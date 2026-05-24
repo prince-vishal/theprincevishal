@@ -1,0 +1,153 @@
+---
+number: "006"
+title: "Search, on top of object storage"
+titleHtml: "Search, on top of <em>object storage.</em>"
+headingHtml: "Search, on top of<br/><span class=\"red\">object</span> <em>storage.</em>"
+description: "Where the math works out, what you trade, and the strange small joy of a query plan that ends in s3.GetObject."
+ogDescription: "On running search workloads where the index lives in S3."
+date: "2026-04-28"
+displayDate: "2026 · 04 · 28"
+readTime: "9 min"
+quirk: "— or two cups of filter coffee"
+excerptHtml: "What you give up, what you get back, where the math actually works out, and the strange small joy of a query plan that ends in <code>s3.GetObject</code>."
+dekHtml: "Where the math actually works out, what you trade for the cheaper bill, and the strange small joy of a query plan that ends in <code>s3.GetObject</code>."
+tags: ["infrastructure", "search", "building"]
+nextSlug: "boundary-around-the-model"
+---
+
+<Lede>
+  For most of the last fifteen years, the rule was simple: if you wanted
+  search, you ran <em>Elasticsearch</em>, or one of its descendants,
+  on a fleet of beefy machines with fast local disks. The index lived next
+  to the CPU. Queries were fast. Bills were high. Nobody loved the bills.
+</Lede>
+
+Then somebody noticed that <em>S3 had quietly become absurdly cheap</em>,
+and the rest of object storage was getting that way too. Quickwit landed.
+Tantivy got serious. People started asking an obvious-in-retrospect
+question: <em>what if the index just lived in S3?</em>
+
+## The shape of the idea.
+
+<MarginNote>
+  ← storage is cheap;<br />
+  <span style={{ color: 'var(--pen)' }}>requests are the catch.</span>
+</MarginNote>
+
+The compromise looks like this. Keep the <b>index in object storage.</b>
+Keep the <b>query engine stateless.</b> Pay only for the queries you
+actually run. What you give up: sub-millisecond p99 latency,
+a bit of operator comfort. What you get back: storage at
+<code>$0.023/GB/month</code> instead of NVMe-attached EBS at
+<code>$0.10/GB/month</code>, independent scaling, painless backups,
+and a system you can mostly reason about on one whiteboard.
+
+## Show me the math.
+
+For a real workload I've watched closely, about <em>800GB of indexed
+logs</em>, 50 queries/second at peak, hot but not blazing, the bill
+shapes look roughly like this:
+
+```txt
+# old setup: Elasticsearch, NVMe disks, 3x replication
+3x r6i.2xlarge        $360/mo   compute
+800GB x 3 replicas    $240/mo   storage
+total                 $600/mo
+
+# new setup: Quickwit-style, object storage
+1x m6i.large          $60/mo
+800GB x 1 in S3 std   $18/mo
+10M GetObject/mo      $400/mo   <- the interesting line
+total                 $478/mo
+```
+
+<em>Object storage isn't free; requests are.</em> If your queries are
+tight and your splits are well-designed, you stay comfortably under a
+million requests a day. If they aren't, you can light an embarrassing
+amount of money on fire by <code>GetObject</code>-ing the same byte
+ranges repeatedly<FnRef>[1]</FnRef>.
+
+<Divider />
+
+## What "designed your splits well" actually means.
+
+A naive implementation does this:
+
+```rust
+async fn search(query: Query) -> Results {
+    let segments = list_segments().await?;       // bad: list on every query
+    let hits = futures::future::join_all(
+        segments.iter().map(|s| s.search(query)) // bad: probes every segment
+    ).await;
+    aggregate(hits)
+}
+```
+
+A better one looks more like this:
+
+```rust
+async fn search(query: Query) -> Results {
+    // 1. consult a small in-memory metadata layer
+    let candidates = metastore.candidate_splits(&query);
+
+    // 2. fan out only to candidates, using range reads
+    let hits = futures::future::join_all(
+        candidates.iter().map(|s| {
+            s.search_with_range_reads(query)
+        })
+    ).await;
+
+    aggregate(hits)
+}
+```
+
+Two changes. A tiny metastore that prunes splits <em>before</em> any
+object-storage call. And <b>range reads</b> instead of whole-object reads:
+a <code>4MB</code> read from a <code>1GB</code> split costs the same as a
+<code>4MB</code> read from a <code>4MB</code> file. The size of the split
+doesn't matter; the size of what you actually fetch does.
+
+<PullQuote>
+  The index doesn't have to live near the CPU. <em>It just has to be
+  reachable, cheap, and addressable in pieces.</em>
+</PullQuote>
+
+## Where it falls apart.
+
+<MarginNote side="left" color="blue">
+  → every architecture has its anti-patterns;<br />
+  these are the ones I keep seeing.
+</MarginNote>
+
+- <b>Latency-critical search</b> (autocomplete, type-ahead, anything user-facing under 50ms). Don't. Keep a hot in-memory layer; let object storage do the long tail.
+- <b>Tiny, high-frequency queries.</b> A 5ms query plus 80ms of network is now an 85ms query. The math doesn't work for a UI search box.
+- <b>Vector search</b>, sort of. The architectural shape is right; the latencies aren't quite there without a warm cache, but the gap is closing fast.
+- <b>Cold-start fan-out.</b> A query against 500 cold splits is 500 independent S3 reads. Plan your warm cache, or watch your p99 spike at 9am every Monday.
+
+## What I keep coming back to.
+
+The moment that made me a believer was watching a 300GB analytics query
+plan resolve in a meeting room. The whole plan fit on one screen. The plan
+ended in <code>s3.GetObject</code>. That was it. <em>No mystery cluster.
+No "is the hot node hot?" No standby replica nobody could remember the
+password to.</em>
+
+For a certain shape of workload: large, mostly-cold, query-on-demand,
+this is just <em>better.</em> The math is better. The operations are
+better. The mental model is better. It's not for everything. But it's for
+a lot more than people currently use it for, and I think the next two
+years prove that out.
+
+Future notes: warm caching layers, vector search on this same
+architecture, and a longer field report on the metastore tradeoffs.
+<em>If you've built one of these and disagree with any of the above,
+please write me.</em>
+
+<EndMark />
+
+<Footnotes>
+  <ol>
+    <li>I once watched a team triple their bill in a week by un-tuning a result cache. Object storage doesn't make you faster; it just makes the price of slow obvious.</li>
+    <li>All numbers are from a real 2026 workload. AWS pricing changes; <em>do your own math</em>; the shape will be similar.</li>
+  </ol>
+</Footnotes>

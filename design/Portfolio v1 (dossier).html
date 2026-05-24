@@ -1,0 +1,1303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Prince Sinha — Engineering leader, AI-native systems</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink:        #0e0c0a;
+    --ink-2:      #181410;
+    --ink-3:      #221d18;
+    --line:       #3a312a;
+    --line-soft:  #2a231d;
+    --cream:      #f4ede3;
+    --cream-2:    #d9d0c2;
+    --cream-3:    #9e9588;
+    --muted:      #756c60;
+    --signal:     oklch(0.74 0.14 55);
+    --signal-2:   oklch(0.62 0.16 50);
+    --signal-dim: oklch(0.45 0.10 55);
+
+    --serif: "Instrument Serif", "Times New Roman", serif;
+    --sans:  "Geist", -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono:  "Geist Mono", ui-monospace, monospace;
+
+    --maxw: 1320px;
+    --gutter: clamp(20px, 4vw, 56px);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { background: var(--ink); }
+  body {
+    background: var(--ink);
+    color: var(--cream);
+    font-family: var(--sans);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  ::selection { background: var(--signal); color: var(--ink); }
+
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; padding: 0; }
+
+  /* ───────── Layout ───────── */
+  .wrap {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding-left: var(--gutter);
+    padding-right: var(--gutter);
+  }
+  .row { display: flex; }
+  .grid { display: grid; }
+
+  /* ───────── Top dossier rail ───────── */
+  .rail {
+    border-bottom: 1px solid var(--line-soft);
+    background: linear-gradient(180deg, rgba(244,237,227,0.02), transparent);
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: blur(12px);
+    background-color: rgba(14, 12, 10, 0.85);
+  }
+  .rail-in {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px; gap: 24px;
+  }
+  .mark {
+    display: flex; align-items: center; gap: 14px;
+    font-family: var(--mono); font-size: 11.5px;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    color: var(--cream-2);
+  }
+  .mark .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--signal);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--signal) 18%, transparent);
+    animation: pulse 2.6s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 4px color-mix(in oklab, var(--signal) 18%, transparent); }
+    50%      { box-shadow: 0 0 0 8px color-mix(in oklab, var(--signal) 4%, transparent); }
+  }
+  .mark .sep { color: var(--muted); margin: 0 2px; }
+  nav.primary { display: flex; gap: 28px; font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--cream-3); }
+  nav.primary a { transition: color .15s ease; }
+  nav.primary a:hover { color: var(--cream); }
+  nav.primary a .num { color: var(--muted); margin-right: 6px; }
+  .rail-meta { font-family: var(--mono); font-size: 11.5px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; }
+  .rail-meta b { color: var(--cream-2); font-weight: 400; }
+
+  @media (max-width: 880px) {
+    nav.primary { display: none; }
+  }
+
+  /* ───────── Common section chrome ───────── */
+  section { position: relative; padding: 100px 0 80px; }
+  .section-tag {
+    display: flex; align-items: center; gap: 14px;
+    font-family: var(--mono); font-size: 11.5px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--cream-3);
+    margin-bottom: 40px;
+  }
+  .section-tag .num { color: var(--signal); }
+  .section-tag .ln { flex: 1; height: 1px; background: linear-gradient(90deg, var(--line) 0%, transparent 100%); }
+
+  h1, h2, h3, h4 { font-weight: 400; margin: 0; }
+
+  .display {
+    font-family: var(--serif);
+    font-weight: 400;
+    line-height: 0.96;
+    letter-spacing: -0.015em;
+    color: var(--cream);
+  }
+  .display em { font-style: italic; color: var(--cream-2); }
+
+  /* ───────── HERO ───────── */
+  .hero { padding-top: 64px; padding-bottom: 96px; position: relative; }
+  .hero::before {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(800px 400px at 80% 20%, color-mix(in oklab, var(--signal) 8%, transparent), transparent 60%),
+      radial-gradient(600px 300px at 10% 90%, color-mix(in oklab, var(--signal) 5%, transparent), transparent 60%);
+    pointer-events: none;
+  }
+  .hero-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 0;
+    border-top: 1px solid var(--line-soft);
+    border-bottom: 1px solid var(--line-soft);
+    padding: 14px 0;
+    margin-bottom: 56px;
+  }
+  .hero-meta div { padding: 0 18px; font-family: var(--mono); font-size: 11px; color: var(--cream-3); letter-spacing: 0.06em; text-transform: uppercase; border-right: 1px solid var(--line-soft); }
+  .hero-meta div:last-child { border-right: 0; }
+  .hero-meta div:first-child { padding-left: 0; }
+  .hero-meta div b { display: block; color: var(--cream); font-weight: 400; font-family: var(--sans); font-size: 13px; text-transform: none; letter-spacing: 0; margin-top: 6px; }
+
+  .hero-title {
+    font-size: clamp(56px, 8.5vw, 132px);
+    margin-bottom: 48px;
+    max-width: 17ch;
+  }
+  .hero-title .signal { color: var(--signal); font-style: italic; }
+  .hero-title .strike {
+    text-decoration: line-through;
+    text-decoration-color: var(--signal-dim);
+    text-decoration-thickness: 2px;
+    color: var(--cream-3);
+  }
+  .hero-body {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 80px;
+    align-items: start;
+  }
+  @media (max-width: 880px) {
+    .hero-body { grid-template-columns: 1fr; gap: 36px; }
+    .hero-meta { grid-template-columns: 1fr 1fr; }
+    .hero-meta div { border-bottom: 1px solid var(--line-soft); padding: 10px 14px; }
+    .hero-meta div:nth-child(2) { border-right: 0; }
+    .hero-meta div:nth-child(3), .hero-meta div:nth-child(4) { border-bottom: 0; }
+  }
+  .hero-left p {
+    font-family: var(--serif);
+    font-size: 22px;
+    line-height: 1.35;
+    color: var(--cream-2);
+    margin: 0 0 28px 0;
+    max-width: 38ch;
+  }
+  .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    height: 44px; padding: 0 22px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-family: var(--mono); font-size: 11.5px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--cream);
+    transition: all .18s ease;
+  }
+  .btn:hover { background: var(--cream); color: var(--ink); border-color: var(--cream); }
+  .btn.primary { background: var(--signal); color: var(--ink); border-color: var(--signal); font-weight: 500; }
+  .btn.primary:hover { background: var(--cream); border-color: var(--cream); }
+  .btn .arrow { display: inline-block; transition: transform .18s ease; }
+  .btn:hover .arrow { transform: translateX(3px); }
+
+  .hero-right { font-family: var(--mono); font-size: 12.5px; line-height: 1.7; color: var(--cream-2); }
+  .hero-right .label { color: var(--cream-3); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 14px; }
+
+  /* Ticker */
+  .ticker {
+    margin-top: 28px;
+    border: 1px solid var(--line-soft);
+    border-radius: 4px;
+    background: var(--ink-2);
+    padding: 14px 18px;
+    font-family: var(--mono); font-size: 12px; color: var(--cream-2);
+    display: flex; gap: 14px; align-items: center;
+    min-height: 50px;
+  }
+  .ticker .blink { color: var(--signal); animation: blink 1.2s steps(2, end) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .ticker-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* ───────── WHAT I BUILD ───────── */
+  .pillars {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border-top: 1px solid var(--line-soft);
+    border-left: 1px solid var(--line-soft);
+  }
+  @media (max-width: 880px) { .pillars { grid-template-columns: 1fr; } }
+  .pillar {
+    padding: 36px 32px 36px 32px;
+    border-right: 1px solid var(--line-soft);
+    border-bottom: 1px solid var(--line-soft);
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 32px;
+    align-items: start;
+    background: transparent;
+    transition: background .25s ease;
+  }
+  .pillar:hover { background: rgba(244, 237, 227, 0.02); }
+  @media (max-width: 720px) { .pillar { grid-template-columns: 1fr; gap: 22px; } }
+  .pillar .meta {
+    font-family: var(--mono); font-size: 10.5px; color: var(--cream-3);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .pillar .meta .idx { color: var(--signal); }
+  .pillar h3 {
+    font-family: var(--serif); font-size: 30px; line-height: 1.08;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+  .pillar h3 em { color: var(--cream-2); }
+  .pillar p {
+    color: var(--cream-2); margin: 0;
+    font-size: 14.5px; line-height: 1.55;
+  }
+  .pillar .diagram {
+    background: var(--ink-2);
+    border: 1px solid var(--line-soft);
+    border-radius: 3px;
+    padding: 18px;
+    min-height: 168px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .pillar .diagram svg { width: 100%; height: auto; }
+
+  .flow-node {
+    font-family: var(--mono); font-size: 9.5px;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    fill: var(--cream-2);
+  }
+  .flow-box { fill: var(--ink-3); stroke: var(--line); }
+  .flow-box-accent { fill: var(--ink-3); stroke: var(--signal); }
+  .flow-line { stroke: var(--line); stroke-width: 1; fill: none; }
+  .flow-arrow { fill: var(--cream-3); }
+  .flow-pulse {
+    stroke: var(--signal); stroke-width: 1.5; fill: none;
+    stroke-dasharray: 4 4;
+    animation: dash 8s linear infinite;
+  }
+  @keyframes dash { to { stroke-dashoffset: -100; } }
+
+  /* ───────── FEATURED PROJECTS ───────── */
+  .projects { display: grid; gap: 1px; background: var(--line-soft); border: 1px solid var(--line-soft); }
+  .project {
+    background: var(--ink);
+    padding: 28px 32px;
+    display: grid;
+    grid-template-columns: 80px 1fr auto 100px;
+    gap: 32px;
+    align-items: center;
+    cursor: pointer;
+    transition: background .2s ease, padding .25s ease;
+    position: relative;
+  }
+  .project:hover { background: var(--ink-2); }
+  .project.open { background: var(--ink-2); padding-bottom: 28px; }
+  @media (max-width: 720px) {
+    .project { grid-template-columns: 50px 1fr auto; padding: 22px; gap: 18px; }
+    .project .cat { display: none; }
+  }
+  .project .idx { font-family: var(--mono); font-size: 11px; color: var(--cream-3); letter-spacing: 0.05em; }
+  .project .name {
+    font-family: var(--serif); font-size: 28px; line-height: 1.1;
+    color: var(--cream); letter-spacing: -0.01em;
+  }
+  .project .name em { color: var(--cream-2); }
+  .project .cat {
+    font-family: var(--mono); font-size: 10.5px; color: var(--cream-3);
+    letter-spacing: 0.06em; text-transform: uppercase; text-align: right;
+  }
+  .project .expand {
+    width: 36px; height: 36px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--cream-2);
+    margin-left: auto;
+    transition: all .25s ease;
+  }
+  .project:hover .expand { border-color: var(--signal); color: var(--signal); }
+  .project.open .expand { background: var(--signal); border-color: var(--signal); color: var(--ink); transform: rotate(45deg); }
+
+  .project-detail {
+    grid-column: 1 / -1;
+    display: none;
+    padding-top: 24px;
+    border-top: 1px solid var(--line-soft);
+    margin-top: 8px;
+  }
+  .project.open .project-detail { display: grid; grid-template-columns: 80px 1fr 1fr; gap: 32px; }
+  @media (max-width: 720px) {
+    .project.open .project-detail { grid-template-columns: 1fr; gap: 18px; padding-top: 18px; }
+  }
+  .project-detail .spacer { grid-column: 1; }
+  .project-detail p {
+    color: var(--cream-2); font-size: 14.5px; line-height: 1.6;
+    margin: 0 0 18px 0;
+  }
+  .project-detail h5 {
+    font-family: var(--mono); font-size: 10.5px;
+    color: var(--cream-3); letter-spacing: 0.08em; text-transform: uppercase;
+    margin: 0 0 12px 0;
+    font-weight: 400;
+  }
+  .project-detail ul {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .project-detail li {
+    font-size: 13.5px; color: var(--cream-2);
+    padding-left: 16px; position: relative;
+  }
+  .project-detail li::before {
+    content: ""; position: absolute; left: 0; top: 9px;
+    width: 8px; height: 1px; background: var(--signal);
+  }
+
+  /* ───────── CYBLE SECTION ───────── */
+  .cyble {
+    background: linear-gradient(180deg, transparent 0%, var(--ink-2) 30%, var(--ink-2) 70%, transparent 100%);
+    padding: 120px 0;
+    margin-top: 40px;
+  }
+  .cyble-head {
+    display: grid; grid-template-columns: 1fr 1.6fr; gap: 60px;
+    margin-bottom: 64px;
+    align-items: end;
+  }
+  @media (max-width: 880px) { .cyble-head { grid-template-columns: 1fr; gap: 28px; } }
+  .cyble-head h2 {
+    font-family: var(--serif); font-size: clamp(40px, 5vw, 72px);
+    line-height: 0.98; letter-spacing: -0.015em;
+  }
+  .cyble-head h2 em { color: var(--cream-2); }
+  .cyble-head .desc {
+    font-family: var(--serif); font-size: 20px; line-height: 1.45;
+    color: var(--cream-2); max-width: 50ch;
+  }
+  .contributions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line-soft);
+    border: 1px solid var(--line-soft);
+  }
+  @media (max-width: 880px) { .contributions { grid-template-columns: 1fr; } }
+  .contrib {
+    background: var(--ink);
+    padding: 28px 26px;
+    min-height: 220px;
+    display: flex; flex-direction: column;
+  }
+  .contrib .num {
+    font-family: var(--mono); font-size: 10.5px;
+    color: var(--signal); letter-spacing: 0.06em;
+    margin-bottom: 22px;
+  }
+  .contrib h4 {
+    font-family: var(--serif); font-size: 22px;
+    line-height: 1.15; margin-bottom: 14px;
+    letter-spacing: -0.005em;
+  }
+  .contrib p {
+    font-size: 13.5px; color: var(--cream-2);
+    line-height: 1.55; margin: 0 0 16px 0;
+  }
+  .contrib .tags {
+    margin-top: auto;
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .contrib .tags span {
+    font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    padding: 4px 8px; border: 1px solid var(--line-soft);
+    color: var(--cream-3); border-radius: 2px;
+  }
+
+  /* ───────── SKILLS ───────── */
+  .skills-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 36px;
+    border-top: 1px solid var(--line-soft);
+    padding-top: 36px;
+  }
+  @media (max-width: 880px) { .skills-grid { grid-template-columns: repeat(2, 1fr); gap: 28px; } }
+  .skill-col h5 {
+    font-family: var(--mono); font-size: 10.5px;
+    color: var(--signal); letter-spacing: 0.08em; text-transform: uppercase;
+    margin: 0 0 18px 0; font-weight: 400;
+  }
+  .skill-col ul {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .skill-col li {
+    font-size: 13.5px; color: var(--cream-2);
+    padding: 5px 0;
+    border-bottom: 1px solid transparent;
+    transition: border-color .15s ease, color .15s ease, padding .15s ease;
+    cursor: default;
+  }
+  .skill-col li:hover { color: var(--cream); border-bottom-color: var(--line); padding-left: 8px; }
+
+  /* ───────── EXPERIENCE ───────── */
+  .exp-timeline { display: flex; flex-direction: column; }
+  .exp-row {
+    display: grid; grid-template-columns: 180px 1fr 1fr;
+    gap: 40px;
+    padding: 32px 0;
+    border-top: 1px solid var(--line-soft);
+    align-items: start;
+  }
+  .exp-row:last-child { border-bottom: 1px solid var(--line-soft); }
+  @media (max-width: 880px) { .exp-row { grid-template-columns: 1fr; gap: 16px; } }
+  .exp-row .when {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--cream-3); letter-spacing: 0.06em;
+    padding-top: 6px;
+  }
+  .exp-row .who h4 {
+    font-family: var(--serif); font-size: 32px;
+    line-height: 1.05; letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+  .exp-row .who .role {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--cream-3); letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .exp-row .body {
+    font-size: 14.5px; color: var(--cream-2);
+    line-height: 1.6;
+  }
+
+  /* ───────── LEADERSHIP / QUOTE ───────── */
+  .quote-section {
+    padding: 140px 0;
+    background:
+      radial-gradient(900px 500px at 20% 50%, color-mix(in oklab, var(--signal) 6%, transparent), transparent 60%);
+  }
+  .pull-quote {
+    font-family: var(--serif);
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    max-width: 22ch;
+    color: var(--cream);
+  }
+  .pull-quote em { color: var(--cream-2); }
+  .pull-quote .signal { color: var(--signal); }
+  .quote-meta {
+    margin-top: 40px;
+    font-family: var(--mono); font-size: 11.5px;
+    color: var(--cream-3); letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .strengths {
+    margin-top: 80px;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--line-soft);
+    border-left: 1px solid var(--line-soft);
+  }
+  @media (max-width: 880px) { .strengths { grid-template-columns: 1fr; } }
+  .strength {
+    padding: 22px 24px;
+    border-right: 1px solid var(--line-soft);
+    border-bottom: 1px solid var(--line-soft);
+    display: flex; gap: 14px; align-items: baseline;
+    transition: background .2s ease;
+  }
+  .strength:hover { background: rgba(244, 237, 227, 0.02); }
+  .strength .n {
+    font-family: var(--mono); font-size: 10px;
+    color: var(--signal); letter-spacing: 0.06em;
+    min-width: 28px;
+  }
+  .strength p { margin: 0; font-size: 14px; color: var(--cream-2); line-height: 1.45; }
+
+  /* ───────── CONTACT ───────── */
+  .contact { padding: 140px 0 80px; position: relative; }
+  .contact-grid {
+    display: grid; grid-template-columns: 1.4fr 1fr; gap: 80px;
+    align-items: end;
+  }
+  @media (max-width: 880px) { .contact-grid { grid-template-columns: 1fr; gap: 40px; } }
+  .contact h2 {
+    font-family: var(--serif);
+    font-size: clamp(56px, 9vw, 140px);
+    line-height: 0.92; letter-spacing: -0.02em;
+  }
+  .contact h2 em { color: var(--cream-2); }
+  .contact h2 .signal { color: var(--signal); }
+  .contact-links {
+    display: flex; flex-direction: column; gap: 4px;
+    border-top: 1px solid var(--line-soft);
+  }
+  .contact-links a {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line-soft);
+    font-family: var(--mono); font-size: 13px;
+    letter-spacing: 0.04em;
+    transition: padding .2s ease, color .2s ease;
+  }
+  .contact-links a:hover { padding-left: 12px; color: var(--signal); }
+  .contact-links a .label { color: var(--cream-3); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .contact-links a .val { color: var(--cream); }
+
+  /* footer */
+  footer {
+    border-top: 1px solid var(--line-soft);
+    padding: 28px 0;
+    margin-top: 60px;
+    display: flex; justify-content: space-between; gap: 24px;
+    flex-wrap: wrap;
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--cream-3);
+  }
+  footer .colophon { color: var(--muted); }
+
+  /* fine grid background */
+  .grid-bg {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(to right, color-mix(in oklab, var(--cream) 4%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, var(--cream) 4%, transparent) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(circle at 50% 0%, black 0%, transparent 75%);
+    -webkit-mask-image: radial-gradient(circle at 50% 0%, black 0%, transparent 75%);
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  /* reveal */
+  .reveal { opacity: 0; transform: translateY(14px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } }
+
+  /* corner crops */
+  .corner {
+    position: relative;
+  }
+  .corner::before, .corner::after {
+    content: ""; position: absolute; width: 10px; height: 10px;
+    border: 1px solid var(--signal);
+    pointer-events: none;
+  }
+  .corner::before { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
+  .corner::after  { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
+
+</style>
+</head>
+<body>
+
+<!-- ───────── DOSSIER RAIL ───────── -->
+<div class="rail">
+  <div class="wrap rail-in">
+    <div class="mark">
+      <span class="dot"></span>
+      <span>PS · DOSSIER</span>
+      <span class="sep">/</span>
+      <span>v. 2026.05</span>
+    </div>
+    <nav class="primary">
+      <a href="#build"><span class="num">01</span>Build</a>
+      <a href="#work"><span class="num">02</span>Work</a>
+      <a href="#cyble"><span class="num">03</span>Cyble</a>
+      <a href="#skills"><span class="num">04</span>Skills</a>
+      <a href="#experience"><span class="num">05</span>Experience</a>
+      <a href="#contact"><span class="num">06</span>Contact</a>
+    </nav>
+    <div class="rail-meta">
+      <b id="clock">—</b>&nbsp;· IST
+    </div>
+  </div>
+</div>
+
+<!-- ───────── HERO ───────── -->
+<section class="hero" id="top">
+  <div class="grid-bg"></div>
+  <div class="wrap" style="position:relative;">
+
+    <div class="hero-meta">
+      <div>Subject<b>Prince Sinha</b></div>
+      <div>Role<b>Engineering leader · Product builder</b></div>
+      <div>Domains<b>AI · Security · Infrastructure</b></div>
+      <div>Status<b style="color: var(--signal);">Available for selective work</b></div>
+    </div>
+
+    <h1 class="display hero-title">
+      Building <span class="signal"><em>AI-native</em></span> systems for security,
+      automation, &amp; <em>trust.</em>
+    </h1>
+
+    <div class="hero-body">
+      <div class="hero-left">
+        <p>
+          I take ambiguous, complex problems &mdash; messy signals, noisy security data,
+          half-built workflows &mdash; and turn them into production systems that work in
+          the real world.
+        </p>
+        <div class="hero-cta">
+          <a href="#work" class="btn primary">View work <span class="arrow">→</span></a>
+          <a href="#experience" class="btn">Experience</a>
+          <a href="#contact" class="btn">Get in touch</a>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <span class="label">// Currently working across</span>
+        Agentic AI · Cybersecurity copilots · SOC automation · Threat intelligence
+        · Cloud-native platforms · Internal developer infrastructure · High-scale
+        ingestion · Search infrastructure · DevOps automation · MCP tooling.
+
+        <div class="ticker">
+          <span class="blink">▮</span>
+          <span class="ticker-text" id="ticker">Initializing focus log…</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ───────── WHAT I BUILD ───────── -->
+<section id="build">
+  <div class="wrap">
+    <div class="section-tag">
+      <span class="num">§ 01</span>
+      <span>What I build</span>
+      <span class="ln"></span>
+      <span>five practices</span>
+    </div>
+
+    <h2 class="display" style="font-size: clamp(40px, 5.4vw, 80px); max-width: 18ch; margin-bottom: 56px;">
+      Practical AI &amp; <em>infrastructure-heavy</em> products &mdash; not chat windows.
+    </h2>
+
+    <div class="pillars">
+
+      <!-- Pillar 1: AI agents -->
+      <div class="pillar">
+        <div>
+          <div class="meta"><span class="idx">01</span> · Agentic AI</div>
+          <h3>AI systems that <em>do real work.</em></h3>
+          <p>Agents and copilots that connect to tools, hold context, follow approvals, and execute workflows safely. Built for delegation &mdash; not chat.</p>
+        </div>
+        <div class="diagram" aria-hidden="true">
+          <svg viewBox="0 0 320 160">
+            <!-- nodes -->
+            <rect class="flow-box" x="6" y="62" width="64" height="36" rx="2"/>
+            <text class="flow-node" x="38" y="84" text-anchor="middle">Request</text>
+
+            <rect class="flow-box-accent" x="92" y="62" width="64" height="36" rx="2"/>
+            <text class="flow-node" x="124" y="80" text-anchor="middle">Planner</text>
+            <text class="flow-node" x="124" y="92" text-anchor="middle" style="fill: var(--signal);">+ memory</text>
+
+            <rect class="flow-box" x="178" y="20" width="58" height="28" rx="2"/>
+            <text class="flow-node" x="207" y="38" text-anchor="middle">Tool A</text>
+            <rect class="flow-box" x="178" y="62" width="58" height="36" rx="2"/>
+            <text class="flow-node" x="207" y="84" text-anchor="middle">Tool B</text>
+            <rect class="flow-box" x="178" y="112" width="58" height="28" rx="2"/>
+            <text class="flow-node" x="207" y="130" text-anchor="middle">Tool C</text>
+
+            <rect class="flow-box-accent" x="258" y="62" width="58" height="36" rx="2"/>
+            <text class="flow-node" x="287" y="80" text-anchor="middle">Approve</text>
+            <text class="flow-node" x="287" y="92" text-anchor="middle" style="fill: var(--signal);">+ audit</text>
+
+            <!-- lines -->
+            <path class="flow-line" d="M 70 80 L 92 80"/>
+            <path class="flow-line" d="M 156 80 L 178 80"/>
+            <path class="flow-line" d="M 156 80 L 178 34"/>
+            <path class="flow-line" d="M 156 80 L 178 126"/>
+            <path class="flow-pulse" d="M 236 80 L 258 80"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Pillar 2: Cybersecurity -->
+      <div class="pillar">
+        <div>
+          <div class="meta"><span class="idx">02</span> · Cybersecurity</div>
+          <h3>Threat intelligence, <em>SOC copilots,</em> investigation.</h3>
+          <p>Systems for alert triage, enrichment, threat actor profiling, dark-web monitoring, and AI-assisted analyst workflows.</p>
+        </div>
+        <div class="diagram" aria-hidden="true">
+          <svg viewBox="0 0 320 160">
+            <!-- ingest pipeline -->
+            <circle cx="20" cy="40" r="4" fill="var(--cream-3)"/>
+            <circle cx="20" cy="80" r="4" fill="var(--cream-3)"/>
+            <circle cx="20" cy="120" r="4" fill="var(--cream-3)"/>
+            <text class="flow-node" x="32" y="44">Alerts</text>
+            <text class="flow-node" x="32" y="84">IOCs</text>
+            <text class="flow-node" x="32" y="124">Telemetry</text>
+
+            <path class="flow-line" d="M 60 40 L 110 80"/>
+            <path class="flow-line" d="M 60 80 L 110 80"/>
+            <path class="flow-line" d="M 60 120 L 110 80"/>
+
+            <rect class="flow-box-accent" x="110" y="62" width="78" height="36" rx="2"/>
+            <text class="flow-node" x="149" y="80" text-anchor="middle">Enrichment</text>
+            <text class="flow-node" x="149" y="92" text-anchor="middle" style="fill: var(--signal);">+ correlate</text>
+
+            <path class="flow-pulse" d="M 188 80 L 222 80"/>
+
+            <rect class="flow-box" x="222" y="62" width="60" height="36" rx="2"/>
+            <text class="flow-node" x="252" y="80" text-anchor="middle">AI brief</text>
+            <text class="flow-node" x="252" y="92" text-anchor="middle">+ score</text>
+
+            <path class="flow-line" d="M 282 80 L 302 80"/>
+            <polygon class="flow-arrow" points="302,76 310,80 302,84"/>
+            <text class="flow-node" x="295" y="106" text-anchor="middle">Analyst</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Pillar 3: Cloud / Platform -->
+      <div class="pillar">
+        <div>
+          <div class="meta"><span class="idx">03</span> · Platform &amp; Cloud</div>
+          <h3>Internal platforms <em>engineers want to use.</em></h3>
+          <p>Kubernetes, Devtron, Argo CD, GitOps, CI/CD, IAM, shared services &mdash; modernization that ships products faster.</p>
+        </div>
+        <div class="diagram" aria-hidden="true">
+          <svg viewBox="0 0 320 160">
+            <!-- repo -> ci -> registry -> cluster -->
+            <rect class="flow-box" x="8" y="62" width="52" height="36" rx="2"/>
+            <text class="flow-node" x="34" y="84" text-anchor="middle">Repo</text>
+            <path class="flow-line" d="M 60 80 L 84 80"/>
+
+            <rect class="flow-box" x="84" y="62" width="56" height="36" rx="2"/>
+            <text class="flow-node" x="112" y="80" text-anchor="middle">CI / build</text>
+            <path class="flow-line" d="M 140 80 L 164 80"/>
+
+            <rect class="flow-box-accent" x="164" y="62" width="58" height="36" rx="2"/>
+            <text class="flow-node" x="193" y="80" text-anchor="middle">Argo CD</text>
+            <text class="flow-node" x="193" y="92" text-anchor="middle" style="fill: var(--signal);">GitOps</text>
+
+            <!-- to cluster grid -->
+            <path class="flow-pulse" d="M 222 80 L 246 80"/>
+            <g transform="translate(246, 36)">
+              <rect class="flow-box" x="0"  y="0"  width="22" height="22" rx="2"/>
+              <rect class="flow-box" x="26" y="0"  width="22" height="22" rx="2"/>
+              <rect class="flow-box" x="52" y="0"  width="22" height="22" rx="2"/>
+              <rect class="flow-box" x="0"  y="32" width="22" height="22" rx="2"/>
+              <rect class="flow-box-accent" x="26" y="32" width="22" height="22" rx="2"/>
+              <rect class="flow-box" x="52" y="32" width="22" height="22" rx="2"/>
+              <rect class="flow-box" x="0"  y="64" width="22" height="22" rx="2"/>
+              <rect class="flow-box" x="26" y="64" width="22" height="22" rx="2"/>
+              <rect class="flow-box" x="52" y="64" width="22" height="22" rx="2"/>
+            </g>
+            <text class="flow-node" x="284" y="146" text-anchor="middle">k8s · pods</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Pillar 4: Data systems -->
+      <div class="pillar">
+        <div>
+          <div class="meta"><span class="idx">04</span> · High-scale data</div>
+          <h3>Ingestion, search, <em>analytics at volume.</em></h3>
+          <p>Event collectors, ClickHouse, object-storage indexes, streaming pipelines, cost-aware infrastructure for very high throughput.</p>
+        </div>
+        <div class="diagram" aria-hidden="true">
+          <svg viewBox="0 0 320 160">
+            <!-- bars / volume meter -->
+            <g>
+              <rect x="10"  y="120" width="6" height="20" fill="var(--line)"/>
+              <rect x="20"  y="108" width="6" height="32" fill="var(--line)"/>
+              <rect x="30"  y="96"  width="6" height="44" fill="var(--cream-3)"/>
+              <rect x="40"  y="80"  width="6" height="60" fill="var(--cream-3)"/>
+              <rect x="50"  y="60"  width="6" height="80" fill="var(--signal)"/>
+              <rect x="60"  y="48"  width="6" height="92" fill="var(--signal)"/>
+              <rect x="70"  y="72"  width="6" height="68" fill="var(--cream-3)"/>
+              <rect x="80"  y="88"  width="6" height="52" fill="var(--cream-3)"/>
+              <rect x="90"  y="100" width="6" height="40" fill="var(--line)"/>
+              <rect x="100" y="116" width="6" height="24" fill="var(--line)"/>
+            </g>
+            <text class="flow-node" x="58" y="32" text-anchor="middle">Ingest · 10k/s</text>
+
+            <path class="flow-line" d="M 116 96 L 148 96"/>
+            <rect class="flow-box-accent" x="148" y="78" width="60" height="36" rx="2"/>
+            <text class="flow-node" x="178" y="96" text-anchor="middle">Stream</text>
+            <text class="flow-node" x="178" y="108" text-anchor="middle" style="fill: var(--signal);">+ queue</text>
+
+            <path class="flow-pulse" d="M 208 96 L 240 96"/>
+
+            <g>
+              <rect class="flow-box" x="240" y="46" width="72" height="28" rx="2"/>
+              <text class="flow-node" x="276" y="64" text-anchor="middle">ClickHouse</text>
+              <rect class="flow-box" x="240" y="82" width="72" height="28" rx="2"/>
+              <text class="flow-node" x="276" y="100" text-anchor="middle">Object store</text>
+              <rect class="flow-box" x="240" y="118" width="72" height="28" rx="2"/>
+              <text class="flow-node" x="276" y="136" text-anchor="middle">Search idx</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ───────── FEATURED WORK ───────── -->
+<section id="work">
+  <div class="wrap">
+    <div class="section-tag">
+      <span class="num">§ 02</span>
+      <span>Featured work</span>
+      <span class="ln"></span>
+      <span>twelve case studies · click to expand</span>
+    </div>
+
+    <div class="projects" id="projects">
+      <!-- populated by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ───────── CYBLE ───────── -->
+<section id="cyble" class="cyble">
+  <div class="wrap">
+    <div class="section-tag">
+      <span class="num">§ 03</span>
+      <span>Cyble · 2022 — present</span>
+      <span class="ln"></span>
+      <span>engineering leadership · AI · platform</span>
+    </div>
+
+    <div class="cyble-head">
+      <h2>Scaling AI, security, &amp; <em>platform engineering</em> at Cyble.</h2>
+      <div class="desc">
+        I worked across cybersecurity product development, AI innovation, and cloud-native modernization &mdash; building systems that help security teams detect, investigate, and respond to threats faster, while also modernizing the engineering platforms that ship them.
+      </div>
+    </div>
+
+    <div class="contributions">
+      <div class="contrib">
+        <div class="num">01 / AI cybersecurity</div>
+        <h4>AI-assisted investigation &amp; analyst workflows.</h4>
+        <p>Workflows that help analysts investigate alerts, enrich indicators, correlate intelligence, and summarize findings &mdash; reducing repetitive effort and surfacing what needs human attention.</p>
+        <div class="tags"><span>LLM</span><span>RAG</span><span>Analyst UX</span></div>
+      </div>
+      <div class="contrib">
+        <div class="num">02 / Agentic security</div>
+        <h4>Cybersecurity copilots with humans in the loop.</h4>
+        <p>Agentic workflows that search, enrich, correlate, and recommend next actions across internal and external intelligence &mdash; with analysts kept in control.</p>
+        <div class="tags"><span>Agents</span><span>Tools</span><span>Approvals</span></div>
+      </div>
+      <div class="contrib">
+        <div class="num">03 / Threat intel</div>
+        <h4>Raw cyber data → structured intelligence.</h4>
+        <p>Entity enrichment, search, correlation, and analyst-facing views for threat actors, malware, breaches, exposures, and cybercrime activity.</p>
+        <div class="tags"><span>Actors</span><span>Malware</span><span>Breaches</span></div>
+      </div>
+      <div class="contrib">
+        <div class="num">04 / SOC automation</div>
+        <h4>Triage that focuses analysts on what matters.</h4>
+        <p>Alert prioritization, deduplication, context enrichment, evidence collection, and playbook-style automation across security tools.</p>
+        <div class="tags"><span>Triage</span><span>Playbooks</span><span>Evidence</span></div>
+      </div>
+      <div class="contrib">
+        <div class="num">05 / Cloud-native</div>
+        <h4>From manual deploys to GitOps delivery.</h4>
+        <p>Dockerization, Kubernetes deployments, Devtron + Argo CD workflows, environment standardization, progressive delivery, rollbacks.</p>
+        <div class="tags"><span>k8s</span><span>Argo CD</span><span>Devtron</span></div>
+      </div>
+      <div class="contrib">
+        <div class="num">06 / Developer platform</div>
+        <h4>Internal platform engineers actually use.</h4>
+        <p>Deployment workflows, IAM and access-control services, CI/CD templates, shared backend services, operational dashboards.</p>
+        <div class="tags"><span>IAM</span><span>CI/CD</span><span>Tooling</span></div>
+      </div>
+      <div class="contrib">
+        <div class="num">07 / Architecture</div>
+        <h4>Ambiguous ideas → engineering plans.</h4>
+        <p>Breaking large product goals into deliverable milestones, defining technical architecture, mentoring engineers, introducing automation-enforced quality gates.</p>
+        <div class="tags"><span>Architecture</span><span>Mentorship</span><span>Quality</span></div>
+      </div>
+      <div class="contrib">
+        <div class="num">08 / AI in production</div>
+        <h4>Prototypes → reliable product workflows.</h4>
+        <p>LLM-powered workflows, model-backed APIs, GPU-aware deployment, retrieval pipelines, human-in-the-loop review, observability.</p>
+        <div class="tags"><span>LLMs</span><span>HITL</span><span>Observability</span></div>
+      </div>
+      <div class="contrib">
+        <div class="num">09 / Cost &amp; scale</div>
+        <h4>Reliability without surprise bills.</h4>
+        <p>Kubernetes scaling, AWS Graviton migrations, service resource planning, observability, and infrastructure standardization.</p>
+        <div class="tags"><span>AWS</span><span>Graviton</span><span>Scale</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── SKILLS ───────── -->
+<section id="skills">
+  <div class="wrap">
+    <div class="section-tag">
+      <span class="num">§ 04</span>
+      <span>Stack &amp; skills</span>
+      <span class="ln"></span>
+      <span>materials I work with</span>
+    </div>
+
+    <h2 class="display" style="font-size: clamp(36px, 4.6vw, 64px); max-width: 22ch; margin-bottom: 12px;">
+      A working toolkit, <em>not a logo soup.</em>
+    </h2>
+
+    <div class="skills-grid">
+      <div class="skill-col">
+        <h5>AI &amp; Agents</h5>
+        <ul>
+          <li>LLM applications</li>
+          <li>Agentic workflows</li>
+          <li>Tool-calling agents</li>
+          <li>RAG systems</li>
+          <li>Browser automation</li>
+          <li>Sandboxed execution</li>
+          <li>Human-in-the-loop</li>
+          <li>OpenAI · Gemini</li>
+          <li>Ollama / local LLMs</li>
+          <li>LangGraph · LangChain</li>
+          <li>Mastra · Composio</li>
+          <li>MCP · LangSmith</li>
+        </ul>
+      </div>
+      <div class="skill-col">
+        <h5>Cybersecurity</h5>
+        <ul>
+          <li>Threat intelligence</li>
+          <li>SOC automation</li>
+          <li>Alert enrichment</li>
+          <li>Threat hunting</li>
+          <li>Dark web monitoring</li>
+          <li>Stealer logs</li>
+          <li>Attack surface mgmt</li>
+          <li>Cloud exposure discovery</li>
+          <li>CSPM</li>
+          <li>SIEM workflows</li>
+          <li>Malware intelligence</li>
+          <li>Brand protection</li>
+        </ul>
+      </div>
+      <div class="skill-col">
+        <h5>Cloud &amp; Infra</h5>
+        <ul>
+          <li>Kubernetes · Docker</li>
+          <li>AWS · GCP · Cloudflare</li>
+          <li>Devtron · Argo CD</li>
+          <li>GitOps · CI/CD</li>
+          <li>Nginx</li>
+          <li>Autoscaling</li>
+          <li>Observability</li>
+          <li>Cost optimization</li>
+          <li>Internal dev platforms</li>
+          <li>Graviton migrations</li>
+        </ul>
+      </div>
+      <div class="skill-col">
+        <h5>Backend / Frontend</h5>
+        <ul>
+          <li>Go · Rust · Python</li>
+          <li>Node.js · NestJS · Django</li>
+          <li>PostgreSQL · MongoDB</li>
+          <li>ClickHouse</li>
+          <li>Search (ES-style, Quickwit)</li>
+          <li>Object storage</li>
+          <li>Pub/Sub · streaming</li>
+          <li>React · Next.js</li>
+          <li>Tailwind · shadcn · Radix</li>
+          <li>Nextra · MDX</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── EXPERIENCE ───────── -->
+<section id="experience">
+  <div class="wrap">
+    <div class="section-tag">
+      <span class="num">§ 05</span>
+      <span>Experience</span>
+      <span class="ln"></span>
+      <span>chronological</span>
+    </div>
+
+    <div class="exp-timeline">
+      <div class="exp-row">
+        <div class="when">2022 — Present</div>
+        <div class="who">
+          <h4>Cyble</h4>
+          <div class="role">Engineering leadership · Innovation · AI</div>
+        </div>
+        <div class="body">
+          Worked across cybersecurity product engineering, AI innovation, and platform modernization. Contributed to AI-assisted security products, threat intelligence systems, SOC workflows, cloud-native infrastructure, and internal developer platforms. Combined product architecture, AI workflows, backend systems, cloud infrastructure, and engineering leadership.
+        </div>
+      </div>
+      <div class="exp-row">
+        <div class="when">Prior</div>
+        <div class="who">
+          <h4>Postman</h4>
+          <div class="role">Software engineering</div>
+        </div>
+        <div class="body">
+          Worked inside a developer-tools environment, contributing to product engineering and API-first workflows. Strengthened my understanding of developer experience, API systems, collaboration workflows, and product-led engineering.
+        </div>
+      </div>
+      <div class="exp-row">
+        <div class="when">Ongoing · Parallel</div>
+        <div class="who">
+          <h4>Founder / Builder</h4>
+          <div class="role">Independent projects</div>
+        </div>
+        <div class="body">
+          Outside formal roles, continuously building products across AI agents, cybersecurity, ad verification, cloud automation, media intelligence, search infrastructure, and developer tooling. Driven by interest in solving complex, real-world problems with practical software systems.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── LEADERSHIP / QUOTE ───────── -->
+<section class="quote-section" id="philosophy">
+  <div class="wrap">
+    <div class="section-tag">
+      <span class="num">§ 06</span>
+      <span>Leadership philosophy</span>
+      <span class="ln"></span>
+    </div>
+
+    <blockquote class="pull-quote">
+      Lead with a <span class="signal">builder's mindset</span> &mdash; clear ownership, fast iteration, strong architecture, <em>automation-enforced quality,</em> and product-first execution.
+    </blockquote>
+    <div class="quote-meta">— how I work with teams</div>
+
+    <div class="strengths">
+      <div class="strength"><span class="n">01</span><p>Turning ambiguous product ideas into technical plans.</p></div>
+      <div class="strength"><span class="n">02</span><p>Building 0 → 1 products end-to-end.</p></div>
+      <div class="strength"><span class="n">03</span><p>Leading small, high-output teams.</p></div>
+      <div class="strength"><span class="n">04</span><p>Working across product, design, research, and engineering.</p></div>
+      <div class="strength"><span class="n">05</span><p>Designing scalable architecture.</p></div>
+      <div class="strength"><span class="n">06</span><p>Improving engineering velocity.</p></div>
+      <div class="strength"><span class="n">07</span><p>Creating CI/CD and DevOps workflows.</p></div>
+      <div class="strength"><span class="n">08</span><p>Mentoring engineers.</p></div>
+      <div class="strength"><span class="n">09</span><p>Making AI practical in production.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── CONTACT ───────── -->
+<section class="contact" id="contact">
+  <div class="grid-bg"></div>
+  <div class="wrap" style="position: relative;">
+    <div class="section-tag">
+      <span class="num">§ 07</span>
+      <span>Get in touch</span>
+      <span class="ln"></span>
+      <span>open to selective work</span>
+    </div>
+
+    <div class="contact-grid">
+      <h2>
+        Let's build <em>something</em><br/>
+        <span class="signal">that ships.</span>
+      </h2>
+      <div class="contact-links">
+        <a href="mailto:vishal.prince30@gmail.com"><span class="label">// Email</span><span class="val">vishal.prince30@gmail.com →</span></a>
+        <a href="#"><span class="label">// LinkedIn</span><span class="val">in/princesinha →</span></a>
+        <a href="#"><span class="label">// GitHub</span><span class="val">@princesinha →</span></a>
+        <a href="#"><span class="label">// X / Twitter</span><span class="val">@princesinha →</span></a>
+        <a href="https://cal.com/prince-vishal-30/15min" target="_blank" rel="noopener"><span class="label">// Calendar</span><span class="val">cal.com/prince-vishal-30/15min →</span></a>
+      </div>
+    </div>
+
+    <footer>
+      <div>© 2026 — Prince Sinha</div>
+      <div class="colophon">Set in Instrument Serif &amp; Geist · Built with attention</div>
+      <div>End of dossier ▮</div>
+    </footer>
+  </div>
+</section>
+
+<script>
+  // ───────── Clock ─────────
+  function tick() {
+    const now = new Date();
+    // IST = UTC + 5:30
+    const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+    const ist = new Date(utc + 5.5 * 3600 * 1000);
+    const hh = String(ist.getHours()).padStart(2, '0');
+    const mm = String(ist.getMinutes()).padStart(2, '0');
+    const ss = String(ist.getSeconds()).padStart(2, '0');
+    const el = document.getElementById('clock');
+    if (el) el.textContent = `${hh}:${mm}:${ss}`;
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  // ───────── Live focus ticker ─────────
+  const tickerLines = [
+    "› shipping an agentic investigation workflow — analyst-in-the-loop",
+    "› benchmarking object-storage search vs traditional indexes",
+    "› writing a postmortem on a noisy alert pipeline",
+    "› refactoring a tool-calling agent for safer execution",
+    "› drafting a spec for an MCP runtime over HTTP",
+    "› profiling ClickHouse ingestion at peak hours",
+    "› reviewing an Argo CD progressive-delivery rollout",
+    "› evaluating GPU-aware deployment patterns for LLM services",
+    "› reading: stealer-log telemetry trends",
+    "› sketching a brand-monitoring summarizer pipeline"
+  ];
+  let tIdx = 0;
+  const tickerEl = document.getElementById('ticker');
+  function typeLine(line, cb) {
+    tickerEl.textContent = "";
+    let i = 0;
+    const id = setInterval(() => {
+      tickerEl.textContent = line.slice(0, ++i);
+      if (i >= line.length) { clearInterval(id); setTimeout(cb, 2400); }
+    }, 28);
+  }
+  function nextLine() {
+    typeLine(tickerLines[tIdx % tickerLines.length], nextLine);
+    tIdx++;
+  }
+  nextLine();
+
+  // ───────── Projects ─────────
+  const PROJECTS = [
+    {
+      name: "Agentic Cybersecurity Analyst Platform",
+      cat: "AI · Cybersecurity",
+      brief: "AI-assisted workflows for threat investigation, alert enrichment, intelligence correlation, and analyst productivity. Built around analyst-in-the-loop decision-making — AI accelerates the workflow but humans remain in control.",
+      highlights: ["Threat intelligence retrieval", "Alert triage & summarization", "Entity enrichment", "Analyst-in-the-loop AI", "Security workflow automation"]
+    },
+    {
+      name: "AI Executive Assistant / Workspace Agent",
+      cat: "AI Agents · Productivity",
+      brief: "A personal AI assistant designed for delegating real operational work across tools, channels, browsers and workflows — with controlled tool execution, approvals, and auditable runs.",
+      highlights: ["Tool-calling agents", "Browser automation", "Sandboxed code execution", "Approval flows & audit logs", "Multi-channel UX"]
+    },
+    {
+      name: "Threat Intelligence Operating System",
+      cat: "Cybersecurity · Data Platform",
+      brief: "A cyber intelligence platform that turns raw threat data into structured, searchable intelligence — actors, malware, breaches, exposures, and cybercrime activity.",
+      highlights: ["Cyber data normalization", "Search & filtering systems", "Threat actor / malware modeling", "Entity enrichment", "Structured reports"]
+    },
+    {
+      name: "AI-Powered SOC Workflow Automation",
+      cat: "SOC Automation",
+      brief: "Workflow automation for SOC teams to reduce repetitive triage and investigation work — prioritization, context, and AI-generated summaries.",
+      highlights: ["Alert enrichment pipelines", "Triage workflows", "Playbook-style automation", "AI-generated summaries", "Security tool integrations"]
+    },
+    {
+      name: "Ad Verification & Measurement Platform",
+      cat: "AdTech · Fraud · Infrastructure",
+      brief: "High-scale ad measurement system across web, mobile, CTV and video — validating delivery, detecting suspicious traffic, and powering delayed analytics.",
+      highlights: ["Golang event collectors", "ClickHouse analytics", "VAST / CTV measurement", "Fraud signal processing", "Object-storage batch jobs"]
+    },
+    {
+      name: "Media Intelligence & Brand Monitoring",
+      cat: "AI · Media Intelligence",
+      brief: "A media monitoring platform tracking mentions, risks, and narratives across social, news, app stores, broadcast and print — with AI summarization and alerting.",
+      highlights: ["Multi-source ingestion", "AI summarization", "Sentiment & risk analysis", "Brand entity tracking", "Alerting workflows"]
+    },
+    {
+      name: "Cloud Exposure Discovery Tool",
+      cat: "Cloud Security",
+      brief: "A cloud security tool that surfaces publicly-exposed storage and misconfigured assets — for defensive monitoring and security research.",
+      highlights: ["Cloud asset discovery", "Exposure detection", "Risk classification", "Provider-specific logic", "API + web interface"]
+    },
+    {
+      name: "Search Infrastructure on Object Storage",
+      cat: "Search · Infrastructure",
+      brief: "Search infrastructure built on object storage to reduce cost and operational load at scale — with future-vector support in mind.",
+      highlights: ["Rust backend", "Full-text indexing", "Object-storage layout", "Cost-optimized queries", "Vector-search ready"]
+    },
+    {
+      name: "MCP Registry & Runtime Tooling",
+      cat: "AI Developer Tools",
+      brief: "A developer platform for discovering, validating, and running Model Context Protocol servers — repo analysis, schema inference, and stdio→HTTP runtimes.",
+      highlights: ["NestJS backend", "GitHub repo analysis", "LLM-based code inspection", ".mcp.json generation", "Deployment automation"]
+    },
+    {
+      name: "Cloud DevOps Automation Platform",
+      cat: "DevOps · Cloud Automation",
+      brief: "A cloud operations platform for managing AWS/GCP resources through guided workflows and a natural-language interface — auditable, fail-safe, role-based.",
+      highlights: ["Workflow engine", "JSON/YAML task templates", "Audit logging", "Role-based access", "Natural-language interface"]
+    },
+    {
+      name: "TV & Print Ad Monitoring System",
+      cat: "Media · Ad Verification",
+      brief: "A traditional media monitoring system focused on tracking ad appearances across television and print — campaign evidence and reporting for advertisers.",
+      highlights: ["Media capture workflows", "Ad occurrence tracking", "Evidence management", "Reporting dashboards", "Campaign-level monitoring"]
+    },
+    {
+      name: "AI Trading Research Agent",
+      cat: "AI · Financial Research",
+      brief: "An experimental AI agent for market research and trading analysis — structured market data, fine-tuning datasets, and evaluation workflows.",
+      highlights: ["Python data pipelines", "JSONL dataset generation", "Fine-tuning experiments", "Evaluation datasets", "Market preprocessing"]
+    }
+  ];
+
+  const projectsEl = document.getElementById('projects');
+  projectsEl.innerHTML = PROJECTS.map((p, i) => `
+    <div class="project" data-i="${i}">
+      <div class="idx">${String(i + 1).padStart(2, '0')}</div>
+      <div class="name">${p.name.replace(/&/g, '&amp;')}</div>
+      <div class="cat">${p.cat}</div>
+      <div class="expand" aria-label="Expand">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="project-detail">
+        <div class="spacer"></div>
+        <div>
+          <h5>// Brief</h5>
+          <p>${p.brief}</p>
+        </div>
+        <div>
+          <h5>// Highlights</h5>
+          <ul>${p.highlights.map(h => `<li>${h}</li>`).join('')}</ul>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  projectsEl.addEventListener('click', (e) => {
+    const card = e.target.closest('.project');
+    if (!card) return;
+    const isOpen = card.classList.contains('open');
+    // optionally close others — keep simple, allow multiple open
+    card.classList.toggle('open');
+  });
+
+  // ───────── Reveal on scroll (inner cards only — sections stay visible) ─────────
+  const revealTargets = document.querySelectorAll('.pillar, .contrib, .project, .exp-row, .strength');
+  revealTargets.forEach(el => el.classList.add('reveal'));
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  revealTargets.forEach(el => io.observe(el));
+
+  // Safety: if IO hasn't fired for an element in 1.5s (e.g. already on-screen, or unsupported),
+  // force-reveal it so nothing stays hidden.
+  setTimeout(() => {
+    revealTargets.forEach(el => el.classList.add('in'));
+  }, 1500);
+</script>
+
+</body>
+</html>

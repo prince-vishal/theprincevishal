@@ -1,0 +1,2403 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Prince Sinha — engineer, builder, security person, etc.</title>
+<meta name="description" content="Engineering leader and product builder. AI-native systems for security, automation, and trust. Based in Bengaluru." />
+<meta name="theme-color" content="#fbf3e6" />
+<meta property="og:title" content="Prince Sinha — engineer, builder, security person, etc." />
+<meta property="og:description" content="Building AI-native systems for security, automation, and trust." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<link rel="icon" href="favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Caveat:wght@400;500;600;700&family=Geist+Mono:wght@300;400;500&family=Geist:wght@400;500&display=swap" rel="stylesheet" />
+<script>
+  // Pre-paint theme set to avoid FOUC.
+  (function() {
+    try {
+      var saved = localStorage.getItem('theme');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var theme = saved || (prefersDark ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) { /* ignore */ }
+  })();
+</script>
+<style>
+  :root {
+    --paper:      #fbf3e6;
+    --paper-2:    #f5ead4;
+    --paper-3:    #ede0c6;
+    --tape:       #f3e4b0;
+    --tape-2:     #e9d58a;
+    --tape-a:     0.6;
+    --tape-b:     0.85;
+    --ink:        #1d1612;
+    --ink-soft:   #3a2e25;
+    --ink-mute:   #7a6a5a;
+    --ink-faint:  #b0a190;
+    --line:       #2a1f17;
+    --rule:       #d2c2a3;
+
+    /* marker red, highlighter yellow, pen blue */
+    --red:        oklch(0.55 0.19 28);
+    --red-light:  oklch(0.72 0.16 28);
+    --hl:         oklch(0.93 0.14 92);
+    --hl-2:       oklch(0.90 0.13 88);
+    --pen:        oklch(0.38 0.14 256);
+
+    --serif:  "Instrument Serif", "Times New Roman", serif;
+    --hand:   "Caveat", "Comic Sans MS", cursive;
+    --sans:   "Geist", -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono:   "Geist Mono", ui-monospace, monospace;
+  }
+
+  /* ───────── Dark mode — "library at midnight" ───────── */
+  [data-theme="dark"] {
+    --paper:      #14100c;
+    --paper-2:    #1d1812;
+    --paper-3:    #28211a;
+    --tape:       #4a3a18;
+    --tape-2:     #5e4a20;
+    --tape-a:     0.45;
+    --tape-b:     0.7;
+    --ink:        #f1e5cd;
+    --ink-soft:   #c8bba2;
+    --ink-mute:   #8a7d6b;
+    --ink-faint:  #4f4638;
+    --line:       #c8bba2;
+    --rule:       #322820;
+
+    --red:        oklch(0.74 0.18 28);
+    --red-light:  oklch(0.82 0.15 28);
+    --hl:         oklch(0.46 0.14 78);
+    --hl-2:       oklch(0.42 0.13 72);
+    --pen:        oklch(0.78 0.13 252);
+  }
+
+  html, body { transition: background-color .4s ease, color .4s ease; }
+
+  /* ───────── Scroll-progress driven animations ───────── */
+  /* Each .scr element exposes --p, a scroll progress value 0..1.
+     Uses individual transform properties (translate/rotate/scale) so they
+     compose cleanly with any existing transform on the element. */
+  .scr {
+    --p: 0;
+    will-change: transform, opacity;
+  }
+  .scr.up        { opacity: var(--p); translate: 0 calc((1 - var(--p)) * 80px); }
+  .scr.down      { opacity: var(--p); translate: 0 calc((1 - var(--p)) * -60px); }
+  .scr.left      { opacity: var(--p); translate: calc((1 - var(--p)) * -240px) 0; }
+  .scr.right     { opacity: var(--p); translate: calc((1 - var(--p)) *  240px) 0; }
+  .scr.zoom      { opacity: var(--p); scale: calc(0.84 + var(--p) * 0.16); }
+  .scr.tilt-l    { opacity: var(--p); translate: calc((1 - var(--p)) * -180px) 0;
+                   rotate: calc((1 - var(--p)) * -6deg); }
+  .scr.tilt-r    { opacity: var(--p); translate: calc((1 - var(--p)) *  180px) 0;
+                   rotate: calc((1 - var(--p)) *  6deg); }
+  .scr.big-up    { opacity: var(--p); translate: 0 calc((1 - var(--p)) * 160px);
+                   scale: calc(0.92 + var(--p) * 0.08); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scr {
+      opacity: 1 !important;
+      translate: 0 0 !important;
+      rotate: 0 !important;
+      scale: 1 !important;
+    }
+    .page-progress, .chapter-indicator { display: none !important; }
+  }
+
+  /* Card shadow boost in dark mode (.now handled separately above with paper styling) */
+  [data-theme="dark"] .featured,
+  [data-theme="dark"] .cyble-card,
+  [data-theme="dark"] .note {
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 230, 180, 0.04) inset;
+  }
+
+  /* Highlighter contrast for dark mode */
+  [data-theme="dark"] .hl { color: var(--paper); }
+
+  /* Pushpin tip in dark mode \u2014 brighter so it pops */
+  [data-theme="dark"] .sticky.pin::before {
+    background: radial-gradient(circle at 35% 30%, #ff9a85, var(--red) 70%);
+  }
+
+  /* Live dot in the now-panel uses signal red; in dark the pulse glow needs tweaking */
+  [data-theme="dark"] .now li .v .live-dot {
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--red) 24%, transparent);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html {
+    background: var(--paper);
+  }
+  body {
+    background:
+      /* faint paper grain via radial speckles */
+      radial-gradient(circle at 15% 10%, rgba(120, 90, 50, 0.04) 0%, transparent 30%),
+      radial-gradient(circle at 85% 70%, rgba(120, 90, 50, 0.035) 0%, transparent 35%),
+      radial-gradient(circle at 50% 50%, rgba(120, 90, 50, 0.025) 0%, transparent 60%),
+      var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+  [data-theme="dark"] body {
+    background:
+      radial-gradient(circle at 15% 10%, rgba(255, 220, 160, 0.020) 0%, transparent 30%),
+      radial-gradient(circle at 85% 70%, rgba(255, 220, 160, 0.018) 0%, transparent 35%),
+      radial-gradient(circle at 50% 50%, rgba(255, 220, 160, 0.012) 0%, transparent 60%),
+      var(--paper);
+  }
+  ::selection { background: var(--hl); color: var(--ink); }
+
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; padding: 0; }
+  p { margin: 0 0 1.1em 0; }
+  h1, h2, h3, h4 { font-weight: 400; margin: 0; }
+
+  /* ───────── Page frame ───────── */
+  .page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 4vw, 48px);
+    position: relative;
+  }
+
+  /* The text column is narrow + center-left; the right side holds marginalia */
+  .col {
+    max-width: 640px;
+    position: relative;
+  }
+  .col.wide { max-width: 760px; }
+
+  /* ───────── Top bar ───────── */
+  .top {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 28px 0 22px 0;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 56px;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .monogram {
+    display: flex; align-items: center; gap: 12px;
+    font-family: var(--mono); font-size: 12px;
+    color: var(--ink-soft); letter-spacing: 0.04em;
+  }
+  .monogram .sigil {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif); font-size: 22px; line-height: 1;
+    font-style: italic;
+    transform: rotate(-6deg);
+  }
+  .monogram .sigil::after {
+    content: ""; position: absolute;
+  }
+
+  nav.top-nav { display: flex; gap: 22px; font-family: var(--mono); font-size: 12px; color: var(--ink-soft); letter-spacing: 0.02em; }
+  nav.top-nav a { padding: 4px 0; border-bottom: 1px solid transparent; transition: border-color .15s ease, color .15s ease; }
+  nav.top-nav a:hover { color: var(--red); border-bottom-color: var(--red); }
+  @media (max-width: 720px) { nav.top-nav { width: 100%; flex-wrap: wrap; gap: 14px; font-size: 11px; } }
+
+  /* ───────── Theme toggle ───────── */
+  .theme-toggle {
+    position: relative;
+    display: inline-flex; align-items: center; gap: 9px;
+    padding: 6px 14px 6px 12px;
+    border: 1px dashed var(--rule);
+    border-radius: 999px;
+    background: transparent;
+    cursor: pointer;
+    color: var(--ink-soft);
+    font-family: var(--hand);
+    font-size: 20px;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    transform: rotate(-1.5deg);
+    transition: transform .2s ease, color .2s ease, background-color .2s ease, border-color .2s ease;
+    overflow: hidden;
+  }
+  .theme-toggle:hover {
+    color: var(--red);
+    border-color: var(--red-light);
+    background: var(--paper-2);
+    transform: rotate(1deg) translateY(-1px);
+  }
+  .theme-toggle:active { transform: rotate(0) translateY(0); }
+  .theme-toggle svg {
+    width: 16px; height: 16px;
+    flex: none;
+    transition: transform .5s cubic-bezier(.4,.2,.2,1);
+  }
+  .theme-toggle:hover svg { transform: rotate(20deg); }
+
+  /* default (light) state: show moon + "working late?" */
+  .theme-toggle .icon-sun  { display: none; }
+  .theme-toggle .icon-moon { display: inline-block; }
+  .theme-toggle .lab-light { display: inline; white-space: nowrap; }
+  .theme-toggle .lab-dark  { display: none;   white-space: nowrap; }
+
+  /* dark state: show sun + "good morning?" */
+  [data-theme="dark"] .theme-toggle .icon-sun  { display: inline-block; }
+  [data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+  [data-theme="dark"] .theme-toggle .lab-dark  { display: inline; }
+  [data-theme="dark"] .theme-toggle .lab-light { display: none; }
+
+  /* ink-splat ripple on click */
+  .theme-toggle .splat {
+    position: absolute; inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .theme-toggle .splat::after {
+    content: "";
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 6px; height: 6px;
+    margin: -3px 0 0 -3px;
+    border-radius: 50%;
+    background: color-mix(in oklab, var(--red) 38%, transparent);
+    transform: scale(0); opacity: 0;
+  }
+  .theme-toggle.flipping .splat::after {
+    animation: splat .55s ease-out forwards;
+  }
+  @keyframes splat {
+    0%   { transform: scale(0);  opacity: 0.85; }
+    100% { transform: scale(40); opacity: 0; }
+  }
+
+  @media (max-width: 720px) {
+    .theme-toggle { font-size: 18px; padding: 5px 12px 5px 10px; }
+    .theme-toggle svg { width: 14px; height: 14px; }
+  }
+
+  /* ───────── Marginalia ───────── */
+  /* A note pinned to the right margin of the current column. Collapses inline on narrow screens. */
+  .margin-note {
+    position: absolute;
+    left: calc(100% + 36px);
+    top: 0;
+    width: 220px;
+    font-family: var(--hand);
+    font-size: 22px;
+    line-height: 1.15;
+    color: var(--red);
+    transform: rotate(-2deg);
+    pointer-events: none;
+  }
+  .margin-note.blue { color: var(--pen); }
+  .margin-note.right { transform: rotate(1.2deg); }
+  .margin-note .arrow {
+    display: inline-block;
+    transform: translateY(2px);
+  }
+  /* left-side variant */
+  .margin-note.left { left: auto; right: calc(100% + 36px); text-align: right; transform: rotate(2deg); }
+
+  @media (max-width: 1024px) {
+    .margin-note {
+      position: static;
+      width: auto;
+      display: inline-block;
+      margin: 8px 0 14px 8px;
+      transform: rotate(-1deg);
+    }
+    .margin-note.left { text-align: left; }
+  }
+
+  /* ───────── Hero ───────── */
+  .hero { padding: 24px 0 80px 0; position: relative; }
+
+  .hello {
+    font-family: var(--hand);
+    font-size: 28px;
+    color: var(--red);
+    transform: rotate(-2deg);
+    display: inline-block;
+    margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(54px, 7vw, 96px);
+    line-height: 0.98;
+    letter-spacing: -0.01em;
+    margin-bottom: 32px;
+    max-width: 14ch;
+  }
+  .hero h1 em { font-style: italic; color: var(--ink-soft); }
+  .hero h1 .red { color: var(--red); font-style: italic; }
+
+  .hero-lead {
+    font-family: var(--serif);
+    font-size: 22px;
+    line-height: 1.45;
+    color: var(--ink-soft);
+    max-width: 56ch;
+  }
+  .hero-lead em { color: var(--ink); }
+
+  /* Highlighter mark */
+  .hl {
+    position: relative;
+    display: inline;
+    background-image: linear-gradient(120deg, var(--hl) 0%, var(--hl-2) 100%);
+    background-repeat: no-repeat;
+    background-size: 100% 60%;
+    background-position: 0 70%;
+    padding: 0 2px;
+  }
+
+  /* Underline scribble */
+  .scribble {
+    display: inline-block;
+    position: relative;
+    color: var(--ink);
+    font-style: italic;
+  }
+  .scribble::after {
+    content: "";
+    position: absolute;
+    left: -2px; right: -2px;
+    bottom: -6px;
+    height: 8px;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 8' preserveAspectRatio='none'><path d='M2 5 Q 15 1 30 4 T 60 4 T 90 4 T 118 4' stroke='%23a83a20' stroke-width='1.6' fill='none' stroke-linecap='round'/></svg>") center/100% 100% no-repeat;
+  }
+  [data-theme="dark"] .scribble::after {
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 8' preserveAspectRatio='none'><path d='M2 5 Q 15 1 30 4 T 60 4 T 90 4 T 118 4' stroke='%23eb8364' stroke-width='1.6' fill='none' stroke-linecap='round'/></svg>") center/100% 100% no-repeat;
+  }
+
+  /* ───────── Right Now panel — real paper sticky note ───────── */
+  .now {
+    position: absolute;
+    right: 0; top: 60px;
+    width: 268px;
+    /* paper has subtle gradient + grain, not a flat color */
+    background:
+      radial-gradient(ellipse at 28% 18%, rgba(255, 250, 232, 0.45) 0%, transparent 55%),
+      radial-gradient(ellipse at 78% 82%, rgba(180, 145, 90, 0.05) 0%, transparent 60%),
+      linear-gradient(135deg,
+        color-mix(in oklab, var(--paper-2) 94%, #fff8e6 6%) 0%,
+        var(--paper-2) 55%,
+        color-mix(in oklab, var(--paper-2) 92%, #c9a560 8%) 100%);
+    border: 0;
+    border-radius: 1px;
+    padding: 24px 22px 22px 22px;
+    transform: rotate(2deg);
+    /* Layered shadows: edge-tight + mid lift + ambient depth */
+    box-shadow:
+      0 1px 0 rgba(60, 40, 20, 0.05),
+      2px 4px 8px rgba(60, 40, 20, 0.07),
+      6px 18px 36px rgba(60, 40, 20, 0.10),
+      0 1px 0 rgba(255, 250, 232, 0.55) inset;
+    font-family: var(--mono); font-size: 11.5px; color: var(--ink-soft);
+  }
+  /* Washi-style tape strip — translucent, soft-edged, slightly off-center */
+  .now::before {
+    content: ""; position: absolute;
+    top: -11px;
+    left: 38%;
+    width: 96px; height: 22px;
+    background:
+      /* subtle horizontal grain */
+      repeating-linear-gradient(90deg,
+        transparent 0,
+        transparent 5px,
+        rgba(255, 255, 255, 0.06) 5px,
+        rgba(255, 255, 255, 0.06) 6px),
+      /* main tape body */
+      linear-gradient(180deg,
+        rgba(245, 220, 130, 0.42) 0%,
+        rgba(232, 207, 115, 0.68) 50%,
+        rgba(245, 220, 130, 0.42) 100%);
+    transform: translateX(-50%) rotate(-7deg);
+    box-shadow:
+      0 2px 3px rgba(60, 40, 20, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    /* torn ragged edges via fade-out mask */
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 7%, black 93%, transparent 100%);
+            mask-image: linear-gradient(90deg, transparent 0%, black 7%, black 93%, transparent 100%);
+    pointer-events: none;
+  }
+  /* Corner curl — bottom-right reveals the "back" of the paper */
+  .now::after {
+    content: "";
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 24px; height: 24px;
+    background: linear-gradient(135deg,
+      color-mix(in oklab, var(--paper-2) 60%, #fff8e6 40%) 0%,
+      color-mix(in oklab, var(--paper-2) 80%, #c9a560 20%) 70%,
+      color-mix(in oklab, var(--paper-2) 88%, #8b6a3d 12%) 100%);
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
+    filter: drop-shadow(-1px -1px 2px rgba(60, 40, 20, 0.18));
+    pointer-events: none;
+  }
+  /* Dark mode — paper sticky reads as warm but darker */
+  [data-theme="dark"] .now {
+    background:
+      radial-gradient(ellipse at 28% 18%, rgba(255, 230, 180, 0.04) 0%, transparent 55%),
+      radial-gradient(ellipse at 78% 82%, rgba(60, 40, 20, 0.30) 0%, transparent 60%),
+      linear-gradient(135deg,
+        color-mix(in oklab, var(--paper-2) 94%, #6e5a30 6%) 0%,
+        var(--paper-2) 55%,
+        color-mix(in oklab, var(--paper-2) 88%, #2b1f12 12%) 100%);
+    box-shadow:
+      0 1px 0 rgba(0, 0, 0, 0.4),
+      2px 4px 10px rgba(0, 0, 0, 0.35),
+      6px 18px 36px rgba(0, 0, 0, 0.5),
+      0 1px 0 rgba(255, 230, 180, 0.05) inset;
+  }
+  [data-theme="dark"] .now::before {
+    background:
+      repeating-linear-gradient(90deg,
+        transparent 0,
+        transparent 5px,
+        rgba(255, 255, 255, 0.025) 5px,
+        rgba(255, 255, 255, 0.025) 6px),
+      linear-gradient(180deg,
+        rgba(190, 150, 70, 0.35) 0%,
+        rgba(170, 130, 55, 0.55) 50%,
+        rgba(190, 150, 70, 0.35) 100%);
+    box-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.5),
+      inset 0 1px 0 rgba(255, 220, 150, 0.12);
+  }
+  [data-theme="dark"] .now::after {
+    background: linear-gradient(135deg,
+      color-mix(in oklab, var(--paper-2) 55%, #5e4a2e 45%) 0%,
+      color-mix(in oklab, var(--paper-2) 78%, #2b1f12 22%) 70%,
+      color-mix(in oklab, var(--paper-2) 88%, #0a0805 12%) 100%);
+    filter: drop-shadow(-1px -1px 2px rgba(0, 0, 0, 0.45));
+  }
+  .now h4 {
+    font-family: var(--hand);
+    font-size: 26px; color: var(--ink);
+    margin-bottom: 14px;
+    transform: rotate(-1.5deg);
+    display: inline-block;
+  }
+  .now ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 9px; }
+  .now li { display: flex; gap: 8px; align-items: baseline; }
+  .now li .k { color: var(--ink-mute); min-width: 56px; font-size: 10.5px; letter-spacing: 0.05em; text-transform: uppercase; }
+  .now li .v { color: var(--ink); flex: 1; }
+  .now li .v .live-dot {
+    display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--red); margin-right: 6px;
+    animation: pulse 1.8s ease-in-out infinite;
+    transform: translateY(-1px);
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--red) 30%, transparent); }
+    50%      { box-shadow: 0 0 0 6px color-mix(in oklab, var(--red) 0%, transparent); }
+  }
+  @media (max-width: 1100px) {
+    .now { position: relative; right: auto; top: auto; margin: 36px 0 0 0; transform: rotate(0.5deg); }
+  }
+
+  /* ───────── Section header (stamped) ───────── */
+  .chapter {
+    margin: 64px 0 28px 0;
+    display: flex; align-items: center; gap: 18px;
+  }
+  .chapter::before, .chapter::after { content: ""; flex: 1; height: 1px; background: var(--rule); }
+  .chapter::before { max-width: 32px; }
+  .chapter .stamp {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--red);
+    padding: 4px 10px;
+    border: 1.5px solid var(--red);
+    border-radius: 2px;
+    transform: rotate(-1.5deg);
+  }
+  .chapter h2 {
+    font-family: var(--serif);
+    font-size: clamp(34px, 4.4vw, 54px);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .chapter h2 em { color: var(--ink-soft); }
+  .chapter h2 .hand { font-family: var(--hand); color: var(--red); font-size: 0.95em; }
+
+  /* Section body wrapper - keeps things in a column with marginalia space */
+  .section { padding-bottom: 28px; }
+
+  /* ───────── Things I keep building (field notes) ───────── */
+  .field {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 28px 56px;
+    margin-top: 14px;
+  }
+  @media (max-width: 880px) { .field { grid-template-columns: 1fr; gap: 28px; } }
+  .field-entry {
+    padding: 22px 0;
+    border-top: 1px solid var(--rule);
+    position: relative;
+  }
+  .field-entry:nth-child(1), .field-entry:nth-child(2) { border-top: 0; padding-top: 0; }
+  @media (max-width: 880px) { .field-entry:nth-child(2) { border-top: 1px solid var(--rule); padding-top: 22px; } }
+
+  .field-entry .ord {
+    font-family: var(--hand);
+    font-size: 30px; color: var(--red);
+    transform: rotate(-3deg);
+    display: inline-block;
+    margin-bottom: 6px;
+  }
+  .field-entry h3 {
+    font-family: var(--serif); font-size: 30px;
+    line-height: 1.08; letter-spacing: -0.005em;
+    margin-bottom: 12px;
+  }
+  .field-entry h3 em { color: var(--ink-soft); }
+  .field-entry p {
+    font-family: var(--serif); font-size: 18px;
+    line-height: 1.45; color: var(--ink-soft);
+  }
+  .field-entry .tags {
+    margin-top: 10px;
+    display: flex; flex-wrap: wrap; gap: 10px;
+    font-family: var(--mono); font-size: 11px; color: var(--ink-mute);
+    letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .field-entry .tags span::before { content: "·"; margin-right: 10px; color: var(--ink-faint); }
+  .field-entry .tags span:first-child::before { content: ""; margin-right: 0; }
+
+  /* ───────── The Work (project entries) ───────── */
+  .work-grid { display: flex; flex-direction: column; gap: 0; }
+  .work-entry {
+    padding: 28px 0;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 24px;
+    position: relative;
+  }
+  .work-entry:first-child { border-top: 0; }
+  @media (max-width: 720px) { .work-entry { grid-template-columns: 1fr; gap: 8px; } }
+
+  .work-entry .num {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-mute);
+    letter-spacing: 0.06em;
+    padding-top: 12px;
+  }
+  .work-entry .num span.year { display: block; font-family: var(--hand); font-size: 22px; color: var(--red); transform: rotate(-3deg); margin-top: 4px; }
+  .work-entry h3 {
+    font-family: var(--serif); font-size: 30px; line-height: 1.05;
+    margin-bottom: 8px;
+    letter-spacing: -0.005em;
+  }
+  .work-entry h3 em { color: var(--ink-soft); }
+  .work-entry .lede {
+    font-family: var(--serif); font-size: 19px; line-height: 1.5;
+    color: var(--ink-soft); margin-bottom: 10px;
+  }
+  .work-entry .lede em { color: var(--ink); font-style: italic; }
+  .work-entry .meta {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em;
+    color: var(--ink-mute);
+    display: flex; flex-wrap: wrap; gap: 14px;
+    margin-top: 6px;
+  }
+  .work-entry .meta b { color: var(--ink); font-weight: 400; text-transform: uppercase; }
+
+  /* Featured project: bigger, with a torn-paper artifact and tape */
+  .featured {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    padding: 32px 36px;
+    margin: 8px 0 28px 0;
+    position: relative;
+    transform: rotate(-0.4deg);
+    box-shadow: 0 14px 30px rgba(60, 40, 20, 0.08);
+  }
+  .featured::before {
+    content: "";
+    position: absolute; top: -14px; left: 28px;
+    width: 100px; height: 24px;
+    background: linear-gradient(90deg,
+      color-mix(in oklab, var(--tape) calc(var(--tape-a) * 80%), transparent),
+      color-mix(in oklab, var(--tape-2) calc(var(--tape-b) * 100%), transparent),
+      color-mix(in oklab, var(--tape) calc(var(--tape-a) * 80%), transparent));
+    transform: rotate(-4deg);
+    box-shadow: 0 1px 2px rgba(60, 40, 20, 0.1);
+  }
+  .featured .stamp-inline {
+    font-family: var(--mono); font-size: 10.5px; color: var(--red);
+    letter-spacing: 0.16em; text-transform: uppercase;
+    border: 1.2px solid var(--red); padding: 3px 8px; border-radius: 2px;
+    display: inline-block; transform: rotate(-1.2deg);
+    margin-bottom: 14px;
+  }
+  .featured h3 { font-family: var(--serif); font-size: 38px; line-height: 1.04; margin-bottom: 10px; letter-spacing: -0.01em; }
+  .featured h3 em { color: var(--ink-soft); }
+
+  /* ───────── Cyble chapter card ───────── */
+  .cyble-card {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    padding: 44px clamp(28px, 5vw, 64px);
+    margin: 24px 0;
+    position: relative;
+    box-shadow: 0 18px 40px rgba(60, 40, 20, 0.08);
+  }
+  .cyble-card::before {
+    content: "";
+    position: absolute; top: -14px; right: 56px;
+    width: 110px; height: 26px;
+    background: linear-gradient(90deg,
+      color-mix(in oklab, var(--tape) calc(var(--tape-a) * 80%), transparent),
+      color-mix(in oklab, var(--tape-2) calc(var(--tape-b) * 100%), transparent),
+      color-mix(in oklab, var(--tape) calc(var(--tape-a) * 80%), transparent));
+    transform: rotate(2.5deg);
+    box-shadow: 0 1px 2px rgba(60, 40, 20, 0.1);
+  }
+  .cyble-card .kicker {
+    font-family: var(--hand); font-size: 26px; color: var(--red);
+    transform: rotate(-1.8deg); display: inline-block; margin-bottom: 4px;
+  }
+  .cyble-card h2 {
+    font-family: var(--serif); font-size: clamp(40px, 5.5vw, 72px);
+    line-height: 0.98; letter-spacing: -0.015em;
+    margin-bottom: 22px; max-width: 18ch;
+  }
+  .cyble-card h2 em { color: var(--ink-soft); }
+  .cyble-card .lead {
+    font-family: var(--serif); font-size: 21px; line-height: 1.5;
+    color: var(--ink-soft); max-width: 60ch;
+    margin-bottom: 32px;
+  }
+  .cyble-card .lead em { color: var(--ink); }
+
+  /* Brand seal pinned to top-left of chapter cards (Cyble, Postman) */
+  .cyble-card .brand-mark {
+    position: absolute;
+    top: -22px;
+    left: -22px;
+    width: 78px;
+    height: 78px;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 1.5px solid var(--rule);
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(-8deg);
+    box-shadow: 0 8px 20px rgba(60, 40, 20, 0.14), 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+    z-index: 2;
+    transition: transform .25s cubic-bezier(.2,.6,.2,1);
+  }
+  .cyble-card .brand-mark:hover { transform: rotate(2deg) scale(1.06); }
+  [data-theme="dark"] .cyble-card .brand-mark {
+    background: var(--paper-3);
+    border-color: var(--rule);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.5), 0 1px 0 rgba(255,230,180,0.05) inset;
+  }
+  .cyble-card .brand-mark img,
+  .cyble-card .brand-mark svg {
+    width: 100%; height: 100%; object-fit: contain; display: block;
+  }
+  @media (max-width: 720px) {
+    .cyble-card .brand-mark { width: 60px; height: 60px; top: -16px; left: -16px; padding: 8px; }
+  }
+
+  /* Postman spot illustration — floats right of the lead text */
+  .postman-illo {
+    float: right;
+    width: clamp(180px, 24%, 240px);
+    margin: 4px 0 16px 28px;
+    pointer-events: none;
+    shape-outside: margin-box;
+  }
+  .postman-illo img {
+    width: 100%; height: auto; display: block;
+  }
+  .cyble-card .contrib-list { clear: right; }
+  @media (max-width: 720px) {
+    .postman-illo {
+      float: none;
+      width: 100%;
+      max-width: 240px;
+      margin: 8px auto 20px auto;
+    }
+  }
+
+  .contrib-list {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 22px 44px;
+    margin-top: 18px;
+  }
+  @media (max-width: 720px) { .contrib-list { grid-template-columns: 1fr; gap: 22px; } }
+  .contrib-item {
+    padding-top: 16px;
+    border-top: 1px solid var(--rule);
+  }
+  .contrib-item .lab {
+    font-family: var(--mono); font-size: 10.5px; color: var(--red);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .contrib-item h4 {
+    font-family: var(--serif); font-size: 22px;
+    line-height: 1.1; margin-bottom: 8px;
+  }
+  .contrib-item h4 em { color: var(--ink-soft); }
+  .contrib-item p { font-size: 16px; color: var(--ink-soft); margin: 0; line-height: 1.45; }
+
+  /* ───────── Career timeline — horizontal rail with alternating labels ───────── */
+  .career-timeline {
+    margin: 12px 0 36px 0;
+  }
+  .career-timeline .lab {
+    font-family: var(--hand);
+    font-size: 24px;
+    color: var(--red);
+    transform: rotate(-2deg);
+    display: inline-block;
+    margin-bottom: 14px;
+    line-height: 1;
+  }
+  .rail-wrap {
+    position: relative;
+    margin: 80px 12px 80px 12px;
+  }
+  .rail-wrap .rail {
+    height: 1.5px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      var(--rule) 8%,
+      var(--rule) 88%,
+      transparent 100%);
+    position: relative;
+  }
+  /* arrow head pointing forward at end of rail */
+  .rail-wrap .rail::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    border-top: 1.5px solid var(--rule);
+    border-right: 1.5px solid var(--rule);
+    transform: translateY(-50%) rotate(45deg);
+  }
+  .career-node {
+    position: absolute;
+    top: 50%;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--paper-2);
+    border: 2px solid var(--ink-mute);
+    transform: translate(-50%, -50%);
+    transition: transform .2s ease;
+    z-index: 2;
+  }
+  .career-node:hover { transform: translate(-50%, -50%) scale(1.2); }
+  .career-node.current {
+    background: var(--red);
+    border-color: var(--red);
+    width: 18px;
+    height: 18px;
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--red) 18%, transparent);
+  }
+  .career-node:hover.current { transform: translate(-50%, -50%) scale(1.15); }
+  /* connecting stem from node to label */
+  .career-node .stem {
+    position: absolute;
+    left: 50%;
+    width: 1px;
+    background: var(--rule);
+    transform: translateX(-50%);
+  }
+  .career-node.above .stem { bottom: calc(100% + 1px); height: 14px; }
+  .career-node.below .stem { top: calc(100% + 1px); height: 14px; }
+  /* the role label box */
+  .career-node .role-label {
+    position: absolute;
+    left: 50%;
+    width: max-content;
+    max-width: 180px;
+    transform: translateX(-50%);
+    text-align: center;
+    display: flex; flex-direction: column;
+    gap: 4px;
+  }
+  .career-node.above .role-label { bottom: calc(100% + 18px); }
+  .career-node.below .role-label { top: calc(100% + 18px); }
+  .career-node .role {
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.15;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+  }
+  .career-node.current .role em {
+    color: var(--red); font-style: italic;
+  }
+  .career-node .role em {
+    color: var(--ink-soft); font-style: italic;
+  }
+  .career-node .date {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--ink-mute);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .career-node.current .date { color: var(--red); }
+  /* "← now" handwritten tag near the current node */
+  .career-node.current::after {
+    content: "now";
+    position: absolute;
+    left: 28px;
+    top: 50%;
+    transform: translateY(-50%) rotate(-3deg);
+    font-family: var(--hand);
+    font-size: 22px;
+    color: var(--red);
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .career-node.current::after::before { content: "← "; }
+
+  /* Mobile: collapse into a vertical list */
+  @media (max-width: 720px) {
+    .rail-wrap {
+      margin: 8px 0 0 0;
+    }
+    .rail-wrap .rail { display: none; }
+    .career-node {
+      position: relative;
+      top: auto; left: 0 !important;
+      width: auto; height: auto;
+      background: transparent; border: 0;
+      transform: none;
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      padding: 10px 0;
+      box-shadow: none !important;
+    }
+    .career-node:hover { transform: none; }
+    .career-node.current { width: auto; height: auto; box-shadow: none; }
+    .career-node .stem { display: none; }
+    .career-node::before {
+      content: "";
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--paper-2);
+      border: 2px solid var(--ink-mute);
+      flex: none;
+      margin-top: 6px;
+    }
+    .career-node.current::before {
+      background: var(--red);
+      border-color: var(--red);
+    }
+    .career-node .role-label {
+      position: relative;
+      left: auto;
+      transform: none;
+      max-width: none;
+      text-align: left;
+      flex-direction: column;
+    }
+    .career-node.current::after {
+      position: relative;
+      left: auto; top: auto;
+      transform: rotate(-3deg);
+      margin-left: 8px;
+      align-self: center;
+    }
+  }
+
+  /* ───────── Credo (numbered opinions) ───────── */
+  .credo { display: flex; flex-direction: column; gap: 0; }
+  .credo-item {
+    padding: 18px 0;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 18px;
+    align-items: baseline;
+  }
+  .credo-item:first-child { border-top: 0; padding-top: 4px; }
+  .credo-item .n {
+    font-family: var(--hand); font-size: 38px; color: var(--red);
+    line-height: 1; transform: rotate(-4deg);
+  }
+  .credo-item p {
+    font-family: var(--serif); font-size: 22px;
+    line-height: 1.35; margin: 0; color: var(--ink);
+  }
+  .credo-item p em { color: var(--ink-soft); }
+
+  /* ───────── Sticky board ───────── */
+  .board-wrap { position: relative; }
+  .board-legend {
+    display: flex; flex-wrap: wrap; gap: 14px 22px;
+    margin: 0 0 22px 0;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-mute); letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .board-legend .leg { display: inline-flex; align-items: center; gap: 8px; }
+  .board-legend .sw {
+    width: 14px; height: 14px; border-radius: 2px;
+    box-shadow: 0 1px 2px rgba(60,40,20,0.18), inset 0 -2px 0 rgba(0,0,0,0.04);
+    display: inline-block;
+  }
+
+  .board {
+    position: relative;
+    padding: 44px 22px 56px 22px;
+    margin: 0 -10px;
+    background:
+      radial-gradient(circle at 22% 18%, rgba(120, 90, 50, 0.05), transparent 55%),
+      radial-gradient(circle at 78% 72%, rgba(120, 90, 50, 0.04), transparent 55%),
+      linear-gradient(180deg, rgba(120, 90, 50, 0.02), transparent 30%);
+    border-top: 1px dashed var(--rule);
+    border-bottom: 1px dashed var(--rule);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 12px;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .sticky {
+    --c:        #fce881;  /* default canary */
+    --c-dark:   rgba(0,0,0,0.08);
+    background: var(--c);
+    padding: 14px 14px 12px 14px;
+    min-width: 104px;
+    max-width: 140px;
+    border-radius: 1px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    font-family: var(--mono);
+    color: var(--ink);
+    box-shadow:
+      1px 2px 0 rgba(60, 40, 20, 0.04),
+      3px 7px 16px rgba(60, 40, 20, 0.12),
+      inset 0 -2px 0 var(--c-dark);
+    transition: transform .2s cubic-bezier(.2,.6,.2,1), box-shadow .2s ease;
+    cursor: default;
+    user-select: none;
+  }
+  .sticky::after {
+    /* bottom-right corner curl shadow */
+    content: "";
+    position: absolute;
+    right: 0; bottom: 0;
+    width: 28px; height: 28px;
+    background: radial-gradient(circle at 0% 0%, rgba(60,40,20,0.18), transparent 70%);
+    pointer-events: none;
+  }
+  .sticky:hover {
+    transform: rotate(0deg) scale(1.05) translateY(-2px) !important;
+    z-index: 5;
+    box-shadow:
+      1px 2px 0 rgba(60, 40, 20, 0.05),
+      6px 18px 32px rgba(60, 40, 20, 0.2),
+      inset 0 -2px 0 var(--c-dark);
+  }
+  .sticky .logo {
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .sticky .logo img,
+  .sticky .logo svg { width: 32px; height: 32px; display: block; }
+  .sticky .logo .fallback {
+    width: 32px; height: 32px;
+    border: 1.5px solid var(--ink); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif); font-style: italic; font-size: 18px;
+    color: var(--ink); background: rgba(255,255,255,0.5);
+  }
+  .sticky .name {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink);
+    text-align: center;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    line-height: 1.1;
+  }
+
+  /* size variants */
+  .sticky.lg { min-width: 124px; max-width: 160px; padding: 18px 18px 16px 18px; }
+  .sticky.lg .logo, .sticky.lg .logo img, .sticky.lg .logo svg { width: 40px; height: 40px; }
+  .sticky.lg .name { font-size: 12.5px; }
+  .sticky.sm { min-width: 84px; padding: 10px 12px 10px 12px; }
+  .sticky.sm .logo, .sticky.sm .logo img, .sticky.sm .logo svg { width: 24px; height: 24px; }
+  .sticky.sm .name { font-size: 10.5px; }
+
+  /* color variants — muted Post-it palette */
+  .sticky.c-ai    { --c: #d0dff5; --c-dark: rgba(40, 60, 110, 0.10); }  /* blue */
+  .sticky.c-sec   { --c: #f4c8d4; --c-dark: rgba(120, 30, 60, 0.10); }  /* pink */
+  .sticky.c-cloud { --c: #cce4cc; --c-dark: rgba(40, 90, 50, 0.10); }   /* mint */
+  .sticky.c-data  { --c: #fce881; --c-dark: rgba(110, 80, 20, 0.10); }  /* yellow */
+  .sticky.c-fe    { --c: #e0d0eb; --c-dark: rgba(70, 40, 100, 0.10); }  /* lavender */
+  .sticky.c-ops   { --c: #f6cfa3; --c-dark: rgba(110, 60, 20, 0.10); }  /* peach */
+
+  /* Dark mode: deeper jewel-tone post-its */
+  [data-theme="dark"] .sticky.c-ai    { --c: #2b3a5a; --c-dark: rgba(0,0,0,0.35); }
+  [data-theme="dark"] .sticky.c-sec   { --c: #5a2e3c; --c-dark: rgba(0,0,0,0.35); }
+  [data-theme="dark"] .sticky.c-cloud { --c: #2c4a36; --c-dark: rgba(0,0,0,0.35); }
+  [data-theme="dark"] .sticky.c-data  { --c: #5a4520; --c-dark: rgba(0,0,0,0.35); }
+  [data-theme="dark"] .sticky.c-fe    { --c: #3d2e4f; --c-dark: rgba(0,0,0,0.35); }
+  [data-theme="dark"] .sticky.c-ops   { --c: #5d3a23; --c-dark: rgba(0,0,0,0.35); }
+  [data-theme="dark"] .sticky {
+    box-shadow:
+      1px 2px 0 rgba(0, 0, 0, 0.25),
+      3px 7px 16px rgba(0, 0, 0, 0.45),
+      inset 0 -2px 0 var(--c-dark);
+  }
+  [data-theme="dark"] .sticky::after {
+    background: radial-gradient(circle at 0% 0%, rgba(0,0,0,0.35), transparent 70%);
+  }
+  [data-theme="dark"] .sticky .logo .fallback {
+    border-color: var(--ink); color: var(--ink);
+    background: rgba(0,0,0,0.18);
+  }
+  [data-theme="dark"] .board-legend .sw {
+    box-shadow: 0 1px 2px rgba(0,0,0,0.35), inset 0 -2px 0 rgba(0,0,0,0.18);
+  }
+  [data-theme="dark"] .board-legend .leg:nth-child(1) .sw { background: #2b3a5a; }
+  [data-theme="dark"] .board-legend .leg:nth-child(2) .sw { background: #5a2e3c; }
+  [data-theme="dark"] .board-legend .leg:nth-child(3) .sw { background: #2c4a36; }
+  [data-theme="dark"] .board-legend .leg:nth-child(4) .sw { background: #5a4520; }
+  [data-theme="dark"] .board-legend .leg:nth-child(5) .sw { background: #3d2e4f; }
+  [data-theme="dark"] .board-legend .leg:nth-child(6) .sw { background: #5d3a23; }
+
+  /* a few favorites get a tape strip */
+  .sticky.tape::before {
+    content: "";
+    position: absolute;
+    top: -8px; left: 50%;
+    width: 46px; height: 14px;
+    background: linear-gradient(90deg,
+      color-mix(in oklab, var(--tape) calc(var(--tape-a) * 100%), transparent),
+      color-mix(in oklab, var(--tape-2) calc(var(--tape-b) * 100%), transparent),
+      color-mix(in oklab, var(--tape) calc(var(--tape-a) * 100%), transparent));
+    transform: translateX(-50%) rotate(-3deg);
+    box-shadow: 0 1px 2px rgba(60, 40, 20, 0.12);
+    pointer-events: none;
+  }
+
+  /* a pushpin variant */
+  .sticky.pin::before {
+    content: "";
+    position: absolute;
+    top: -5px; left: 50%;
+    width: 12px; height: 12px;
+    background: radial-gradient(circle at 35% 30%, #ff8c7a, var(--red) 70%);
+    border-radius: 50%;
+    transform: translateX(-50%);
+    box-shadow:
+      0 2px 3px rgba(0,0,0,0.25),
+      inset -1px -1.5px 2px rgba(0,0,0,0.2),
+      inset 1px 1px 1px rgba(255,255,255,0.4);
+    pointer-events: none;
+  }
+
+  @media (max-width: 720px) {
+    .sticky { min-width: 90px; max-width: 120px; padding: 12px 12px 10px 12px; }
+    .sticky.lg { min-width: 100px; max-width: 130px; }
+    .sticky .logo, .sticky .logo img { width: 28px; height: 28px; }
+    .sticky .name { font-size: 10.5px; }
+  }
+
+  /* ───────── Lately (notes preview) ───────── */
+  .notes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  @media (max-width: 880px) { .notes { grid-template-columns: 1fr; } }
+  .note {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    padding: 22px 22px 20px 22px;
+    position: relative;
+    transition: transform .2s ease;
+  }
+  .note:nth-child(1) { transform: rotate(-1deg); }
+  .note:nth-child(2) { transform: rotate(0.6deg); }
+  .note:nth-child(3) { transform: rotate(-0.4deg); }
+  .note:hover { transform: rotate(0deg) translateY(-3px); }
+  .note .date { font-family: var(--mono); font-size: 10.5px; color: var(--ink-mute); letter-spacing: 0.06em; text-transform: uppercase; }
+  .note h4 { font-family: var(--serif); font-size: 26px; line-height: 1.08; margin: 8px 0 10px 0; }
+  .note h4 em { color: var(--ink-soft); }
+  .note p { font-family: var(--serif); font-size: 17px; color: var(--ink-soft); line-height: 1.45; margin: 0; }
+  .note .more {
+    margin-top: 12px;
+    display: inline-block;
+    font-family: var(--mono); font-size: 11px; color: var(--red);
+    letter-spacing: 0.04em;
+  }
+
+  /* ───────── Signoff / contact ───────── */
+  .signoff {
+    margin: 72px 0 40px 0;
+    padding: 56px 0 0 0;
+    border-top: 1px solid var(--rule);
+    position: relative;
+  }
+
+  /* Recruiter callout card (in signoff) */
+  .recruiter-cta {
+    margin: 56px 0 8px 0;
+    max-width: 520px;
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    padding: 22px 24px 22px 24px;
+    position: relative;
+    transform: rotate(-0.6deg);
+    box-shadow: 0 14px 32px rgba(60, 40, 20, 0.08);
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .recruiter-cta:hover {
+    transform: rotate(0.3deg) translateY(-2px);
+    box-shadow: 0 18px 36px rgba(60, 40, 20, 0.12);
+  }
+  [data-theme="dark"] .recruiter-cta {
+    box-shadow: 0 18px 40px rgba(0,0,0,0.5), 0 1px 0 rgba(255,230,180,0.04) inset;
+  }
+  [data-theme="dark"] .recruiter-cta:hover {
+    box-shadow: 0 22px 48px rgba(0,0,0,0.6), 0 1px 0 rgba(255,230,180,0.05) inset;
+  }
+  .recruiter-cta::before {
+    content: "";
+    position: absolute; top: -12px; left: 28px;
+    width: 86px; height: 22px;
+    background: linear-gradient(90deg,
+      color-mix(in oklab, var(--tape) calc(var(--tape-a) * 80%), transparent),
+      color-mix(in oklab, var(--tape-2) calc(var(--tape-b) * 100%), transparent),
+      color-mix(in oklab, var(--tape) calc(var(--tape-a) * 80%), transparent));
+    transform: rotate(-3deg);
+    box-shadow: 0 1px 2px rgba(60, 40, 20, 0.12);
+    pointer-events: none;
+  }
+  .recruiter-cta .kicker {
+    font-family: var(--hand);
+    font-size: 24px;
+    color: var(--red);
+    transform: rotate(-1.5deg);
+    display: inline-block;
+    margin-bottom: 6px;
+  }
+  .recruiter-cta h4 {
+    font-family: var(--serif);
+    font-size: 30px;
+    line-height: 1.05;
+    margin-bottom: 8px;
+    letter-spacing: -0.005em;
+  }
+  .recruiter-cta h4 em { color: var(--ink-soft); }
+  .recruiter-cta p {
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.45;
+    color: var(--ink-soft);
+    margin: 0 0 14px 0;
+    max-width: 50ch;
+  }
+  .recruiter-cta .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 11.5px;
+    color: var(--red); letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 6px 12px;
+    border: 1.5px solid var(--red); border-radius: 999px;
+    transition: gap .2s ease, background-color .2s ease, color .2s ease;
+  }
+  .recruiter-cta:hover .pill { gap: 12px; background: var(--red); color: var(--paper); }
+  .signoff .salutation {
+    font-family: var(--hand);
+    font-size: 36px; color: var(--red);
+    transform: rotate(-2deg);
+    display: inline-block; margin-bottom: 18px;
+  }
+  .signoff p.letter {
+    font-family: var(--serif); font-size: 24px; line-height: 1.45;
+    max-width: 32ch; color: var(--ink);
+  }
+  .signoff p.letter em { color: var(--ink-soft); }
+  .signoff .yours {
+    font-family: var(--hand); font-size: 28px;
+    color: var(--ink-soft); transform: rotate(-1.5deg);
+    margin-top: 28px; display: inline-block;
+  }
+  .signoff .signature {
+    font-family: var(--serif); font-style: italic;
+    font-size: 64px; color: var(--ink);
+    transform: rotate(-3deg) skewX(-4deg);
+    display: inline-block; margin-top: -6px;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 0;
+    letter-spacing: -0.02em;
+  }
+  .contacts {
+    margin-top: 48px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 32px;
+    max-width: 640px;
+  }
+  @media (max-width: 720px) { .contacts { grid-template-columns: 1fr; } }
+  .contacts a {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--rule);
+    display: flex; justify-content: space-between;
+    font-family: var(--mono); font-size: 13px; color: var(--ink);
+    letter-spacing: 0.02em;
+    transition: padding .15s ease, color .15s ease;
+  }
+  .contacts a:hover { padding-left: 8px; color: var(--red); }
+  .contacts a .k { color: var(--ink-mute); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
+
+  footer.colophon {
+    margin-top: 60px;
+    padding: 22px 0;
+    border-top: 1px solid var(--rule);
+    display: flex; justify-content: space-between; gap: 22px;
+    flex-wrap: wrap;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-mute); letter-spacing: 0.04em;
+  }
+  footer.colophon b { color: var(--ink); font-weight: 400; }
+
+  /* ───────── Misc ornaments ───────── */
+  .ornament {
+    display: flex; align-items: center; justify-content: center;
+    margin: 64px 0 32px 0;
+    color: var(--ink-faint);
+    font-family: var(--serif); font-size: 26px; letter-spacing: 1em;
+  }
+  .ornament::before, .ornament::after {
+    content: ""; height: 1px; flex: 1; background: var(--rule); max-width: 220px;
+  }
+  .ornament span { padding: 0 22px; transform: translateY(-4px); }
+
+  /* arrow accent (handwritten) */
+  .squiggle-arrow {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  /* paper grid for stationery feel */
+  .ruled {
+    background-image: linear-gradient(to bottom, transparent 0, transparent calc(100% - 1px), rgba(120, 90, 50, 0.1) 100%);
+    background-size: 100% 1.55em;
+  }
+
+  /* ───────── SCROLL: page progress + chapter indicator ───────── */
+  .page-progress {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: 2px;
+    background: transparent;
+    z-index: 100;
+    pointer-events: none;
+  }
+  .page-progress .bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--red) 0%, var(--red-light) 100%);
+    width: 0;
+    transition: width .08s linear;
+    box-shadow: 0 0 8px color-mix(in oklab, var(--red) 40%, transparent);
+  }
+
+  .chapter-indicator {
+    position: fixed;
+    left: 24px;
+    bottom: 24px;
+    z-index: 90;
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 8px 14px 8px 12px;
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-soft);
+    letter-spacing: 0.06em; text-transform: uppercase;
+    box-shadow: 0 6px 16px rgba(60, 40, 20, 0.12);
+    transform: translateY(20px);
+    opacity: 0;
+    transition: transform .35s cubic-bezier(.2,.7,.2,1), opacity .25s ease;
+    pointer-events: none;
+  }
+  [data-theme="dark"] .chapter-indicator {
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.5);
+  }
+  .chapter-indicator.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  .chapter-indicator .ord {
+    color: var(--red);
+    font-family: var(--hand);
+    font-size: 17px;
+    line-height: 1;
+    letter-spacing: 0;
+    text-transform: none;
+    transform: rotate(-3deg) translateY(-1px);
+    display: inline-block;
+  }
+  .chapter-indicator .lab {
+    color: var(--ink);
+  }
+  @media (max-width: 720px) {
+    .chapter-indicator { left: 12px; bottom: 12px; font-size: 10px; padding: 7px 12px 7px 10px; }
+  }
+
+  /* "keep scrolling" hint — removed; scroll-progress system replaces it */
+  /* (old .reveal-* system removed — replaced by .scr.* scroll-progress system above) */
+
+  /* ─────────────────── PAPER NOTE SYSTEM ─────────────────── */
+  /* Applied to every paper-card surface — overrides earlier per-card
+     background/border/box-shadow rules via cascade order. */
+
+  /* (1) Paper surface — gradient + grain, no border, layered shadows */
+  .featured,
+  .cyble-card,
+  .note,
+  .recruiter-cta {
+    background:
+      radial-gradient(ellipse at 28% 18%, rgba(255, 250, 232, 0.45) 0%, transparent 55%),
+      radial-gradient(ellipse at 78% 82%, rgba(180, 145, 90, 0.05) 0%, transparent 60%),
+      linear-gradient(135deg,
+        color-mix(in oklab, var(--paper-2) 94%, #fff8e6 6%) 0%,
+        var(--paper-2) 55%,
+        color-mix(in oklab, var(--paper-2) 92%, #c9a560 8%) 100%);
+    border: 0;
+    box-shadow:
+      0 1px 0 rgba(60, 40, 20, 0.05),
+      2px 4px 10px rgba(60, 40, 20, 0.08),
+      8px 22px 44px rgba(60, 40, 20, 0.12),
+      0 1px 0 rgba(255, 250, 232, 0.55) inset;
+  }
+
+  /* (2) Washi tape on cards with a centered tape strip ::before */
+  .featured::before,
+  .cyble-card::before,
+  .recruiter-cta::before {
+    background:
+      repeating-linear-gradient(90deg,
+        transparent 0, transparent 5px,
+        rgba(255, 255, 255, 0.06) 5px, rgba(255, 255, 255, 0.06) 6px),
+      linear-gradient(180deg,
+        rgba(245, 220, 130, 0.42) 0%,
+        rgba(232, 207, 115, 0.68) 50%,
+        rgba(245, 220, 130, 0.42) 100%);
+    box-shadow:
+      0 2px 3px rgba(60, 40, 20, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 7%, black 93%, transparent 100%);
+            mask-image: linear-gradient(90deg, transparent 0%, black 7%, black 93%, transparent 100%);
+  }
+
+  /* (3) Corner curl at bottom-right — paper-back triangle with fold shadow */
+  .featured::after,
+  .cyble-card::after,
+  .note::after,
+  .recruiter-cta::after {
+    content: "";
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 24px; height: 24px;
+    background: linear-gradient(135deg,
+      color-mix(in oklab, var(--paper-2) 60%, #fff8e6 40%) 0%,
+      color-mix(in oklab, var(--paper-2) 80%, #c9a560 20%) 70%,
+      color-mix(in oklab, var(--paper-2) 88%, #8b6a3d 12%) 100%);
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
+    filter: drop-shadow(-1px -1px 2px rgba(60, 40, 20, 0.18));
+    pointer-events: none;
+  }
+  /* per-card curl size variations */
+  .cyble-card::after, .featured::after { width: 28px; height: 28px; }
+  .note::after { width: 18px; height: 18px; }
+
+  /* (4) Dark mode */
+  [data-theme="dark"] .featured,
+  [data-theme="dark"] .cyble-card,
+  [data-theme="dark"] .note,
+  [data-theme="dark"] .recruiter-cta {
+    background:
+      radial-gradient(ellipse at 28% 18%, rgba(255, 230, 180, 0.04) 0%, transparent 55%),
+      radial-gradient(ellipse at 78% 82%, rgba(60, 40, 20, 0.30) 0%, transparent 60%),
+      linear-gradient(135deg,
+        color-mix(in oklab, var(--paper-2) 94%, #6e5a30 6%) 0%,
+        var(--paper-2) 55%,
+        color-mix(in oklab, var(--paper-2) 88%, #2b1f12 12%) 100%);
+    box-shadow:
+      0 1px 0 rgba(0, 0, 0, 0.4),
+      2px 4px 10px rgba(0, 0, 0, 0.4),
+      8px 22px 44px rgba(0, 0, 0, 0.55),
+      0 1px 0 rgba(255, 230, 180, 0.05) inset;
+  }
+  [data-theme="dark"] .featured::before,
+  [data-theme="dark"] .cyble-card::before,
+  [data-theme="dark"] .recruiter-cta::before {
+    background:
+      repeating-linear-gradient(90deg,
+        transparent 0, transparent 5px,
+        rgba(255, 255, 255, 0.025) 5px, rgba(255, 255, 255, 0.025) 6px),
+      linear-gradient(180deg,
+        rgba(190, 150, 70, 0.35) 0%,
+        rgba(170, 130, 55, 0.55) 50%,
+        rgba(190, 150, 70, 0.35) 100%);
+    box-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.5),
+      inset 0 1px 0 rgba(255, 220, 150, 0.12);
+  }
+  [data-theme="dark"] .featured::after,
+  [data-theme="dark"] .cyble-card::after,
+  [data-theme="dark"] .note::after,
+  [data-theme="dark"] .recruiter-cta::after {
+    background: linear-gradient(135deg,
+      color-mix(in oklab, var(--paper-2) 55%, #5e4a2e 45%) 0%,
+      color-mix(in oklab, var(--paper-2) 78%, #2b1f12 22%) 70%,
+      color-mix(in oklab, var(--paper-2) 88%, #0a0805 12%) 100%);
+    filter: drop-shadow(-1px -1px 2px rgba(0, 0, 0, 0.45));
+  }
+</style>
+</head>
+<body>
+
+<!-- scroll progress bar (top) -->
+<div class="page-progress" aria-hidden="true"><div class="bar" id="page-progress-bar"></div></div>
+
+<!-- floating chapter indicator (bottom-left) -->
+<div class="chapter-indicator" id="chapter-indicator" aria-hidden="true">
+  <span class="ord" id="chapter-ord">§ 01</span>
+  <span class="lab" id="chapter-lab">hello</span>
+</div>
+
+<div class="page">
+
+  <!-- ───────── TOP ───────── -->
+  <div class="top">
+    <a href="#top" class="monogram">
+      <div class="sigil">P</div>
+      <span>Prince Sinha · est. somewhere around the time React was new</span>
+    </a>
+    <nav class="top-nav">
+      <a href="#work">work</a>
+      <a href="#cyble">cyble</a>
+      <a href="#credo">credo</a>
+      <a href="#toolkit">toolkit</a>
+      <a href="Notes.html">notes</a>
+      <a href="#say-hi">say hi</a>
+    </nav>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode">
+      <svg class="icon-moon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M13.5 9.7a5 5 0 0 1-6.7-6.7A5.5 5.5 0 1 0 13.5 9.7z"/>
+      </svg>
+      <svg class="icon-sun" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+        <circle cx="8" cy="8" r="2.8" fill="currentColor"/>
+        <path d="M8 1.2v1.8M8 13v1.8M1.2 8H3M13 8h1.8M3.1 3.1l1.3 1.3M11.6 11.6l1.3 1.3M3.1 12.9l1.3-1.3M11.6 4.4l1.3-1.3"/>
+      </svg>
+      <span class="lab-light">working late?</span>
+      <span class="lab-dark">good morning?</span>
+      <span class="splat" aria-hidden="true"></span>
+    </button>
+  </div>
+
+  <!-- ───────── HERO ───────── -->
+  <section class="hero" id="top">
+
+    <!-- right-now panel pinned to the right side -->
+    <aside class="now" id="now-panel">
+      <h4><a href="Now.html" style="color: inherit; border-bottom: 1px dashed currentColor; padding-bottom: 1px;">right now →</a></h4>
+      <ul>
+        <li><span class="k">in</span><span class="v">Bengaluru, IN · <span id="clock">—</span> IST</span></li>
+        <li><span class="k">doing</span><span class="v"><span class="live-dot"></span><span id="doing">teaching an agent to ask for permission</span></span></li>
+        <li><span class="k">reading</span><span class="v">papers on object-storage search layouts</span></li>
+        <li><span class="k">drinking</span><span class="v">filter coffee · second of the day</span></li>
+        <li><span class="k">status</span><span class="v" style="color: var(--red);">open to selective work</span></li>
+        <li><span class="k">recruiters</span><span class="v"><a href="For Recruiters.html" style="color: var(--red); border-bottom: 1px dashed var(--red);">there's a letter for you →</a></span></li>
+      </ul>
+    </aside>
+
+    <div class="col">
+      <span class="hello">hi, i'm —</span>
+
+      <h1 style="font-size: 95px">
+        Prince.
+      </h1>
+      <h1 style="font-size: 50px">
+        I build things that <span class="red">probably shouldn't</span> work, and then make them.
+      </h1>
+
+      <p class="hero-lead">
+        I'm an engineering leader and product builder. I spend most of my time at the messy
+        intersection of <span class="hl">AI agents, cybersecurity, and the infrastructure</span>
+        underneath both &mdash; turning ambiguous ideas into systems that actually run in
+        production and survive their first Tuesday.
+      </p>
+      <p class="hero-lead">
+        Lately that's looked like <em>analyst copilots</em>, <em>SOC automation</em>,
+        threat-intelligence platforms, search engines built on object storage,
+        agent runtimes, and the quiet, unglamorous work of making engineering teams
+        ship faster without setting things on fire.
+      </p>
+
+      <!-- margin notes -->
+      <div class="margin-note" style="top: 200px; left: 500px">
+        ← this one's a polite way of saying<br/>
+        <span style="color: var(--pen);">"I write a lot of YAML & Markdown"</span>
+      </div>
+    </div>
+
+  </section>
+
+  <div class="ornament"><span>✦</span></div>
+
+  <!-- ───────── THINGS I KEEP BUILDING ───────── -->
+  <section class="section" id="build">
+    <div class="chapter">
+      <div class="stamp">§ chapter one</div>
+      <h2>things I keep <em>ending up</em> building.</h2>
+    </div>
+
+    <div class="col wide">
+      <p style="font-family: var(--serif); font-size: 21px; line-height: 1.45; color: var(--ink-soft); max-width: 56ch; margin-bottom: 36px;">
+        You can read a portfolio by the shape of what it keeps returning to.
+        Mine has four shapes &mdash; and they keep finding each other.
+      </p>
+
+      <div class="field">
+
+        <div class="field-entry">
+          <span class="ord">one.</span>
+          <h3>AI that <em>does something.</em></h3>
+          <p>
+            Agents and copilots that connect to real tools, hold context,
+            ask before they act, and leave an audit trail you'd actually
+            want to read. Less chat, more <span class="scribble">work</span>.
+          </p>
+          <div class="tags"><span>tool-calling</span><span>RAG</span><span>HITL</span><span>MCP</span></div>
+        </div>
+
+        <div class="field-entry">
+          <span class="ord">two.</span>
+          <h3>Cybersecurity, the <em>boring useful</em> kind.</h3>
+          <p>
+            Threat intelligence platforms, SOC copilots, alert enrichment,
+            investigation flows. The point is to make analysts faster, not
+            replace them with a dashboard they'll close by Wednesday.
+          </p>
+          <div class="tags"><span>SOC</span><span>threat intel</span><span>enrichment</span><span>copilots</span></div>
+        </div>
+
+        <div class="field-entry">
+          <span class="ord">three.</span>
+          <h3>Platforms engineers <em>want to</em> use.</h3>
+          <p>
+            Kubernetes, GitOps with Argo CD, Devtron pipelines, IAM that
+            doesn't make people cry, internal tools that take a 40-minute
+            ritual down to one button.
+          </p>
+          <div class="tags"><span>k8s</span><span>Argo CD</span><span>Devtron</span><span>IDP</span></div>
+        </div>
+
+        <div class="field-entry">
+          <span class="ord">four.</span>
+          <h3>Data at <em>uncomfortable</em> scale.</h3>
+          <p>
+            Event collectors, ClickHouse analytics, object-storage indexes,
+            streaming pipelines. The infrastructure equivalent of carrying
+            more groceries than you should &mdash; <em>but cheaper</em>.
+          </p>
+          <div class="tags"><span>Go</span><span>ClickHouse</span><span>S3</span><span>Quickwit-ish</span></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="ornament"><span>✦ ✦ ✦</span></div>
+
+  <!-- ───────── THE WORK ───────── -->
+  <section class="section" id="work">
+    <div class="chapter">
+      <div class="stamp">§ chapter two</div>
+      <h2>the work, <em>annotated.</em></h2>
+    </div>
+
+    <div class="col wide">
+      <p style="font-family: var(--serif); font-size: 20px; color: var(--ink-soft); margin-bottom: 28px; max-width: 56ch;">
+        Project names are anonymized &mdash; titles below are field-note style,
+        not marketing-deck style. Ask me about any of them.
+        <span style="font-family: var(--hand); color: var(--red); font-size: 22px;">(no, really, ask)</span>
+      </p>
+
+      <!-- Featured one: agentic security analyst -->
+      <article class="featured">
+        <span class="stamp-inline">⊛ featured · still cooking</span>
+        <h3>The one where AI <em>does</em> the alert triage no one wants to do.</h3>
+        <p style="font-family: var(--serif); font-size: 19px; line-height: 1.5; color: var(--ink-soft); margin: 8px 0 12px 0; max-width: 56ch;">
+          An agentic cybersecurity analyst platform: a security team asks a question,
+          the system fans out across intelligence sources, enriches indicators,
+          correlates signals, drafts a structured brief, and lets an analyst
+          approve or override the next step. Humans in the loop, AI in the gears.
+        </p>
+        <div class="meta" style="font-family: var(--mono); font-size: 11.5px; color: var(--ink-mute); letter-spacing: 0.04em; display: flex; flex-wrap: wrap; gap: 18px;">
+          <span><b style="color: var(--ink);">CATEGORY</b> AI · Cybersecurity</span>
+          <span><b style="color: var(--ink);">ROLE</b> Product architecture · AI workflows · backend</span>
+          <span><b style="color: var(--ink);">VINTAGE</b> 2024–</span>
+        </div>
+      </article>
+
+      <div class="work-grid" id="work-list">
+        <!-- inserted by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── CYBLE CHAPTER ───────── -->
+  <section class="section" id="cyble" style="margin-top: 40px;">
+    <div class="cyble-card">
+      <div class="brand-mark" aria-label="Cyble logo">
+        <img src="https://cyble.com/wp-content/uploads/2024/01/cropped-Cyble-Threat-Intelligence.png" alt="Cyble" width="58" height="58" onerror="this.onerror=null;this.src='cyble-logo.svg';" />
+      </div>
+      <span class="kicker">a longer one ⤵</span>
+      <h2>A chapter at <em>Cyble</em>. <span style="font-style: italic; color: var(--red);">2021 → today.</span></h2>
+      <p class="lead">
+        At Cyble I worked across <em>cybersecurity product engineering, AI innovation,
+        and platform modernization</em>. The job, honestly described: take a bunch of
+        ambitious cybersecurity ideas and the engineering reality underneath them, and
+        find a way to ship both. AI-assisted investigation on one screen; Argo CD
+        rollouts on the other; people in between who needed both to actually work.
+      </p>
+
+      <!-- career timeline at Cyble: Jul 2021 → present -->
+      <div class="career-timeline">
+        <span class="lab">↬ the climb at Cyble —</span>
+        <div class="rail-wrap">
+          <div class="rail"></div>
+          <div class="career-node below" style="left: 6%;" data-comment-anchor="cda5ed11:187-sr-swe">
+            <span class="stem"></span>
+            <span class="role-label">
+              <span class="role">Senior Software Engineer</span>
+              <span class="date">Jul 2021</span>
+            </span>
+          </div>
+          <div class="career-node above" style="left: 30%;">
+            <span class="stem"></span>
+            <span class="role-label">
+              <span class="role">Engineering Manager</span>
+              <span class="date">Aug 2022</span>
+            </span>
+          </div>
+          <div class="career-node below" style="left: 60%;">
+            <span class="stem"></span>
+            <span class="role-label">
+              <span class="role">Director of Engineering</span>
+              <span class="date">Apr 2024</span>
+            </span>
+          </div>
+          <div class="career-node above current" style="left: 84%;">
+            <span class="stem"></span>
+            <span class="role-label">
+              <span class="role">Senior Director, <em>AI &amp; Innovations</em></span>
+              <span class="date">May 2025 — present</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="contrib-list">
+        <div class="contrib-item">
+          <div class="lab">01 · AI cybersecurity</div>
+          <h4>Investigation that <em>finishes itself.</em></h4>
+          <p>Workflows where analysts ask once, the system enriches indicators, correlates intelligence, and drafts a brief. Reduces the busywork, keeps the judgment human.</p>
+        </div>
+        <div class="contrib-item">
+          <div class="lab">02 · Agentic security</div>
+          <h4>Copilots that <em>ask first.</em></h4>
+          <p>Agents that search, enrich, summarize, and recommend &mdash; with approval gates so analysts stay in control of what actually happens next.</p>
+        </div>
+        <div class="contrib-item">
+          <div class="lab">03 · Threat intelligence</div>
+          <h4>Noise → <em>profiles.</em></h4>
+          <p>Threat actors, malware families, breach data, exposures, cybercrime activity. Raw data turned into searchable, structured intelligence.</p>
+        </div>
+        <div class="contrib-item">
+          <div class="lab">04 · SOC automation</div>
+          <h4>Triage that <em>respects analysts' time.</em></h4>
+          <p>Alert prioritization, dedup, enrichment, evidence collection, playbook-style automation across the tools SOCs already use.</p>
+        </div>
+        <div class="contrib-item">
+          <div class="lab">05 · Cloud-native</div>
+          <h4>From manual deploys → <em>GitOps.</em></h4>
+          <p>Dockerization, k8s deployments, Devtron + Argo CD pipelines, environment standardization, rollbacks that don't require a prayer.</p>
+        </div>
+        <div class="contrib-item">
+          <div class="lab">06 · Developer platform</div>
+          <h4>Internal tooling, <em>used voluntarily.</em></h4>
+          <p>Deployment workflows, IAM and access services, CI/CD templates, shared backends, dashboards that show what's actually happening.</p>
+        </div>
+        <div class="contrib-item">
+          <div class="lab">07 · Architecture</div>
+          <h4>Ambiguous ideas → <em>milestones.</em></h4>
+          <p>Breaking big product goals into deliverable slices. Mentoring engineers. Introducing quality gates that automation enforces.</p>
+        </div>
+        <div class="contrib-item">
+          <div class="lab">08 · AI in production</div>
+          <h4>Prototypes that <em>survive Tuesday.</em></h4>
+          <p>LLM-backed services, retrieval pipelines, GPU-aware deployment, HITL review, observability for the bits that hallucinate.</p>
+        </div>
+        <div class="contrib-item">
+          <div class="lab">09 · Cost &amp; scale</div>
+          <h4>Reliability <em>without surprise bills.</em></h4>
+          <p>Kubernetes scaling, AWS Graviton migrations, resource planning, observability, infrastructure standardization.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── POSTMAN CHAPTER ───────── -->
+  <section class="section" id="postman" style="margin-top: 0; padding-top: 32px;">
+    <div class="cyble-card" style="transform: rotate(0.4deg);">
+      <div class="brand-mark" aria-label="Postman logo">
+        <img src="postman-logo.svg" alt="Postman" width="58" height="58" />
+      </div>
+      <span class="kicker">↗ before that —</span>
+      <h2>An <em>API-first</em> year at <span style="font-style: italic; color: var(--red);">Postman.</span></h2>
+      <div class="postman-illo" aria-hidden="true">
+        <img src="postman-illustration.svg" alt="" loading="lazy" />
+      </div>
+      <p class="lead">
+        Before Cyble, I spent a year at Postman working on <em>Artemis</em>
+        &mdash; the web application &mdash; on Mock Servers, the OpenAPI design
+        editor, and the real-time events plumbing the rest of the app depends
+        on. The job, honestly described: ship the small pieces that make the
+        everyday work of API designers a little less painful, and lead
+        <em>API-first</em> as a real practice inside the team.
+      </p>
+
+      <div class="contrib-list" style="grid-template-columns: repeat(2, 1fr);">
+        <div class="contrib-item">
+          <div class="lab">01 · Mock Servers</div>
+          <h4>The plumbing <em>API designers depend on.</em></h4>
+          <p>Shipped Mock Server features on Artemis &mdash; real-time events for tabs and sidebar, real-time call logs, "move mock server to workspaces." Small features, big daily rituals.</p>
+        </div>
+        <div class="contrib-item">
+          <div class="lab">02 · API design editor</div>
+          <h4>Validation rulesets for <em>OpenAPI.</em></h4>
+          <p>Added feature/rulesets validation to Postman's OpenAPI design editor &mdash; closer to schema-as-source-of-truth than schema-as-afterthought.</p>
+        </div>
+        <div class="contrib-item">
+          <div class="lab">03 · GitHub sync</div>
+          <h4>100ms shaved off <em>schema sync.</em></h4>
+          <p>Cut API schema sync latency to GitHub by 100ms. A small number that compounds across thousands of pushes, across thousands of users.</p>
+        </div>
+        <div class="contrib-item">
+          <div class="lab">04 · API-first practice</div>
+          <h4>Led <em>API-first</em> as a habit.</h4>
+          <p>Drove API-first design adoption inside my team &mdash; contracts before code, contracts <em>as</em> the contract. The reason I still believe in API-first today.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ornament"><span>✦</span></div>
+
+  <!-- ───────── CREDO ───────── -->
+  <section class="section" id="credo">
+    <div class="chapter">
+      <div class="stamp">§ chapter three</div>
+      <h2>things I've come to <em>believe</em> about building.</h2>
+    </div>
+
+    <div class="col" style="position: relative;">
+      <div class="credo">
+        <div class="credo-item"><span class="n">i.</span><p>Demos are easy. Tuesdays are hard. Build for <em>Tuesday</em>.</p></div>
+        <div class="credo-item"><span class="n">ii.</span><p>The interesting AI problem is almost never the model. <em>It's the boundary around the model</em>.</p></div>
+        <div class="credo-item"><span class="n">iii.</span><p>Approvals, audit logs, and undo aren't UX features &mdash; they're <em>what makes a thing usable in the real world</em>.</p></div>
+        <div class="credo-item"><span class="n">iv.</span><p>If your platform requires a Slack message to ship code, <em>your platform isn't done</em>.</p></div>
+        <div class="credo-item"><span class="n">v.</span><p>Threat intel is mostly a data-modelling problem wearing a cybersecurity hat.</p></div>
+        <div class="credo-item"><span class="n">vi.</span><p>You can't outsource taste. <em>The smallest details are the ones nobody else will fix</em>.</p></div>
+        <div class="credo-item"><span class="n">vii.</span><p>Object storage is doing more than people give it credit for.</p></div>
+        <div class="credo-item"><span class="n">viii.</span><p>The best engineering leaders I know spend more time <em>removing things</em> than adding them.</p></div>
+      </div>
+
+      <div class="margin-note left" style="top: 110px;">
+        ← I keep<br/>this one<br/>on my wall
+      </div>
+      <div class="margin-note blue" style="top: 240px;">
+        <span style="font-size: 18px;">("agents" included)</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="ornament"><span>✦ ✦</span></div>
+
+  <!-- ───────── TOOLKIT ───────── -->
+  <section class="section" id="toolkit">
+    <div class="chapter">
+      <div class="stamp">§ chapter four</div>
+      <h2>the toolkit, <em>pinned</em> to the wall.</h2>
+    </div>
+
+    <div class="col wide" style="max-width: 920px;">
+      <p style="font-family: var(--serif); font-size: 20px; color: var(--ink-soft); margin-bottom: 22px; max-width: 56ch;">
+        Not a logo wall &mdash; a board. <span style="font-family: var(--hand); color: var(--red); font-size: 22px;">things that earned their place,</span> mostly in the order they joined the rotation. Hover to straighten.
+      </p>
+
+      <div class="board-legend">
+        <span class="leg"><span class="sw" style="background:#d0dff5;"></span>AI &amp; agents</span>
+        <span class="leg"><span class="sw" style="background:#f4c8d4;"></span>cybersecurity</span>
+        <span class="leg"><span class="sw" style="background:#cce4cc;"></span>cloud &amp; infra</span>
+        <span class="leg"><span class="sw" style="background:#fce881;"></span>backend &amp; data</span>
+        <span class="leg"><span class="sw" style="background:#e0d0eb;"></span>frontend</span>
+        <span class="leg"><span class="sw" style="background:#f6cfa3;"></span>tools &amp; ops</span>
+      </div>
+
+      <div class="board-wrap">
+        <div class="board" id="board"></div>
+      </div>
+
+      <p style="font-family: var(--hand); font-size: 22px; color: var(--ink-mute); margin-top: 18px; text-align: right;">
+        ↑ plus a stack of others not yet pinned.
+      </p>
+    </div>
+  </section>
+
+  <div class="ornament"><span>✦</span></div>
+
+  <!-- ───────── LATELY (notes) ───────── -->
+  <section class="section" id="lately">
+    <div class="chapter">
+      <div class="stamp">§ chapter five</div>
+      <h2>lately, I've been <em>thinking about</em>…</h2>
+    </div>
+
+    <div class="col wide">
+      <div class="notes">
+        <article class="note">
+          <div class="date">2026 · 05</div>
+          <h4>The interesting <em>boundary</em> around the model.</h4>
+          <p>Most "AI product" work is really tool design, approval flow design, and observability. The model just sits in the middle, doing the easy part.</p>
+          <a class="more" href="Note 01 - The boundary around the model.html">read note →</a>
+        </article>
+        <article class="note">
+          <div class="date">2026 · 04</div>
+          <h4>Search, on top of <em>object storage.</em></h4>
+          <p>What you give up, what you get back, where the math actually works out, and the strange small joy of a query plan that ends in <code style="font-family: var(--mono); font-size: 0.9em;">s3.GetObject</code>.</p>
+          <a class="more" href="Notes.html">read note →</a>
+        </article>
+        <article class="note">
+          <div class="date">2026 · 02</div>
+          <h4>Triage is a <em>UX problem</em>, mostly.</h4>
+          <p>After six months of watching analysts work, I'm convinced that what they need is less AI and more reorganization. The good AI helps with that, too.</p>
+          <a class="more" href="Notes.html">read note →</a>
+        </article>
+      </div>
+
+      <div style="margin-top: 32px; text-align: right;">
+        <a href="Notes.html" style="display: inline-flex; align-items: baseline; gap: 10px; font-family: var(--hand); font-size: 26px; color: var(--red); transform: rotate(-1.5deg); transition: gap .15s ease;" onmouseover="this.style.gap='16px'" onmouseout="this.style.gap='10px'">
+          see all notes <span style="font-family: var(--serif); font-style: italic; font-size: 22px;">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── SIGNOFF ───────── -->
+  <section class="signoff" id="say-hi">
+    <div class="col">
+      <span class="salutation">p.s. —</span>
+      <p class="letter">
+        If you read this far, that's flattering. I'm <em>open to a small number
+        of conversations</em> &mdash; for collaboration, hiring, advising, or just
+        comparing notes on cyber/AI things. The fastest path is email.
+        I usually reply within a day.
+      </p>
+
+      <div style="margin-top: 24px;">
+        <div class="yours">Yours,</div><br/>
+        <div class="signature">Prince Sinha</div>
+      </div>
+
+      <a href="For Recruiters.html" class="recruiter-cta">
+        <span class="kicker">↬ if you're a recruiter:</span>
+        <h4>I wrote you a <em>separate letter.</em></h4>
+        <p>
+          Six questions every cold email asks, answered up front — plus what I'm
+          open to, what to skip, and how to make this easy on both of us.
+        </p>
+        <span class="pill">read the letter <span aria-hidden="true">→</span></span>
+      </a>
+
+      <div class="contacts">
+        <a href="mailto:vishal.prince30@gmail.com"><span class="k">email</span><span>vishal.prince30@gmail.com →</span></a>
+        <a href="https://www.linkedin.com/in/princevishal/" target="_blank" rel="noopener"><span class="k">linkedin</span><span>in/princevishal →</span></a>
+        <a href="https://github.com/prince-vishal" target="_blank" rel="noopener"><span class="k">github</span><span>@prince-vishal →</span></a>
+        <a href="https://cal.com/prince-vishal-30/15min" target="_blank" rel="noopener"><span class="k">calendar</span><span>15 min call →</span></a>
+        <a href="https://theprincevishal.in" target="_blank" rel="noopener"><span class="k">website</span><span>theprincevishal.in →</span></a>
+        <a href="For Recruiters.html"><span class="k">for recruiters</span><span>a separate letter →</span></a>
+        <a href="resume.pdf" target="_blank" rel="noopener"><span class="k">resume</span><span>pdf →</span></a>
+      </div>
+    </div>
+
+    <footer class="colophon">
+      <div>© 2026 — <b>Prince Sinha</b>. made by hand, mostly.</div>
+      <div>set in Instrument Serif, Caveat &amp; Geist Mono.</div>
+      <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+        <a href="Now.html" style="color: var(--ink-mute); border-bottom: 1px dashed transparent; transition: color .15s ease, border-color .15s ease;" onmouseover="this.style.color='var(--red)';this.style.borderBottomColor='var(--red)'" onmouseout="this.style.color='var(--ink-mute)';this.style.borderBottomColor='transparent'">/now</a>
+        <a href="Uses.html" style="color: var(--ink-mute); border-bottom: 1px dashed transparent; transition: color .15s ease, border-color .15s ease;" onmouseover="this.style.color='var(--red)';this.style.borderBottomColor='var(--red)'" onmouseout="this.style.color='var(--ink-mute)';this.style.borderBottomColor='transparent'">/uses</a>
+        <a href="Colophon.html" style="color: var(--ink-mute); border-bottom: 1px dashed transparent; transition: color .15s ease, border-color .15s ease;" onmouseover="this.style.color='var(--red)';this.style.borderBottomColor='var(--red)'" onmouseout="this.style.color='var(--ink-mute)';this.style.borderBottomColor='transparent'">/colophon</a>
+        <a href="Notes.html" style="color: var(--ink-mute); border-bottom: 1px dashed transparent; transition: color .15s ease, border-color .15s ease;" onmouseover="this.style.color='var(--red)';this.style.borderBottomColor='var(--red)'" onmouseout="this.style.color='var(--ink-mute)';this.style.borderBottomColor='transparent'">/notes</a>
+      </div>
+      <div>end of notebook ▮</div>
+    </footer>
+  </section>
+
+</div>
+
+<script>
+  // ───────── Scroll animations (chapters reveal + page progress + indicator) ─────────
+  // ───────── Scroll-progress driven animations + page progress + chapter indicator ─────────
+  (function() {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // ── Tagging: assign each element a scroll-direction class ──
+    function tag(el, dir) { el.classList.add('scr', dir); }
+    function tagAll(selector, dir) {
+      document.querySelectorAll(selector).forEach(el => tag(el, dir));
+    }
+    function tagAlt(selector, a, b) {
+      document.querySelectorAll(selector).forEach((el, i) => tag(el, i % 2 === 0 ? a : b));
+    }
+    function tagCycle(selector, dirs) {
+      document.querySelectorAll(selector).forEach((el, i) => tag(el, dirs[i % dirs.length]));
+    }
+
+    // Section headers
+    tagAll('section.section .section-tag', 'down');
+    tagAll('section.section .chapter h2', 'left');
+    tagAll('section.section h2.display', 'left');
+    // Lead paragraph after a display heading
+    document.querySelectorAll('section.section h2.display, section.section .chapter').forEach(h => {
+      let n = h.nextElementSibling;
+      // walk forward to find the first paragraph
+      let hops = 0;
+      while (n && hops < 4) {
+        if (n.tagName === 'P') { tag(n, 'right'); break; }
+        n = n.nextElementSibling; hops++;
+      }
+    });
+
+    // §01 Field entries — alternating tilts left/right
+    tagAlt('.field .field-entry', 'tilt-l', 'tilt-r');
+
+    // §02 Featured project zooms in; project rows tagged later (after JS renders them)
+    tagAll('.featured', 'zoom');
+
+    // §03 / Postman cards lift in big, brand seals zoom, contrib items alternate
+    tagAll('.cyble-card', 'big-up');
+    tagAll('.cyble-card .brand-mark', 'zoom');
+    tagAll('.postman-illo', 'right');
+    tagAlt('.cyble-card .contrib-item', 'left', 'right');
+
+    // §04 Credo numbered items — each from left
+    tagAll('.credo .credo-item', 'left');
+
+    // §05 Toolkit — legend from below, chips cycle through directions for variety
+    tagAll('.board-legend', 'down');
+    // chips tagged after they render (see end of script)
+
+    // §06 Notes — three cards, three motions
+    tagCycle('.notes .note', ['tilt-l', 'up', 'tilt-r']);
+
+    // §07 Contact — giant heading lifts, links cascade in from the right
+    tagAll('.contact h2', 'up');
+    tagAll('.contact-links a', 'right');
+
+    // Quote/leadership pull quote + strengths grid
+    tagAll('.pull-quote', 'left');
+    tagAlt('.strengths .strength', 'left', 'right');
+
+    if (reduceMotion) {
+      // skip animation; ensure --p:1 so nothing stays hidden
+      document.querySelectorAll('.scr').forEach(el => el.style.setProperty('--p', '1'));
+    } else {
+      // ── Scroll-progress driver ──
+      let scrEls = [];
+      function register() { scrEls = Array.from(document.querySelectorAll('.scr')); }
+      function clamp(v, mn, mx) { return v < mn ? mn : v > mx ? mx : v; }
+
+      let ticking = false;
+      function update() {
+        const vh = window.innerHeight;
+        const enterY = vh * 0.92;   // element top crosses this → animation starts
+        const settleY = vh * 0.28;  // element top reaches this → fully settled
+        const range = enterY - settleY;
+
+        for (const el of scrEls) {
+          const r = el.getBoundingClientRect();
+          let p;
+          if (r.top > enterY + 100) p = 0;
+          else if (r.top < settleY) p = 1;
+          else {
+            p = clamp((enterY - r.top) / range, 0, 1);
+            // ease-out cubic for a more cinematic settle
+            p = 1 - Math.pow(1 - p, 3);
+          }
+          el.style.setProperty('--p', p.toFixed(3));
+        }
+        ticking = false;
+      }
+      function onScroll() {
+        if (!ticking) { requestAnimationFrame(update); ticking = true; }
+      }
+
+      register();
+      update();
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
+
+      // expose for dynamically-inserted nodes
+      window.__scrRegister = () => { register(); update(); };
+      window.__scrTag = tag;
+      window.__scrTagAlt = (els, a, b) => els.forEach((el, i) => tag(el, i % 2 === 0 ? a : b));
+      window.__scrTagCycle = (els, dirs) => els.forEach((el, i) => tag(el, dirs[i % dirs.length]));
+    }
+
+    // ── Page-progress bar ──
+    const progressBar = document.getElementById('page-progress-bar');
+    function updateProgress() {
+      const h = document.documentElement;
+      const scrollTop = h.scrollTop || document.body.scrollTop;
+      const scrollHeight = h.scrollHeight - h.clientHeight;
+      const pct = scrollHeight > 0 ? Math.min(100, (scrollTop / scrollHeight) * 100) : 0;
+      if (progressBar) progressBar.style.width = pct + '%';
+    }
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    window.addEventListener('resize', updateProgress, { passive: true });
+
+    // ── Chapter indicator ──
+    const chapters = [
+      { id: 'top',      ord: '§ 00',  lab: 'hello' },
+      { id: 'build',    ord: '§ 01',  lab: 'what i build' },
+      { id: 'work',     ord: '§ 02',  lab: 'the work' },
+      { id: 'cyble',    ord: '§ 03',  lab: 'cyble' },
+      { id: 'postman',  ord: '§ 03.5',lab: 'postman' },
+      { id: 'credo',    ord: '§ 04',  lab: 'credo' },
+      { id: 'toolkit',  ord: '§ 05',  lab: 'toolkit' },
+      { id: 'lately',   ord: '§ 06',  lab: 'lately' },
+      { id: 'say-hi',   ord: '§ 07',  lab: 'say hi' }
+    ];
+    const indicator = document.getElementById('chapter-indicator');
+    const ordEl = document.getElementById('chapter-ord');
+    const labEl = document.getElementById('chapter-lab');
+    const chapterEls = chapters.map(c => ({ ...c, el: document.getElementById(c.id) })).filter(c => c.el);
+    let currentChapterId = null;
+    function updateChapterIndicator() {
+      const probeY = window.scrollY + window.innerHeight * 0.35;
+      let active = chapterEls[0];
+      for (const c of chapterEls) {
+        if (c.el.offsetTop <= probeY) active = c;
+      }
+      if (window.scrollY < 240) { indicator.classList.remove('show'); return; }
+      if (active && active.id !== currentChapterId) {
+        currentChapterId = active.id;
+        ordEl.textContent = active.ord;
+        labEl.textContent = active.lab;
+      }
+      indicator.classList.add('show');
+    }
+    updateChapterIndicator();
+    window.addEventListener('scroll', updateChapterIndicator, { passive: true });
+    window.addEventListener('resize', updateChapterIndicator, { passive: true });
+  })();
+
+  // ───────── Theme toggle ─────────
+  const themeBtn = document.getElementById('theme-toggle');
+  function setTheme(theme, persist) {
+    document.documentElement.setAttribute('data-theme', theme);
+    if (persist) {
+      try { localStorage.setItem('theme', theme); } catch (e) {}
+    }
+  }
+  if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme') || 'light';
+      const next = current === 'light' ? 'dark' : 'light';
+      // ink-splat ripple
+      themeBtn.classList.remove('flipping');
+      // force reflow so animation restarts cleanly
+      void themeBtn.offsetWidth;
+      themeBtn.classList.add('flipping');
+      setTheme(next, true);
+    });
+  }
+
+  // ───────── Clock ─────────
+  function tick() {
+    const now = new Date();
+    const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+    const ist = new Date(utc + 5.5 * 3600 * 1000);
+    const hh = String(ist.getHours()).padStart(2, '0');
+    const mm = String(ist.getMinutes()).padStart(2, '0');
+    const el = document.getElementById('clock');
+    if (el) el.textContent = `${hh}:${mm}`;
+  }
+  tick();
+  setInterval(tick, 1000 * 30);
+
+  // ───────── Rotating "doing" line ─────────
+  const doings = [
+    "teaching an agent to ask for permission",
+    "convincing object storage it's a search engine",
+    "writing YAML, again, but on purpose",
+    "debugging an Argo CD rollout that's almost happy",
+    "tuning a triage prompt for the seventh time",
+    "reading stealer-log telemetry, slightly horrified",
+    "sketching an MCP runtime on a napkin",
+    "profiling a ClickHouse query at 2am ideas-time",
+    "drafting a postmortem nobody will read but me",
+    "watching a Graviton bill go down"
+  ];
+  let dIdx = 0;
+  const doingEl = document.getElementById('doing');
+  function rotateDoing() {
+    if (!doingEl) return;
+    doingEl.style.opacity = 0;
+    setTimeout(() => {
+      doingEl.textContent = doings[dIdx % doings.length];
+      doingEl.style.opacity = 1;
+      dIdx++;
+    }, 320);
+  }
+  if (doingEl) {
+    doingEl.style.transition = "opacity .25s ease";
+    setInterval(rotateDoing, 4200);
+  }
+
+  // ───────── The work list ─────────
+  const WORK = [
+    {
+      title: "An <em>MCP</em> server registry, because someone had to.",
+      brief: "Repo analysis, tool/prompt/resource detection, schema inference, .mcp.json generation, stdio → HTTP runtimes, and the deployment glue for running them somewhere real.",
+      cat: "AI Developer Tools",
+      role: "Founder · builder",
+      vintage: "2025"
+    },
+    {
+      title: "The one where I tried to <em>delegate</em> my inbox to an AI &mdash; and (sort of) did.",
+      brief: "An AI executive assistant: tool-calling, browser automation, sandboxed execution, approval flows, audit logs. Built so it can actually <em>do</em> things, not just talk about them.",
+      cat: "AI Agents · Productivity",
+      role: "Founder · builder",
+      vintage: "2024–"
+    },
+    {
+      title: "Making <em>object storage</em> do a search engine's job.",
+      brief: "Search infrastructure built on top of object storage to cut cost at scale. Rust backend, full-text indexing, future vector support, query plans that end in S3 reads.",
+      cat: "Search · Infrastructure",
+      role: "Backend & infra builder",
+      vintage: "2024"
+    },
+    {
+      title: "An AI agent that wants to <em>read the market</em>.",
+      brief: "Experimental: market data pipelines, JSONL dataset generation for fine-tuning, evaluation sets, and the slightly humbling experience of letting a model trade in paper.",
+      cat: "AI · Financial Research",
+      role: "Experimental builder",
+      vintage: "2024"
+    },
+    {
+      title: "Threat intelligence as a <em>real</em> operating system.",
+      brief: "A platform that turns raw cyber data into structured intelligence: threat actors, malware families, breach data, exposures &mdash; searchable, correlatable, profile-able.",
+      cat: "Cybersecurity · Data Platform",
+      role: "Platform architecture · product eng",
+      vintage: "2023–"
+    },
+    {
+      title: "SOC triage that <em>doesn't waste</em> the analyst's morning.",
+      brief: "Workflow automation for SOCs: prioritization, enrichment, related-signal grouping, AI-drafted summaries, evidence collection &mdash; with the analyst still on the steering wheel.",
+      cat: "SOC Automation",
+      role: "Product · engineering contributions",
+      vintage: "2023–"
+    },
+    {
+      title: "Cloud operations, <em>via sentence.</em>",
+      brief: "A DevOps automation platform for AWS/GCP: workflow engine, JSON/YAML task templates, audit logs, RBAC, and a natural-language interface for the boring stuff.",
+      cat: "DevOps · Cloud Automation",
+      role: "Product architect · builder",
+      vintage: "2023"
+    },
+    {
+      title: "An ad-verification system that ingests <em>more than it should</em>.",
+      brief: "High-scale ad measurement across web, mobile, CTV, video: Go collectors, ClickHouse analytics, object-storage batches, VAST/video tracking, fraud signal processing.",
+      cat: "AdTech · Fraud · Infra",
+      role: "Product architecture · backend & infra",
+      vintage: "2022"
+    },
+    {
+      title: "Watching the internet talk about <em>you</em>, calmly.",
+      brief: "A media intelligence and brand monitoring platform: social, news, app stores, broadcast, print, with AI summarization, sentiment, and alerting in one place.",
+      cat: "AI · Media Intelligence",
+      role: "Product · architecture",
+      vintage: "2022"
+    },
+    {
+      title: "Finding the buckets <em>you didn't know</em> were public.",
+      brief: "A cloud security tool focused on public storage exposure and misconfiguration. Discovery, risk classification, an interface, an API &mdash; defensive monitoring without the drama.",
+      cat: "Cloud Security",
+      role: "Product builder",
+      vintage: "2021"
+    },
+    {
+      title: "Did <em>that ad</em> really run? &mdash; the offline edition.",
+      brief: "A TV and print ad monitoring system: media capture, occurrence tracking, evidence management, campaign-level reporting, and the kind of audit trail advertisers want.",
+      cat: "Media Monitoring",
+      role: "System design",
+      vintage: "2021"
+    }
+  ];
+
+  // ───────── Sticky board (tools) ─────────
+  // Inline SVGs for brands that the simpleicons CDN doesn't serve reliably.
+  // Paths are from the simple-icons project (MIT licensed).
+  const CUSTOM_SVGS = {
+    'OpenAI': '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" aria-hidden="true"><path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.5346-3.0137l.142.0852 4.783 2.7582a.7712.7712 0 0 0 .7806 0l5.8428-3.3685v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655-1.9728V11.6a.7664.7664 0 0 0 .3879.6765l5.8144 3.3543-2.0201 1.1685a.0757.0757 0 0 1-.071 0l-4.8303-2.7865A4.504 4.504 0 0 1 2.3408 7.8956zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a.0757.0757 0 0 1 .071 0l4.8303 2.7913a4.4944 4.4944 0 0 1-.6765 8.1042v-5.6772a.79.79 0 0 0-.3927-.6813zm2.0107-3.0231l-.142-.0852-4.7735-2.7818a.7759.7759 0 0 0-.7854 0L9.409 9.2297V6.8974a.0662.0662 0 0 1 .0284-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02-1.1638a.0804.0804 0 0 1-.038-.0567V6.0742a4.4992 4.4992 0 0 1 7.3757-3.4537l-.142.0805L8.704 5.459a.7948.7948 0 0 0-.3927.6813zm1.0976-2.3654l2.602-1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997-2.6067-1.4997Z"/></svg>',
+    'AWS': '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#FF9900" aria-hidden="true"><path d="M6.763 10.036c0 .296.032.535.088.71.064.176.144.368.256.576.04.063.056.127.056.183 0 .08-.048.16-.152.24l-.503.335a.383.383 0 0 1-.208.072c-.08 0-.16-.04-.239-.112a2.47 2.47 0 0 1-.287-.375 6.18 6.18 0 0 1-.248-.471c-.622.734-1.405 1.101-2.347 1.101-.67 0-1.205-.191-1.596-.574-.391-.384-.59-.894-.59-1.533 0-.678.239-1.23.726-1.644.487-.415 1.133-.623 1.955-.623.272 0 .551.024.846.064.296.04.6.104.918.176v-.583c0-.607-.127-1.03-.375-1.277-.255-.248-.686-.367-1.3-.367-.28 0-.568.031-.863.103-.295.072-.583.16-.862.272a2.287 2.287 0 0 1-.28.104.488.488 0 0 1-.127.023c-.112 0-.168-.08-.168-.247v-.391c0-.128.016-.224.056-.28a.597.597 0 0 1 .224-.167c.279-.144.614-.264 1.005-.36a4.84 4.84 0 0 1 1.246-.151c.95 0 1.644.216 2.091.647.439.43.662 1.085.662 1.963v2.586zm-3.24 1.214c.263 0 .534-.048.822-.144.287-.096.543-.271.758-.51.128-.152.224-.32.272-.512.047-.191.08-.422.08-.694v-.335a6.66 6.66 0 0 0-.735-.136 6.02 6.02 0 0 0-.75-.048c-.535 0-.926.104-1.19.32-.263.215-.39.518-.39.917 0 .375.095.655.295.846.192.2.471.296.838.296zm6.41.862c-.144 0-.24-.024-.304-.08-.064-.048-.12-.16-.168-.311L7.586 5.55a1.398 1.398 0 0 1-.072-.32c0-.128.064-.2.191-.2h.783c.151 0 .255.025.31.08.065.048.113.16.16.312l1.342 5.284 1.245-5.284c.04-.16.088-.264.151-.312a.549.549 0 0 1 .32-.08h.638c.152 0 .256.025.32.08.063.048.12.16.151.312l1.261 5.348 1.381-5.348c.048-.16.104-.264.16-.312a.52.52 0 0 1 .311-.08h.743c.127 0 .2.065.2.2 0 .04-.009.08-.017.128a1.137 1.137 0 0 1-.056.2l-1.923 6.17c-.048.16-.104.263-.168.311a.51.51 0 0 1-.303.08h-.687c-.151 0-.255-.024-.32-.08-.063-.056-.119-.16-.15-.32l-1.238-5.148-1.23 5.14c-.04.16-.087.264-.15.32-.065.056-.177.08-.32.08zm10.256.215c-.415 0-.83-.048-1.229-.143-.399-.096-.71-.2-.918-.32-.128-.071-.215-.151-.247-.223a.563.563 0 0 1-.048-.224v-.407c0-.167.064-.247.183-.247.048 0 .096.008.144.024.048.016.12.048.2.08.271.12.566.215.878.279.319.064.63.096.95.096.502 0 .894-.088 1.165-.264a.86.86 0 0 0 .415-.758.777.777 0 0 0-.215-.559c-.144-.151-.416-.287-.807-.415l-1.157-.36c-.583-.183-1.014-.454-1.277-.813a1.902 1.902 0 0 1-.4-1.158c0-.335.073-.63.216-.886.144-.255.335-.479.575-.654.24-.184.51-.32.83-.415.32-.096.655-.136 1.006-.136.175 0 .359.008.535.032.183.024.35.056.518.088.16.04.312.08.455.127.144.048.256.096.336.144a.69.69 0 0 1 .24.2.43.43 0 0 1 .071.263v.375c0 .168-.064.256-.184.256a.83.83 0 0 1-.303-.096 3.652 3.652 0 0 0-1.532-.311c-.455 0-.815.071-1.062.223-.248.152-.375.383-.375.71 0 .224.08.416.24.567.159.152.454.304.877.44l1.134.358c.574.184.99.44 1.237.767.247.327.367.702.367 1.117 0 .343-.072.655-.207.926-.144.272-.336.511-.583.703-.248.2-.543.343-.886.447-.36.111-.734.167-1.142.167zM21.698 16.207c-2.626 1.94-6.442 2.969-9.722 2.969-4.598 0-8.74-1.7-11.87-4.526-.247-.223-.024-.527.27-.351 3.384 1.963 7.559 3.153 11.877 3.153 2.914 0 6.114-.607 9.06-1.852.439-.2.814.287.385.607zM22.792 14.961c-.336-.43-2.22-.207-3.074-.103-.255.032-.295-.192-.063-.36 1.5-1.053 3.967-.75 4.254-.399.287.36-.08 2.826-1.485 4.007-.215.184-.423.088-.327-.151.32-.79 1.03-2.57.694-2.994z"/></svg>'
+  };
+  // cat colors: ai | sec | cloud | data | fe | ops
+  // size:       sm | md | lg  (md is default)
+  // flag:       tape | pin  (optional)
+  const TOOLS = [
+    { name: 'OpenAI',         slug: 'openai',            cat: 'ai',    size: 'lg', flag: 'tape' },
+    { name: 'Anthropic',      slug: 'anthropic',         cat: 'ai' },
+    { name: 'Gemini',         slug: 'googlegemini',      cat: 'ai' },
+    { name: 'Ollama',         slug: 'ollama',            cat: 'ai' },
+    { name: 'LangChain',      slug: 'langchain',         cat: 'ai' },
+    { name: 'HuggingFace',    slug: 'huggingface',       cat: 'ai',    size: 'sm' },
+    { name: 'MCP',            slug: null,                cat: 'ai',    fallback: 'M' },
+    { name: 'LangGraph',      slug: null,                cat: 'ai',    fallback: 'L' },
+
+    { name: 'Kubernetes',     slug: 'kubernetes',        cat: 'cloud', size: 'lg', flag: 'pin' },
+    { name: 'Docker',         slug: 'docker',            cat: 'cloud' },
+    { name: 'AWS',            slug: 'amazonwebservices', cat: 'cloud', size: 'lg' },
+    { name: 'GCP',            slug: 'googlecloud',       cat: 'cloud' },
+    { name: 'Cloudflare',     slug: 'cloudflare',        cat: 'cloud' },
+    { name: 'Nginx',          slug: 'nginx',             cat: 'cloud', size: 'sm' },
+    { name: 'Linux',          slug: 'linux',             cat: 'cloud', size: 'sm' },
+
+    { name: 'Argo CD',        slug: 'argo',              cat: 'ops' },
+    { name: 'GitHub Actions', slug: 'githubactions',     cat: 'ops' },
+    { name: 'GitHub',         slug: 'github',            cat: 'ops' },
+    { name: 'Git',            slug: 'git',               cat: 'ops',   size: 'sm' },
+    { name: 'Grafana',        slug: 'grafana',           cat: 'ops',   size: 'sm' },
+    { name: 'Prometheus',     slug: 'prometheus',        cat: 'ops',   size: 'sm' },
+    { name: 'Devtron',        slug: null,                cat: 'ops',   fallback: 'D' },
+
+    { name: 'Go',             slug: 'go',                cat: 'data',  size: 'lg', flag: 'tape' },
+    { name: 'Rust',           slug: 'rust',              cat: 'data' },
+    { name: 'Python',         slug: 'python',            cat: 'data',  size: 'lg' },
+    { name: 'TypeScript',     slug: 'typescript',        cat: 'data' },
+    { name: 'Node.js',        slug: 'nodedotjs',         cat: 'data' },
+    { name: 'NestJS',         slug: 'nestjs',            cat: 'data',  size: 'sm' },
+    { name: 'Django',         slug: 'django',            cat: 'data',  size: 'sm' },
+    { name: 'PostgreSQL',     slug: 'postgresql',        cat: 'data' },
+    { name: 'MongoDB',        slug: 'mongodb',           cat: 'data',  size: 'sm' },
+    { name: 'ClickHouse',     slug: 'clickhouse',        cat: 'data',  flag: 'pin' },
+    { name: 'Elasticsearch',  slug: 'elasticsearch',     cat: 'data',  size: 'sm' },
+    { name: 'Redis',          slug: 'redis',             cat: 'data',  size: 'sm' },
+    { name: 'Quickwit',       slug: null,                cat: 'data',  size: 'sm', fallback: 'Q' },
+
+    { name: 'React',          slug: 'react',             cat: 'fe',    size: 'lg' },
+    { name: 'Next.js',        slug: 'nextdotjs',         cat: 'fe' },
+    { name: 'Tailwind',       slug: 'tailwindcss',       cat: 'fe' },
+    { name: 'shadcn/ui',      slug: 'shadcnui',          cat: 'fe',    size: 'sm' },
+    { name: 'Radix UI',       slug: 'radixui',           cat: 'fe',    size: 'sm' },
+    { name: 'MDX',            slug: 'mdx',               cat: 'fe',    size: 'sm' },
+    { name: 'Vite',           slug: 'vite',              cat: 'fe',    size: 'sm' },
+
+    { name: 'Postman',        slug: 'postman',           cat: 'ops' },
+    { name: 'Figma',          slug: 'figma',             cat: 'fe',    size: 'sm' },
+    { name: 'Vercel',         slug: 'vercel',            cat: 'fe',    size: 'sm' },
+    { name: 'Notion',         slug: 'notion',            cat: 'ops',   size: 'sm' }
+  ];
+
+  // light shuffle so each refresh feels a little different, but with stable rotations
+  function pseudoShuffle(arr) {
+    // Fisher-Yates with a deterministic but per-load random seed for fun
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  const boardEl = document.getElementById('board');
+  const ordered = pseudoShuffle(TOOLS);
+  boardEl.innerHTML = ordered.map((t, i) => {
+    const size = t.size || '';
+    const flag = t.flag || '';
+    // seeded rotation between -4 and +4 degrees
+    const rot = (((i * 53) % 9) - 4) + (Math.random() * 1.4 - 0.7);
+    const cls = ['sticky', 'c-' + t.cat, size, flag].filter(Boolean).join(' ');
+    const inner = CUSTOM_SVGS[t.name]
+      ? CUSTOM_SVGS[t.name]
+      : t.slug
+        ? `<img src="icons/${t.slug}.svg" alt="" loading="lazy" onerror="this.outerHTML='<div class=&quot;fallback&quot;>${(t.fallback || t.name[0])}</div>'">`
+        : `<div class="fallback">${t.fallback || t.name[0]}</div>`;
+    return `<div class="${cls}" style="transform: rotate(${rot.toFixed(2)}deg);" title="${t.name}"><div class="logo">${inner}</div><div class="name">${t.name}</div></div>`;
+  }).join('');
+
+  const wlist = document.getElementById('work-list');
+  wlist.innerHTML = WORK.map((w, i) => `
+    <article class="work-entry">
+      <div class="num">№ ${String(i + 2).padStart(2, '0')}<span class="year">${w.vintage}</span></div>
+      <div>
+        <h3>${w.title}</h3>
+        <p class="lede">${w.brief}</p>
+        <div class="meta">
+          <span><b>category</b> ${w.cat}</span>
+          <span><b>role</b> ${w.role}</span>
+        </div>
+      </div>
+    </article>
+  `).join('');
+
+  // ───────── Tag work entries (after they're rendered into the DOM) ─────────
+  document.querySelectorAll('#work-list .work-entry').forEach((el, i) => {
+    el.classList.add('scr', i % 2 === 0 ? 'left' : 'right');
+  });
+  // Tag sticky-board chips with mixed directions
+  document.querySelectorAll('.board .sticky').forEach((el, i) => {
+    const cycle = ['up', 'left', 'up', 'right', 'tilt-l', 'up', 'down', 'tilt-r'];
+    el.classList.add('scr', cycle[i % cycle.length]);
+  });
+  if (window.__scrRegister) window.__scrRegister();
+</script>
+
+</body>
+</html>

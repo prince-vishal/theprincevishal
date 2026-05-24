@@ -1,39 +1,34 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'Prince Sinha — builder, thinker, occasionally funny',
-  description:
-    'Personal internet space of Prince Sinha. Senior Director of Innovations & AI at Cyble. Builder of things that work. Thinker of thoughts that might.',
-  keywords: [
-    'Prince Sinha',
-    'portfolio',
-    'AI architect',
-    'full stack developer',
-    'cybersecurity',
-    'engineering leader',
-  ],
+  title: {
+    default: 'Prince Sinha',
+    template: '%s',
+  },
+  description: 'Engineering leader and product builder based in Bengaluru.',
   authors: [{ name: 'Prince Sinha' }],
-  openGraph: {
-    title: 'Prince Sinha — builder, thinker, occasionally funny',
-    description:
-      'Personal internet space. Engineering, AI, cybersecurity, and the occasional observation about being alive.',
-    url: 'https://theprincevishal.in',
-    siteName: 'Prince Sinha',
-    locale: 'en_US',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Prince Sinha',
-    description: 'Personal internet space.',
-  },
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <meta name="theme-color" content="#fbf3e6" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var saved = localStorage.getItem('theme');
+                  var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  var theme = saved || (prefersDark ? 'dark' : 'light');
+                  document.documentElement.setAttribute('data-theme', theme);
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
       </head>
       <body>{children}</body>
     </html>

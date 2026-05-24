@@ -1,0 +1,779 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Notes — Prince Sinha</title>
+<meta name="description" content="Half essay, half marginalia. Notes by Prince Sinha on AI, security, infrastructure, and what I've learned by writing it down." />
+<meta name="theme-color" content="#fbf3e6" />
+<meta property="og:title" content="Notes — Prince Sinha" />
+<meta property="og:description" content="Notes on AI, security, and the boring details that make products actually work." />
+<meta property="og:type" content="website" />
+<link rel="icon" href="favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Caveat:wght@400;500;600;700&family=Geist+Mono:wght@300;400;500&family=Geist:wght@400;500&display=swap" rel="stylesheet" />
+<script>
+  (function() {
+    try {
+      var saved = localStorage.getItem('theme');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      var theme = saved || (prefersDark ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
+<style>
+  :root {
+    --paper:      #fbf3e6;
+    --paper-2:    #f5ead4;
+    --paper-3:    #ede0c6;
+    --tape:       #f3e4b0;
+    --tape-2:     #e9d58a;
+    --tape-a:     0.6;
+    --tape-b:     0.85;
+    --ink:        #1d1612;
+    --ink-soft:   #3a2e25;
+    --ink-mute:   #7a6a5a;
+    --ink-faint:  #b0a190;
+    --rule:       #d2c2a3;
+
+    --red:        oklch(0.55 0.19 28);
+    --red-light:  oklch(0.72 0.16 28);
+    --green:      oklch(0.55 0.13 145);
+    --hl:         oklch(0.93 0.14 92);
+
+    --serif:  "Instrument Serif", "Times New Roman", serif;
+    --hand:   "Caveat", "Comic Sans MS", cursive;
+    --sans:   "Geist", -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono:   "Geist Mono", ui-monospace, monospace;
+  }
+  [data-theme="dark"] {
+    --paper:      #14100c;
+    --paper-2:    #1d1812;
+    --paper-3:    #28211a;
+    --tape:       #4a3a18;
+    --tape-2:     #5e4a20;
+    --tape-a:     0.45;
+    --tape-b:     0.7;
+    --ink:        #f1e5cd;
+    --ink-soft:   #c8bba2;
+    --ink-mute:   #8a7d6b;
+    --ink-faint:  #4f4638;
+    --rule:       #322820;
+
+    --red:        oklch(0.74 0.18 28);
+    --red-light:  oklch(0.82 0.15 28);
+    --green:      oklch(0.72 0.14 145);
+    --hl:         oklch(0.46 0.14 78);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { background: var(--paper); transition: background-color .4s ease; }
+  body {
+    background:
+      radial-gradient(circle at 15% 10%, rgba(120, 90, 50, 0.04) 0%, transparent 30%),
+      radial-gradient(circle at 85% 70%, rgba(120, 90, 50, 0.035) 0%, transparent 35%),
+      var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+    transition: background-color .4s ease, color .4s ease;
+  }
+  [data-theme="dark"] body {
+    background:
+      radial-gradient(circle at 15% 10%, rgba(255, 220, 160, 0.02) 0%, transparent 30%),
+      radial-gradient(circle at 85% 70%, rgba(255, 220, 160, 0.018) 0%, transparent 35%),
+      var(--paper);
+  }
+  ::selection { background: var(--hl); color: var(--ink); }
+
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; padding: 0; }
+  p { margin: 0 0 1.1em 0; }
+  h1, h2, h3, h4 { font-weight: 400; margin: 0; }
+
+  .page {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 4vw, 48px);
+    position: relative;
+  }
+
+  /* TOP */
+  .top {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 28px 0 22px 0;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 48px;
+    gap: 16px; flex-wrap: wrap;
+  }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 12px;
+    color: var(--ink-soft); letter-spacing: 0.02em;
+    transition: color .15s ease, gap .15s ease;
+  }
+  .back-link:hover { color: var(--red); gap: 12px; }
+  .back-link .arr { font-family: var(--serif); font-size: 18px; line-height: 1; }
+  .crumbs { display: flex; gap: 8px; font-family: var(--mono); font-size: 11px; color: var(--ink-mute); letter-spacing: 0.04em; }
+  .crumbs .sep { color: var(--ink-faint); }
+  .crumbs b { color: var(--ink); font-weight: 400; }
+
+  /* THEME TOGGLE (reused) */
+  .theme-toggle {
+    position: relative;
+    display: inline-flex; align-items: center; gap: 9px;
+    padding: 6px 14px 6px 12px;
+    border: 1px dashed var(--rule);
+    border-radius: 999px;
+    background: transparent;
+    cursor: pointer;
+    color: var(--ink-soft);
+    font-family: var(--hand);
+    font-size: 20px;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    transform: rotate(-1.5deg);
+    transition: transform .2s ease, color .2s ease, background-color .2s ease, border-color .2s ease;
+    overflow: hidden;
+  }
+  .theme-toggle:hover { color: var(--red); border-color: var(--red-light); background: var(--paper-2); transform: rotate(1deg) translateY(-1px); }
+  .theme-toggle svg { width: 16px; height: 16px; flex: none; transition: transform .5s cubic-bezier(.4,.2,.2,1); }
+  .theme-toggle:hover svg { transform: rotate(20deg); }
+  .theme-toggle .icon-sun  { display: none; }
+  .theme-toggle .icon-moon { display: inline-block; }
+  .theme-toggle .lab-light { display: inline; white-space: nowrap; }
+  .theme-toggle .lab-dark  { display: none;   white-space: nowrap; }
+  [data-theme="dark"] .theme-toggle .icon-sun  { display: inline-block; }
+  [data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+  [data-theme="dark"] .theme-toggle .lab-dark  { display: inline; }
+  [data-theme="dark"] .theme-toggle .lab-light { display: none; }
+
+  /* HERO */
+  .hero {
+    padding: 8px 0 56px 0;
+    position: relative;
+  }
+  .hero .kicker {
+    font-family: var(--hand); font-size: 28px; color: var(--red);
+    transform: rotate(-2deg); display: inline-block; margin-bottom: 14px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(72px, 14vw, 180px);
+    line-height: 0.94;
+    letter-spacing: -0.03em;
+    margin-bottom: 28px;
+  }
+  .hero h1 em { color: var(--ink-soft); }
+  .hero h1 .red { color: var(--red); font-style: italic; }
+  .hero .lead {
+    font-family: var(--serif); font-size: 24px; line-height: 1.4;
+    color: var(--ink-soft); max-width: 56ch;
+  }
+  .hero .lead em { color: var(--ink); }
+
+  /* "currently writing" floating card */
+  .currently {
+    position: absolute;
+    right: 0; top: 40px;
+    width: 250px;
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    padding: 16px 18px 14px 18px;
+    transform: rotate(2deg);
+    font-family: var(--mono); font-size: 11.5px;
+    color: var(--ink-soft);
+    box-shadow: 0 10px 24px rgba(60, 40, 20, 0.08);
+  }
+  [data-theme="dark"] .currently { box-shadow: 0 12px 28px rgba(0,0,0,0.4), 0 1px 0 rgba(255,230,180,0.04) inset; }
+  .currently::before {
+    content: ""; position: absolute; top: -10px; left: 50%;
+    width: 80px; height: 22px;
+    background: linear-gradient(90deg,
+      color-mix(in oklab, var(--tape) calc(var(--tape-a) * 100%), transparent),
+      color-mix(in oklab, var(--tape-2) calc(var(--tape-b) * 100%), transparent),
+      color-mix(in oklab, var(--tape) calc(var(--tape-a) * 100%), transparent));
+    transform: translateX(-50%) rotate(-4deg);
+    box-shadow: 0 1px 2px rgba(60, 40, 20, 0.1);
+  }
+  .currently h4 {
+    font-family: var(--hand); font-size: 26px; color: var(--ink);
+    margin-bottom: 8px; transform: rotate(-1.5deg); display: inline-block;
+  }
+  .currently p { margin: 0; line-height: 1.4; }
+  .currently .live {
+    display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--red); margin-right: 6px;
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--red) 28%, transparent); }
+    50%      { box-shadow: 0 0 0 6px color-mix(in oklab, var(--red) 0%, transparent); }
+  }
+  @media (max-width: 980px) {
+    .currently { position: relative; right: auto; top: auto; margin: 32px 0 0; transform: rotate(0.5deg); width: 100%; max-width: 320px; }
+  }
+
+  /* TAG BAR */
+  .tag-bar {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin: 24px 0 56px 0;
+    padding: 18px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    align-items: center;
+  }
+  .tag-bar .label {
+    font-family: var(--hand); font-size: 22px; color: var(--red);
+    transform: rotate(-2deg); display: inline-block;
+    margin-right: 10px;
+  }
+  .tag-bar .tag {
+    font-family: var(--mono); font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    padding: 5px 11px;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all .15s ease;
+  }
+  .tag-bar .tag:hover, .tag-bar .tag.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .tag-bar .tag .count { color: var(--ink-mute); margin-left: 4px; }
+  .tag-bar .tag:hover .count, .tag-bar .tag.active .count { color: color-mix(in oklab, var(--paper) 70%, transparent); }
+
+  /* LIST */
+  .list { display: flex; flex-direction: column; }
+  .entry {
+    padding: 32px 0;
+    border-top: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 32px;
+    position: relative;
+    transition: padding .2s ease;
+  }
+  .entry:first-child { border-top: 0; padding-top: 8px; }
+  .entry:last-child { border-bottom: 1px solid var(--rule); }
+  @media (max-width: 720px) {
+    .entry { grid-template-columns: 1fr; gap: 12px; }
+  }
+
+  .entry .gutter {
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-mute); letter-spacing: 0.06em;
+    line-height: 1.5;
+    padding-top: 6px;
+  }
+  .entry .gutter b { color: var(--ink); font-weight: 400; display: block; margin-bottom: 4px; font-size: 12px; }
+  .entry .gutter .date { display: block; margin-top: 2px; color: var(--ink-soft); }
+
+  .entry .body { max-width: 64ch; }
+  .entry .body a.title {
+    display: inline-block;
+    font-family: var(--serif);
+    font-size: clamp(28px, 3.4vw, 40px);
+    line-height: 1.06;
+    letter-spacing: -0.005em;
+    color: var(--ink);
+    transition: color .15s ease, transform .2s ease;
+  }
+  .entry .body a.title:hover { color: var(--red); transform: translateX(4px); }
+  .entry .body a.title em { color: var(--ink-soft); }
+  .entry .body .lede {
+    margin: 12px 0 14px 0;
+    font-family: var(--serif); font-size: 19px;
+    line-height: 1.5; color: var(--ink-soft);
+  }
+  .entry .body .lede em { color: var(--ink); font-style: italic; }
+
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 6px 18px;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-mute); letter-spacing: 0.04em;
+    align-items: baseline;
+  }
+  .meta .read-time {
+    color: var(--ink);
+    font-style: normal;
+  }
+  .meta .quirk {
+    font-family: var(--hand); font-size: 18px;
+    color: var(--red); letter-spacing: normal;
+    transform: rotate(-1deg); display: inline-block;
+    margin-left: -4px;
+  }
+  .meta .tags { display: inline-flex; gap: 10px; }
+  .meta .tags span { color: var(--ink-soft); }
+  .meta .tags span::before { content: "·"; color: var(--ink-faint); margin-right: 10px; }
+  .meta .tags span:first-child::before { content: ""; margin-right: 0; }
+
+  /* draft state */
+  .entry.draft .body a.title { color: var(--ink-mute); cursor: not-allowed; }
+  .entry.draft .body a.title:hover { color: var(--ink-mute); transform: none; }
+  .entry.draft .body .lede { color: var(--ink-mute); }
+  .entry.draft .gutter .stamp {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 3px 8px;
+    font-family: var(--mono); font-size: 10px;
+    color: var(--red); letter-spacing: 0.14em; text-transform: uppercase;
+    border: 1.2px solid var(--red); border-radius: 2px;
+    transform: rotate(-3deg);
+    white-space: nowrap;
+  }
+
+  /* featured "if you only read one" entry */
+  .entry.featured::before {
+    content: "★ if you only read one";
+    position: absolute;
+    top: 24px; right: 0;
+    font-family: var(--hand); font-size: 22px;
+    color: var(--red);
+    transform: rotate(2deg);
+  }
+  @media (max-width: 980px) { .entry.featured::before { display: none; } }
+
+  /* FOOTER */
+  .ornament {
+    display: flex; align-items: center; justify-content: center;
+    margin: 56px 0 32px 0;
+    color: var(--ink-faint);
+    font-family: var(--serif); font-size: 26px; letter-spacing: 1em;
+  }
+  .ornament::before, .ornament::after {
+    content: ""; height: 1px; flex: 1; background: var(--rule); max-width: 200px;
+  }
+  .ornament span { padding: 0 22px; transform: translateY(-4px); }
+
+  .end-block {
+    margin: 32px 0 24px 0;
+    text-align: center;
+    font-family: var(--hand); font-size: 26px;
+    color: var(--ink-mute);
+  }
+  .end-block .arr { color: var(--red); }
+
+  footer.bottom {
+    margin-top: 32px;
+    padding: 24px 0 36px 0;
+    border-top: 1px solid var(--rule);
+    display: flex; justify-content: space-between; gap: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+    font-family: var(--mono); font-size: 11px;
+    color: var(--ink-mute); letter-spacing: 0.04em;
+  }
+  footer.bottom b { color: var(--ink); font-weight: 400; }
+
+  .big-back {
+    font-family: var(--serif); font-size: 22px; font-style: italic;
+    color: var(--ink); display: inline-flex; align-items: center; gap: 12px;
+    transition: gap .15s ease, color .15s ease;
+  }
+  .big-back:hover { color: var(--red); gap: 18px; }
+
+  /* THEME splat (same as other pages) */
+  .theme-toggle .splat { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; overflow: hidden; }
+  .theme-toggle .splat::after {
+    content: ""; position: absolute; top: 50%; left: 50%;
+    width: 6px; height: 6px; margin: -3px 0 0 -3px;
+    border-radius: 50%;
+    background: color-mix(in oklab, var(--red) 38%, transparent);
+    transform: scale(0); opacity: 0;
+  }
+  .theme-toggle.flipping .splat::after { animation: splat .55s ease-out forwards; }
+  @keyframes splat { 0%   { transform: scale(0);  opacity: 0.85; } 100% { transform: scale(40); opacity: 0; } }
+
+  /* ─────────────────── PAPER NOTE SYSTEM ─────────────────── */
+  .currently {
+    background:
+      radial-gradient(ellipse at 28% 18%, rgba(255, 250, 232, 0.45) 0%, transparent 55%),
+      radial-gradient(ellipse at 78% 82%, rgba(180, 145, 90, 0.05) 0%, transparent 60%),
+      linear-gradient(135deg,
+        color-mix(in oklab, var(--paper-2) 94%, #fff8e6 6%) 0%,
+        var(--paper-2) 55%,
+        color-mix(in oklab, var(--paper-2) 92%, #c9a560 8%) 100%);
+    border: 0;
+    box-shadow:
+      0 1px 0 rgba(60, 40, 20, 0.05),
+      2px 4px 10px rgba(60, 40, 20, 0.08),
+      8px 22px 44px rgba(60, 40, 20, 0.12),
+      0 1px 0 rgba(255, 250, 232, 0.55) inset;
+  }
+  .currently::before {
+    background:
+      repeating-linear-gradient(90deg,
+        transparent 0, transparent 5px,
+        rgba(255, 255, 255, 0.06) 5px, rgba(255, 255, 255, 0.06) 6px),
+      linear-gradient(180deg,
+        rgba(245, 220, 130, 0.42) 0%,
+        rgba(232, 207, 115, 0.68) 50%,
+        rgba(245, 220, 130, 0.42) 100%);
+    box-shadow:
+      0 2px 3px rgba(60, 40, 20, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 7%, black 93%, transparent 100%);
+            mask-image: linear-gradient(90deg, transparent 0%, black 7%, black 93%, transparent 100%);
+  }
+  .currently::after {
+    content: "";
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 22px; height: 22px;
+    background: linear-gradient(135deg,
+      color-mix(in oklab, var(--paper-2) 60%, #fff8e6 40%) 0%,
+      color-mix(in oklab, var(--paper-2) 80%, #c9a560 20%) 70%,
+      color-mix(in oklab, var(--paper-2) 88%, #8b6a3d 12%) 100%);
+    clip-path: polygon(100% 0, 100% 100%, 0 100%);
+    filter: drop-shadow(-1px -1px 2px rgba(60, 40, 20, 0.18));
+    pointer-events: none;
+  }
+  [data-theme="dark"] .currently {
+    background:
+      radial-gradient(ellipse at 28% 18%, rgba(255, 230, 180, 0.04) 0%, transparent 55%),
+      radial-gradient(ellipse at 78% 82%, rgba(60, 40, 20, 0.30) 0%, transparent 60%),
+      linear-gradient(135deg,
+        color-mix(in oklab, var(--paper-2) 94%, #6e5a30 6%) 0%,
+        var(--paper-2) 55%,
+        color-mix(in oklab, var(--paper-2) 88%, #2b1f12 12%) 100%);
+    box-shadow:
+      0 1px 0 rgba(0, 0, 0, 0.4),
+      2px 4px 10px rgba(0, 0, 0, 0.4),
+      8px 22px 44px rgba(0, 0, 0, 0.55),
+      0 1px 0 rgba(255, 230, 180, 0.05) inset;
+  }
+  [data-theme="dark"] .currently::before {
+    background:
+      repeating-linear-gradient(90deg,
+        transparent 0, transparent 5px,
+        rgba(255, 255, 255, 0.025) 5px, rgba(255, 255, 255, 0.025) 6px),
+      linear-gradient(180deg,
+        rgba(190, 150, 70, 0.35) 0%,
+        rgba(170, 130, 55, 0.55) 50%,
+        rgba(190, 150, 70, 0.35) 100%);
+    box-shadow:
+      0 2px 4px rgba(0, 0, 0, 0.5),
+      inset 0 1px 0 rgba(255, 220, 150, 0.12);
+  }
+  [data-theme="dark"] .currently::after {
+    background: linear-gradient(135deg,
+      color-mix(in oklab, var(--paper-2) 55%, #5e4a2e 45%) 0%,
+      color-mix(in oklab, var(--paper-2) 78%, #2b1f12 22%) 70%,
+      color-mix(in oklab, var(--paper-2) 88%, #0a0805 12%) 100%);
+    filter: drop-shadow(-1px -1px 2px rgba(0, 0, 0, 0.45));
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- TOP -->
+  <div class="top">
+    <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+      <a href="Portfolio.html" class="back-link">
+        <span class="arr">←</span> back to the portfolio
+      </a>
+      <div class="crumbs">
+        <span>portfolio</span><span class="sep">/</span><b>notes</b>
+      </div>
+    </div>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode">
+      <svg class="icon-moon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+        <path d="M13.5 9.7a5 5 0 0 1-6.7-6.7A5.5 5.5 0 1 0 13.5 9.7z"/>
+      </svg>
+      <svg class="icon-sun" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+        <circle cx="8" cy="8" r="2.8" fill="currentColor"/>
+        <path d="M8 1.2v1.8M8 13v1.8M1.2 8H3M13 8h1.8M3.1 3.1l1.3 1.3M11.6 11.6l1.3 1.3M3.1 12.9l1.3-1.3M11.6 4.4l1.3-1.3"/>
+      </svg>
+      <span class="lab-light">working late?</span>
+      <span class="lab-dark">good morning?</span>
+      <span class="splat" aria-hidden="true"></span>
+    </button>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <aside class="currently">
+      <h4>now writing</h4>
+      <p><span class="live"></span><em>"the boring case for boring infrastructure."</em> &mdash; about <span style="color: var(--red);">73% done.</span></p>
+    </aside>
+
+    <span class="kicker">— a small writing room.</span>
+    <h1>
+      <em>Notes.</em>
+    </h1>
+    <p class="lead">
+      Half essay, half <em>marginalia.</em> Mostly about AI agents, security
+      systems, the boring details that make products actually work, and what I've
+      learned by writing it down. New entries land here when they're ready.
+    </p>
+  </section>
+
+  <!-- TAGS -->
+  <div class="tag-bar">
+    <span class="label">filed by mood →</span>
+    <button class="tag active">all <span class="count">07</span></button>
+    <button class="tag">ai &amp; agents <span class="count">04</span></button>
+    <button class="tag">security <span class="count">02</span></button>
+    <button class="tag">infrastructure <span class="count">03</span></button>
+    <button class="tag">opinions <span class="count">05</span></button>
+    <button class="tag">drafts <span class="count">02</span></button>
+  </div>
+
+  <!-- LIST -->
+  <div class="list">
+
+    <article class="entry featured">
+      <div class="gutter">
+        <b>Note №.007</b>
+        <span class="date">2026 · 05 · 12</span>
+      </div>
+      <div class="body">
+        <a class="title" href="Note 01 - The boundary around the model.html">
+          The interesting <em>boundary</em> around the model.
+        </a>
+        <p class="lede">
+          Most "AI product" work is really tool design, approval-flow design, and
+          observability. The model just sits in the middle, doing the <em>easy</em>
+          part. A short essay on what actually makes these systems good.
+        </p>
+        <div class="meta">
+          <span class="read-time">≈ 6 min</span>
+          <span class="quirk">— or one slow espresso</span>
+          <span class="tags"><span>ai</span><span>agents</span><span>building</span></span>
+        </div>
+      </div>
+    </article>
+
+    <article class="entry">
+      <div class="gutter">
+        <b>Note №.006</b>
+        <span class="date">2026 · 04 · 28</span>
+      </div>
+      <div class="body">
+        <a class="title" href="Note 02 - Search on object storage.html">
+          Search, on top of <em>object storage.</em>
+        </a>
+        <p class="lede">
+          What you give up, what you get back, where the math actually works out,
+          and the strange small joy of a query plan that ends in
+          <code style="font-family: var(--mono); font-size: 0.88em; padding: 1px 5px; background: color-mix(in oklab, var(--red) 10%, transparent); color: var(--red); border-radius: 2px;">s3.GetObject</code>.
+        </p>
+        <div class="meta">
+          <span class="read-time">≈ 9 min</span>
+          <span class="quirk">— or two cups of filter coffee</span>
+          <span class="tags"><span>infrastructure</span><span>search</span></span>
+        </div>
+      </div>
+    </article>
+
+    <article class="entry">
+      <div class="gutter">
+        <b>Note №.005</b>
+        <span class="date">2026 · 03 · 15</span>
+      </div>
+      <div class="body">
+        <a class="title" href="#">
+          Why <em>"agentic"</em> is quietly becoming useless.
+        </a>
+        <p class="lede">
+          A useful word is losing its meaning &mdash; not because of anyone in
+          particular, but because everyone is using it for everything. A small
+          attempt to put it back together, with verbs.
+        </p>
+        <div class="meta">
+          <span class="read-time">≈ 4 min</span>
+          <span class="quirk">— or one elevator argument</span>
+          <span class="tags"><span>ai</span><span>opinions</span></span>
+        </div>
+      </div>
+    </article>
+
+    <article class="entry">
+      <div class="gutter">
+        <b>Note №.004</b>
+        <span class="date">2026 · 02 · 22</span>
+      </div>
+      <div class="body">
+        <a class="title" href="#">
+          Triage is a <em>UX problem,</em> mostly.
+        </a>
+        <p class="lede">
+          After six months of watching analysts work, I'm convinced that what SOC
+          teams need is less AI and more reorganization. The <em>good</em> AI
+          helps with that, too &mdash; but only if you start there.
+        </p>
+        <div class="meta">
+          <span class="read-time">≈ 7 min</span>
+          <span class="quirk">— or the time for an Argo rollout</span>
+          <span class="tags"><span>security</span><span>soc</span><span>opinions</span></span>
+        </div>
+      </div>
+    </article>
+
+    <article class="entry">
+      <div class="gutter">
+        <b>Note №.003</b>
+        <span class="date">2026 · 01 · 18</span>
+      </div>
+      <div class="body">
+        <a class="title" href="#">
+          What I learned writing my first <em>MCP server.</em>
+        </a>
+        <p class="lede">
+          The protocol is small. The interesting design decisions are not. A field
+          report from building, breaking, and re-building a tool server &mdash;
+          and what I'd actually do differently next time.
+        </p>
+        <div class="meta">
+          <span class="read-time">≈ 8 min</span>
+          <span class="quirk">— or a long ssh reconnect</span>
+          <span class="tags"><span>ai</span><span>agents</span><span>building</span></span>
+        </div>
+      </div>
+    </article>
+
+    <article class="entry">
+      <div class="gutter">
+        <b>Note №.002</b>
+        <span class="date">2025 · 12 · 03</span>
+      </div>
+      <div class="body">
+        <a class="title" href="#">
+          Reading the cap table like an <em>offer letter.</em>
+        </a>
+        <p class="lede">
+          Vesting, cliff, refresh, RSU vs ISO, strike price, dilution &mdash; a
+          short, opinionated field guide to the part of an offer most engineers
+          (including me, once) try not to read.
+        </p>
+        <div class="meta">
+          <span class="read-time">≈ 5 min</span>
+          <span class="quirk">— or one careful tea</span>
+          <span class="tags"><span>opinions</span><span>career</span></span>
+        </div>
+      </div>
+    </article>
+
+    <article class="entry">
+      <div class="gutter">
+        <b>Note №.001</b>
+        <span class="date">2025 · 10 · 09</span>
+      </div>
+      <div class="body">
+        <a class="title" href="#">
+          Demos are easy. Tuesdays are <em>hard.</em>
+        </a>
+        <p class="lede">
+          On the gap between a thing that works in the room and a thing that works
+          in a customer's hands on a Tuesday morning. The first half of a
+          long-running argument I keep having with myself.
+        </p>
+        <div class="meta">
+          <span class="read-time">≈ 6 min</span>
+          <span class="quirk">— or a slow K8s pod restart</span>
+          <span class="tags"><span>building</span><span>opinions</span></span>
+        </div>
+      </div>
+    </article>
+
+    <!-- DRAFT entries -->
+    <article class="entry draft">
+      <div class="gutter">
+        <b>Draft</b>
+        <span class="date">— · — · —</span>
+        <span class="stamp">still cooking</span>
+      </div>
+      <div class="body">
+        <a class="title" href="#">
+          The boring case for <em>boring infrastructure.</em>
+        </a>
+        <p class="lede">
+          The reasons I keep choosing the "unsexy" option in cloud architecture
+          arguments &mdash; and why I think the next ten years will reward that
+          choice more than the previous ten did.
+        </p>
+        <div class="meta">
+          <span class="read-time">draft</span>
+          <span class="quirk">— stewing on this one</span>
+          <span class="tags"><span>infrastructure</span><span>opinions</span></span>
+        </div>
+      </div>
+    </article>
+
+    <article class="entry draft">
+      <div class="gutter">
+        <b>Draft</b>
+        <span class="date">— · — · —</span>
+        <span class="stamp">about to give up</span>
+      </div>
+      <div class="body">
+        <a class="title" href="#">
+          Notes on <em>token-maxxing.</em>
+        </a>
+        <p class="lede">
+          The fun meme; the boring truth. Context engineering vs prompt
+          engineering vs the actual eval that gets you off the demo treadmill.
+        </p>
+        <div class="meta">
+          <span class="read-time">draft</span>
+          <span class="quirk">— probably worth finishing?</span>
+          <span class="tags"><span>ai</span><span>opinions</span></span>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <!-- ornament + end -->
+  <div class="ornament"><span>✦</span></div>
+
+  <div class="end-block">
+    <em>that's everything pinned to the wall, for now.</em><br/>
+    <span style="font-size: 22px;">new notes show up <span class="arr">↬</span> whenever they're ready.</span>
+  </div>
+
+  <footer class="bottom">
+    <a href="Portfolio.html" class="big-back">
+      <span>←</span> back to the rest of the notebook
+    </a>
+    <div>© 2026 · <b>Prince Sinha</b> · made by hand, mostly.</div>
+  </footer>
+
+</div>
+
+<script>
+  // theme toggle (shared localStorage)
+  const themeBtn = document.getElementById('theme-toggle');
+  if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+      const cur = document.documentElement.getAttribute('data-theme') || 'light';
+      const nxt = cur === 'light' ? 'dark' : 'light';
+      themeBtn.classList.remove('flipping');
+      void themeBtn.offsetWidth;
+      themeBtn.classList.add('flipping');
+      document.documentElement.setAttribute('data-theme', nxt);
+      try { localStorage.setItem('theme', nxt); } catch (e) {}
+    });
+  }
+
+  // tag bar — purely visual filter (UI demo); clicking just toggles active class
+  document.querySelectorAll('.tag-bar .tag').forEach(t => {
+    t.addEventListener('click', () => {
+      document.querySelectorAll('.tag-bar .tag').forEach(o => o.classList.remove('active'));
+      t.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>

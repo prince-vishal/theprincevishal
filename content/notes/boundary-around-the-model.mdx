@@ -1,0 +1,122 @@
+---
+number: "007"
+title: "The interesting boundary around the model"
+titleHtml: "The interesting <em>boundary</em> around the model."
+headingHtml: "The interesting <em>boundary</em><br/><span class=\"red\">around</span> the model."
+description: "Most AI product work is really tool design, approval-flow design, and observability. The model just sits in the middle, doing the easy part."
+ogDescription: "On context engineering, tool design, and why approvals are the actual product."
+date: "2026-05-12"
+displayDate: "2026 · 05 · 12"
+readTime: "6 min"
+quirk: "— or one slow espresso"
+excerptHtml: "Most \"AI product\" work is really tool design, approval-flow design, and observability. The model just sits in the middle, doing the <em>easy</em> part. A short essay on what actually makes these systems good."
+dekHtml: "On context engineering, tool design, observability, and the quiet realization that the <em>model</em> is almost never the hard part."
+tags: ["ai", "agents", "security", "building", "opinions"]
+featured: true
+nextSlug: "search-on-object-storage"
+---
+
+<Lede>
+  If you spend long enough building with LLMs, you notice something quiet:
+  the <em>model</em> almost never becomes the hard part. The hard part is
+  everything around it. The tools you give it. The context you let it see.
+  The instructions you can revise without redeploying. The approval gate
+  before it actually does anything. The observability that lets you debug
+  when it inevitably doesn't.
+</Lede>
+
+I started saying <em>"the boundary around the model"</em> maybe six months
+ago, and I keep finding new reasons to. It started as a useful phrase for a
+whiteboard. It's become a kind of test I quietly run on every AI product I
+see: how much of the work is actually in the boundary, and how much is
+theatre about which model they're using.
+
+## The model is the easy part.
+
+<MarginNote>
+  ← roughly the ratio I've seen across <span style={{ color: 'var(--pen)' }}>three serious systems.</span>
+</MarginNote>
+
+I've worked on cybersecurity copilots that started with <em>"let's get a
+model to summarize alerts"</em> and ended, after eight months, with a
+system where the model is doing about 8% of the engineering work. The
+other 92% is everything that lets the model be useful, safe, and
+explainable to the person reading its output.
+
+That 92% is:
+
+- a careful retrieval layer that pulls only what's actually relevant;
+- tool definitions tight enough to be useful, loose enough to compose;
+- an approval queue that lets an analyst override before anything ships;
+- structured outputs that downstream systems can actually parse;
+- a feedback loop where wrong answers become tomorrow's evals;
+- and a fallback path for when <em>all of the above</em> still doesn't work.
+
+None of these are model problems. All of them are product problems wearing
+engineering hats. You can swap out the model later<FnRef>[1]</FnRef> and
+most of this code will not care.
+
+<Divider />
+
+## What "good" feels like.
+
+The teams I've watched ship real AI products share a handful of habits.
+None of them are about the model itself.
+
+They spend more time on <em>tool design</em> than on prompt engineering.
+They write down what <em>wrong</em> looks like before they ship anything.
+They treat eval data the way good infra teams treat schema migrations:
+reviewed, versioned, and not invented in the middle of an outage. They
+obsess over the approval flow because they know that's where their
+product's trust either survives or doesn't. And they argue about latency
+and cost the way the previous generation argued about p99s, because at
+scale, <em>cost-per-query is a feature.</em>
+
+<PullQuote>
+  The model is the part that <em>looks</em> like the product.
+  The boundary is the part that <em>is</em> the product.
+</PullQuote>
+
+The shortest version of all of this: the model is the part that
+<em>looks</em> like the product. The boundary is the part that
+<em>is</em> the product. The boundary is also where most of the
+actual engineering judgement lives: what to retrieve, what to
+let the agent touch, when to pause for a human, when to fail loudly.
+
+## A small principle.
+
+<MarginNote side="left" color="blue">
+  → if you're hiring AI engineers, ask them these.
+</MarginNote>
+
+When someone tells me their AI product feature isn't working, whether
+they're a friend at a startup, a candidate in an interview, or a teammate
+pinging me on Slack, I usually ask three questions, in this order:
+
+1. What <em>context</em> does the model have when it makes this decision?
+2. What <em>tools</em> does it have, and how strict are the input contracts?
+3. What happens when it gets it <em>wrong</em>: who notices, and who can intervene?
+
+The model almost never comes up. By the time we've worked through those
+three, we've found the bug, or the missing eval, or the boundary that was
+never actually drawn. The model was fine. The model is almost always fine.
+
+<Divider />
+
+I think a lot about what the next two years of this look like. Models
+will keep getting better, faster, and cheaper<FnRef>[2]</FnRef>. The
+boundary problem will not go away. The teams that figure out their
+retrieval, their tools, their approvals, and their evals will keep
+shipping. The teams that don't will keep impressing themselves with demos.
+
+If you're building one of these systems, start with the boundary. The
+model will catch up.
+
+<EndMark />
+
+<Footnotes>
+  <ol>
+    <li>Within reason. I've watched a model swap break a system once, not because the new model was worse, but because the old system's prompts were quietly load-bearing on a specific failure mode. Add it to the list of <em>things that aren't really the model's fault.</em></li>
+    <li>I am also wrong about this approximately 30% of the time. The other 70% feels worth planning for.</li>
+  </ol>
+</Footnotes>
