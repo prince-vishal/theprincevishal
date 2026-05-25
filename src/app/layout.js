@@ -1,4 +1,5 @@
 import './globals.css';
+import GoogleTagManager from '@/components/GoogleTagManager';
 
 export const metadata = {
   title: {
@@ -31,7 +32,10 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <GoogleTagManager />
+        {children}
+      </body>
     </html>
   );
 }
