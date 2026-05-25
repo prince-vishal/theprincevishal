@@ -1,5 +1,8 @@
 import './globals.css';
 import GoogleTagManager from '@/components/GoogleTagManager';
+import MobileNav from '@/components/MobileNav';
+import ResponsiveLayoutStyles from '@/components/ResponsiveLayoutStyles';
+import ToolkitBoardToggle from '@/components/ToolkitBoardToggle';
 
 export const metadata = {
   title: {
@@ -35,6 +38,9 @@ export default function RootLayout({ children }) {
       <body>
         <GoogleTagManager />
         {children}
+        <ToolkitBoardToggle />
+        <MobileNav />
+        <ResponsiveLayoutStyles />
       </body>
     </html>
   );
