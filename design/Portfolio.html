@@ -2429,7 +2429,14 @@
   }).join('');
 
   const wlist = document.getElementById('work-list');
-  wlist.innerHTML = WORK.map((w, i) => `
+  function workYear(item) {
+    const match = String(item.vintage || '').match(/\d{4}/);
+    return match ? Number(match[0]) : 0;
+  }
+  const workByYear = WORK
+    .map((item, index) => ({ ...item, index }))
+    .sort((a, b) => (workYear(b) - workYear(a)) || (a.index - b.index));
+  wlist.innerHTML = workByYear.map((w, i) => `
     <article class="work-entry">
       <div class="num">№ ${String(i + 2).padStart(2, '0')}<span class="year">${w.vintage}</span></div>
       <div>
