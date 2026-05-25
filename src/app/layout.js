@@ -5,7 +5,8 @@ export const metadata = {
     default: 'Prince Sinha',
     template: '%s',
   },
-  description: 'Engineering leader and product builder based in Bengaluru.',
+  description:
+    'Engineering leader building AI-native systems for security operations, threat intelligence, automation, and infrastructure.',
   authors: [{ name: 'Prince Sinha' }],
 };
 

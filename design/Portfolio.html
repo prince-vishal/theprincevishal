@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Prince Sinha — engineer, builder, security person, etc.</title>
-<meta name="description" content="Engineering leader and product builder. AI-native systems for security, automation, and trust. Based in Bengaluru." />
+<title>Prince Sinha — AI-native cybersecurity & SecOps platform architect</title>
+<meta name="description" content="Engineering leader building AI-native systems for security operations, threat intelligence, automation, and infrastructure." />
 <meta name="theme-color" content="#fbf3e6" />
-<meta property="og:title" content="Prince Sinha — engineer, builder, security person, etc." />
-<meta property="og:description" content="Building AI-native systems for security, automation, and trust." />
+<meta property="og:title" content="Prince Sinha — AI-native cybersecurity & SecOps platform architect" />
+<meta property="og:description" content="Building AI-native systems for security operations, threat intelligence, automation, and trust." />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary" />
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
@@ -931,6 +931,41 @@
     }
   }
 
+  .impact-strip {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin: 4px 0 34px 0;
+    padding: 16px 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .impact-strip .impact {
+    position: relative;
+    padding-right: 12px;
+  }
+  .impact-strip .impact b {
+    display: block;
+    font-family: var(--hand);
+    font-size: 30px;
+    color: var(--red);
+    line-height: 1;
+    transform: rotate(-2deg);
+    margin-bottom: 6px;
+  }
+  .impact-strip .impact span {
+    display: block;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    line-height: 1.35;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  @media (max-width: 720px) {
+    .impact-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
   /* ───────── Credo (numbered opinions) ───────── */
   .credo { display: flex; flex-direction: column; gap: 0; }
   .credo-item {
@@ -1502,9 +1537,10 @@
   <div class="top">
     <a href="#top" class="monogram">
       <div class="sigil">P</div>
-      <span>Prince Sinha · est. somewhere around the time React was new</span>
+      <span>Prince Sinha · AI-native security systems, built for Tuesday</span>
     </a>
     <nav class="top-nav">
+      <a href="#build">build</a>
       <a href="#work">work</a>
       <a href="#cyble">cyble</a>
       <a href="#credo">credo</a>
@@ -1534,8 +1570,8 @@
       <h4><a href="Now.html" style="color: inherit; border-bottom: 1px dashed currentColor; padding-bottom: 1px;">right now →</a></h4>
       <ul>
         <li><span class="k">in</span><span class="v">Bengaluru, IN · <span id="clock">—</span> IST</span></li>
-        <li><span class="k">doing</span><span class="v"><span class="live-dot"></span><span id="doing">teaching an agent to ask for permission</span></span></li>
-        <li><span class="k">reading</span><span class="v">papers on object-storage search layouts</span></li>
+        <li><span class="k">doing</span><span class="v"><span class="live-dot"></span><span id="doing">teaching a SecOps agent to ask before it acts</span></span></li>
+        <li><span class="k">reading</span><span class="v">notes on autonomous investigations and retrieval</span></li>
         <li><span class="k">drinking</span><span class="v">filter coffee · second of the day</span></li>
         <li><span class="k">status</span><span class="v" style="color: var(--red);">open to selective work</span></li>
         <li><span class="k">recruiters</span><span class="v"><a href="For Recruiters.html" style="color: var(--red); border-bottom: 1px dashed var(--red);">there's a letter for you →</a></span></li>
@@ -1545,30 +1581,26 @@
     <div class="col">
       <span class="hello">hi, i'm —</span>
 
-      <h1 style="font-size: 95px">
-        Prince.
-      </h1>
-      <h1 style="font-size: 50px">
-        I build things that <span class="red">probably shouldn't</span> work, and then make them.
+      <h1>
+        Prince. I build <span class="red">AI-native</span> systems for security, automation, and trust.
       </h1>
 
       <p class="hero-lead">
-        I'm an engineering leader and product builder. I spend most of my time at the messy
-        intersection of <span class="hl">AI agents, cybersecurity, and the infrastructure</span>
-        underneath both &mdash; turning ambiguous ideas into systems that actually run in
-        production and survive their first Tuesday.
+        I'm Prince Sinha, an engineering leader and product builder working across
+        <span class="hl">AI agents, cybersecurity, SecOps, cloud infrastructure, and high-scale data systems</span>
+        &mdash; mostly the parts where products become technically inconvenient.
       </p>
       <p class="hero-lead">
-        Lately that's looked like <em>analyst copilots</em>, <em>SOC automation</em>,
-        threat-intelligence platforms, search engines built on object storage,
-        agent runtimes, and the quiet, unglamorous work of making engineering teams
-        ship faster without setting things on fire.
+        Lately that means AI-assisted investigations, autonomous alert triage,
+        threat-intelligence research systems, workflow orchestration, internal
+        developer platforms, and the quiet infrastructure work that lets all of
+        it run in production without becoming theatre.
       </p>
 
       <!-- margin notes -->
       <div class="margin-note" style="top: 200px; left: 500px">
         ← this one's a polite way of saying<br/>
-        <span style="color: var(--pen);">"I write a lot of YAML & Markdown"</span>
+        <span style="color: var(--pen);">"the model is not the whole product"</span>
       </div>
     </div>
 
@@ -1580,59 +1612,60 @@
   <section class="section" id="build">
     <div class="chapter">
       <div class="stamp">§ chapter one</div>
-      <h2>things I keep <em>ending up</em> building.</h2>
+      <h2>what I build, <em>when the problem gets real.</em></h2>
     </div>
 
     <div class="col wide">
       <p style="font-family: var(--serif); font-size: 21px; line-height: 1.45; color: var(--ink-soft); max-width: 56ch; margin-bottom: 36px;">
-        You can read a portfolio by the shape of what it keeps returning to.
-        Mine has four shapes &mdash; and they keep finding each other.
+        The recurring theme is practical AI: systems that understand context,
+        use tools, follow approvals, integrate with the messy enterprise world,
+        and leave enough traces that humans can still trust them.
       </p>
 
       <div class="field">
 
         <div class="field-entry">
           <span class="ord">one.</span>
-          <h3>AI that <em>does something.</em></h3>
+          <h3>AI systems that <em>do real work.</em></h3>
           <p>
-            Agents and copilots that connect to real tools, hold context,
-            ask before they act, and leave an audit trail you'd actually
-            want to read. Less chat, more <span class="scribble">work</span>.
+            Agents and copilots that connect to tools, retrieve the right
+            context, route through workflows, ask before they act, and produce
+            outputs another system can actually use.
           </p>
-          <div class="tags"><span>tool-calling</span><span>RAG</span><span>HITL</span><span>MCP</span></div>
+          <div class="tags"><span>agentic workflows</span><span>RAG</span><span>HITL</span><span>tool-calling</span></div>
         </div>
 
         <div class="field-entry">
           <span class="ord">two.</span>
-          <h3>Cybersecurity, the <em>boring useful</em> kind.</h3>
+          <h3>AI-native <em>SecOps</em> platforms.</h3>
           <p>
-            Threat intelligence platforms, SOC copilots, alert enrichment,
-            investigation flows. The point is to make analysts faster, not
-            replace them with a dashboard they'll close by Wednesday.
+            Threat intelligence, alert enrichment, autonomous investigation,
+            case context, SOC copilots, and workflow automation. The point is
+            to reduce analyst fatigue without pretending judgment can be skipped.
           </p>
-          <div class="tags"><span>SOC</span><span>threat intel</span><span>enrichment</span><span>copilots</span></div>
+          <div class="tags"><span>SOC</span><span>threat intel</span><span>case management</span><span>copilots</span></div>
         </div>
 
         <div class="field-entry">
           <span class="ord">three.</span>
-          <h3>Platforms engineers <em>want to</em> use.</h3>
+          <h3>Platforms engineers <em>trust</em> under load.</h3>
           <p>
-            Kubernetes, GitOps with Argo CD, Devtron pipelines, IAM that
-            doesn't make people cry, internal tools that take a 40-minute
-            ritual down to one button.
+            Kubernetes, GitOps, Devtron, IAM, observability, deployment
+            workflows, resource planning, and internal tools that make the safe
+            path also the fast path.
           </p>
-          <div class="tags"><span>k8s</span><span>Argo CD</span><span>Devtron</span><span>IDP</span></div>
+          <div class="tags"><span>k8s</span><span>Argo CD</span><span>Devtron</span><span>observability</span></div>
         </div>
 
         <div class="field-entry">
           <span class="ord">four.</span>
-          <h3>Data at <em>uncomfortable</em> scale.</h3>
+          <h3>Intelligence systems at <em>uncomfortable</em> scale.</h3>
           <p>
-            Event collectors, ClickHouse analytics, object-storage indexes,
-            streaming pipelines. The infrastructure equivalent of carrying
-            more groceries than you should &mdash; <em>but cheaper</em>.
+            Search, enrichment, ClickHouse analytics, Elasticsearch, object
+            storage, queues, streaming pipelines, and data models that turn
+            noisy signals into something operationally useful.
           </p>
-          <div class="tags"><span>Go</span><span>ClickHouse</span><span>S3</span><span>Quickwit-ish</span></div>
+          <div class="tags"><span>Go</span><span>ClickHouse</span><span>Elasticsearch</span><span>object storage</span></div>
         </div>
 
       </div>
@@ -1657,18 +1690,18 @@
 
       <!-- Featured one: agentic security analyst -->
       <article class="featured">
-        <span class="stamp-inline">⊛ featured · still cooking</span>
-        <h3>The one where AI <em>does</em> the alert triage no one wants to do.</h3>
+        <span class="stamp-inline">⊛ featured · AI-native SecOps</span>
+        <h3>Agentic cybersecurity analyst platform.</h3>
         <p style="font-family: var(--serif); font-size: 19px; line-height: 1.5; color: var(--ink-soft); margin: 8px 0 12px 0; max-width: 56ch;">
-          An agentic cybersecurity analyst platform: a security team asks a question,
-          the system fans out across intelligence sources, enriches indicators,
-          correlates signals, drafts a structured brief, and lets an analyst
-          approve or override the next step. Humans in the loop, AI in the gears.
+          A security team asks a question; the system retrieves threat
+          intelligence, enriches indicators, correlates evidence, drafts an
+          investigation brief, recommends next actions, and keeps the analyst
+          in control of what happens next.
         </p>
         <div class="meta" style="font-family: var(--mono); font-size: 11.5px; color: var(--ink-mute); letter-spacing: 0.04em; display: flex; flex-wrap: wrap; gap: 18px;">
-          <span><b style="color: var(--ink);">CATEGORY</b> AI · Cybersecurity</span>
-          <span><b style="color: var(--ink);">ROLE</b> Product architecture · AI workflows · backend</span>
-          <span><b style="color: var(--ink);">VINTAGE</b> 2024–</span>
+          <span><b style="color: var(--ink);">CATEGORY</b> AI · SecOps · Threat Intelligence</span>
+          <span><b style="color: var(--ink);">ROLE</b> Product architecture · AI workflows · platform</span>
+          <span><b style="color: var(--ink);">VINTAGE</b> 2025–</span>
         </div>
       </article>
 
@@ -1685,13 +1718,13 @@
         <img src="https://cyble.com/wp-content/uploads/2024/01/cropped-Cyble-Threat-Intelligence.png" alt="Cyble" width="58" height="58" onerror="this.onerror=null;this.src='cyble-logo.svg';" />
       </div>
       <span class="kicker">a longer one ⤵</span>
-      <h2>A chapter at <em>Cyble</em>. <span style="font-style: italic; color: var(--red);">2021 → today.</span></h2>
+      <h2>Scaling AI, security, and platform engineering at <em>Cyble</em>.</h2>
       <p class="lead">
-        At Cyble I worked across <em>cybersecurity product engineering, AI innovation,
-        and platform modernization</em>. The job, honestly described: take a bunch of
-        ambitious cybersecurity ideas and the engineering reality underneath them, and
-        find a way to ship both. AI-assisted investigation on one screen; Argo CD
-        rollouts on the other; people in between who needed both to actually work.
+        At Cyble, I have worked across <em>AI innovation, cybersecurity product
+        engineering, SecOps workflows, threat intelligence systems, and
+        cloud-native platform modernization</em>. The work sits across multiple
+        layers: analyst UX, AI orchestration, backend services, security data,
+        infrastructure reliability, and the engineering systems that help teams ship.
       </p>
 
       <!-- career timeline at Cyble: Jul 2021 → present -->
@@ -1723,58 +1756,65 @@
           <div class="career-node above current" style="left: 84%;">
             <span class="stem"></span>
             <span class="role-label">
-              <span class="role">Senior Director, <em>AI &amp; Innovations</em></span>
+              <span class="role">Senior Director, <em>Innovations</em></span>
               <span class="date">May 2025 — present</span>
             </span>
           </div>
         </div>
       </div>
 
+      <div class="impact-strip" aria-label="Cyble impact highlights">
+        <div class="impact"><b>0→1</b><span>new cybersecurity products and internal platforms</span></div>
+        <div class="impact"><b>5m → 200ms</b><span>API response improvement on platform work</span></div>
+        <div class="impact"><b>140+</b><span>apps dockerized and moved toward Kubernetes</span></div>
+        <div class="impact"><b>40%</b><span>infrastructure cost reduction on platform optimization</span></div>
+      </div>
+
       <div class="contrib-list">
         <div class="contrib-item">
-          <div class="lab">01 · AI cybersecurity</div>
-          <h4>Investigation that <em>finishes itself.</em></h4>
-          <p>Workflows where analysts ask once, the system enriches indicators, correlates intelligence, and drafts a brief. Reduces the busywork, keeps the judgment human.</p>
+          <div class="lab">01 · AI-native SecOps</div>
+          <h4>Autonomous investigation, <em>human supervised.</em></h4>
+          <p>Contributed to AI-assisted security workflows for alert triage, enrichment, investigation, summarization, and analyst productivity, with human judgment kept in the loop.</p>
         </div>
         <div class="contrib-item">
-          <div class="lab">02 · Agentic security</div>
-          <h4>Copilots that <em>ask first.</em></h4>
-          <p>Agents that search, enrich, summarize, and recommend &mdash; with approval gates so analysts stay in control of what actually happens next.</p>
+          <div class="lab">02 · Blaze AI</div>
+          <h4>Multi-agent SOC systems, <em>built for operators.</em></h4>
+          <p>Worked on agentic workflows that combine intelligence retrieval, enrichment, reasoning, traceability, guardrails, and quality checks for security operations.</p>
         </div>
         <div class="contrib-item">
           <div class="lab">03 · Threat intelligence</div>
           <h4>Noise → <em>profiles.</em></h4>
-          <p>Threat actors, malware families, breach data, exposures, cybercrime activity. Raw data turned into searchable, structured intelligence.</p>
+          <p>Worked on systems that turn raw cyber data into structured intelligence: threat actors, malware families, breach data, exposures, cybercrime activity, search, filtering, and profile generation.</p>
         </div>
         <div class="contrib-item">
           <div class="lab">04 · SOC automation</div>
           <h4>Triage that <em>respects analysts' time.</em></h4>
-          <p>Alert prioritization, dedup, enrichment, evidence collection, playbook-style automation across the tools SOCs already use.</p>
+          <p>Alert prioritization, enrichment, evidence collection, related-signal grouping, investigation history, and playbook-style workflows for the repetitive work around security alerts.</p>
         </div>
         <div class="contrib-item">
           <div class="lab">05 · Cloud-native</div>
           <h4>From manual deploys → <em>GitOps.</em></h4>
-          <p>Dockerization, k8s deployments, Devtron + Argo CD pipelines, environment standardization, rollbacks that don't require a prayer.</p>
+          <p>Dockerized services, Kubernetes deployments, Devtron and Argo CD workflows, environment standardization, release visibility, rollback patterns, and more disciplined delivery.</p>
         </div>
         <div class="contrib-item">
           <div class="lab">06 · Developer platform</div>
           <h4>Internal tooling, <em>used voluntarily.</em></h4>
-          <p>Deployment workflows, IAM and access services, CI/CD templates, shared backends, dashboards that show what's actually happening.</p>
+          <p>Built and improved deployment workflows, IAM and access services, CI/CD automation, shared backend patterns, dashboards, logs, and operational visibility for engineering teams.</p>
         </div>
         <div class="contrib-item">
           <div class="lab">07 · Architecture</div>
           <h4>Ambiguous ideas → <em>milestones.</em></h4>
-          <p>Breaking big product goals into deliverable slices. Mentoring engineers. Introducing quality gates that automation enforces.</p>
+          <p>Converted large product goals into technical plans, milestones, and deliverable slices while mentoring engineers and improving code review, automation, and release discipline.</p>
         </div>
         <div class="contrib-item">
           <div class="lab">08 · AI in production</div>
           <h4>Prototypes that <em>survive Tuesday.</em></h4>
-          <p>LLM-backed services, retrieval pipelines, GPU-aware deployment, HITL review, observability for the bits that hallucinate.</p>
+          <p>Worked on LLM-backed services, retrieval pipelines, model-backed APIs, prompt and workflow design, observability, latency, security boundaries, and human review loops.</p>
         </div>
         <div class="contrib-item">
           <div class="lab">09 · Cost &amp; scale</div>
           <h4>Reliability <em>without surprise bills.</em></h4>
-          <p>Kubernetes scaling, AWS Graviton migrations, resource planning, observability, infrastructure standardization.</p>
+          <p>Improved scaling, observability, resource planning, infrastructure standardization, and cost efficiency, including resume-backed infrastructure savings work.</p>
         </div>
       </div>
     </div>
@@ -1836,14 +1876,14 @@
 
     <div class="col" style="position: relative;">
       <div class="credo">
-        <div class="credo-item"><span class="n">i.</span><p>Demos are easy. Tuesdays are hard. Build for <em>Tuesday</em>.</p></div>
+        <div class="credo-item"><span class="n">i.</span><p>The future of cybersecurity is not more dashboards. It is <em>intelligent operational systems</em>.</p></div>
         <div class="credo-item"><span class="n">ii.</span><p>The interesting AI problem is almost never the model. <em>It's the boundary around the model</em>.</p></div>
-        <div class="credo-item"><span class="n">iii.</span><p>Approvals, audit logs, and undo aren't UX features &mdash; they're <em>what makes a thing usable in the real world</em>.</p></div>
-        <div class="credo-item"><span class="n">iv.</span><p>If your platform requires a Slack message to ship code, <em>your platform isn't done</em>.</p></div>
-        <div class="credo-item"><span class="n">v.</span><p>Threat intel is mostly a data-modelling problem wearing a cybersecurity hat.</p></div>
-        <div class="credo-item"><span class="n">vi.</span><p>You can't outsource taste. <em>The smallest details are the ones nobody else will fix</em>.</p></div>
-        <div class="credo-item"><span class="n">vii.</span><p>Object storage is doing more than people give it credit for.</p></div>
-        <div class="credo-item"><span class="n">viii.</span><p>The best engineering leaders I know spend more time <em>removing things</em> than adding them.</p></div>
+        <div class="credo-item"><span class="n">iii.</span><p>AI should augment human decision-making, not replace operational understanding.</p></div>
+        <div class="credo-item"><span class="n">iv.</span><p>Approvals, audit logs, and undo aren't UX features &mdash; they're <em>what makes automation usable in the real world</em>.</p></div>
+        <div class="credo-item"><span class="n">v.</span><p>Security platforms should reduce complexity, not move it into a prettier interface.</p></div>
+        <div class="credo-item"><span class="n">vi.</span><p>Automation without observability is dangerous. <em>So is AI without a way to inspect what happened</em>.</p></div>
+        <div class="credo-item"><span class="n">vii.</span><p>If your platform requires a Slack message to ship code, <em>your platform isn't done</em>.</p></div>
+        <div class="credo-item"><span class="n">viii.</span><p>Demos are easy. Tuesdays are hard. Build for <em>Tuesday</em>.</p></div>
       </div>
 
       <div class="margin-note left" style="top: 110px;">
@@ -1901,21 +1941,21 @@
       <div class="notes">
         <article class="note">
           <div class="date">2026 · 05</div>
-          <h4>The interesting <em>boundary</em> around the model.</h4>
-          <p>Most "AI product" work is really tool design, approval flow design, and observability. The model just sits in the middle, doing the easy part.</p>
-          <a class="more" href="Note 01 - The boundary around the model.html">read note →</a>
+          <h4>Rethinking <em>SecOps</em> as an AI-native platform.</h4>
+          <p>Security operations do not need one more dashboard. They need systems that reason across context, orchestrate workflows, and keep analysts in control.</p>
+          <a class="more" href="/notes/ai-native-secops-platform">read note →</a>
         </article>
         <article class="note">
-          <div class="date">2026 · 04</div>
-          <h4>Search, on top of <em>object storage.</em></h4>
-          <p>What you give up, what you get back, where the math actually works out, and the strange small joy of a query plan that ends in <code style="font-family: var(--mono); font-size: 0.9em;">s3.GetObject</code>.</p>
-          <a class="more" href="Notes.html">read note →</a>
+          <div class="date">2026 · 05</div>
+          <h4>Building deep research systems for <em>cybersecurity.</em></h4>
+          <p>Search is useful, but the real product is the operational explanation: retrieval, correlation, reasoning, and memory working together.</p>
+          <a class="more" href="/notes/deep-research-systems">read note →</a>
         </article>
         <article class="note">
-          <div class="date">2026 · 02</div>
-          <h4>Triage is a <em>UX problem</em>, mostly.</h4>
-          <p>After six months of watching analysts work, I'm convinced that what they need is less AI and more reorganization. The good AI helps with that, too.</p>
-          <a class="more" href="Notes.html">read note →</a>
+          <div class="date">2026 · 05</div>
+          <h4>Why infrastructure discipline matters for <em>AI systems.</em></h4>
+          <p>Production AI is a distributed systems problem: retrieval, queues, workflow tracing, cost, observability, and failure handling all count.</p>
+          <a class="more" href="/notes/infrastructure-reliability-for-ai">read note →</a>
         </article>
       </div>
 
@@ -2173,15 +2213,15 @@
 
   // ───────── Rotating "doing" line ─────────
   const doings = [
-    "teaching an agent to ask for permission",
-    "convincing object storage it's a search engine",
-    "writing YAML, again, but on purpose",
+    "teaching a SecOps agent to ask before it acts",
+    "turning dashboard clicks into investigation workflows",
+    "making retrieval explain itself to analysts",
     "debugging an Argo CD rollout that's almost happy",
-    "tuning a triage prompt for the seventh time",
+    "tuning an alert-triage workflow for the seventh time",
     "reading stealer-log telemetry, slightly horrified",
-    "sketching an MCP runtime on a napkin",
+    "sketching a deep-research system on a napkin",
     "profiling a ClickHouse query at 2am ideas-time",
-    "drafting a postmortem nobody will read but me",
+    "writing an eval for a thing that almost worked",
     "watching a Graviton bill go down"
   ];
   let dIdx = 0;
@@ -2203,11 +2243,25 @@
   // ───────── The work list ─────────
   const WORK = [
     {
-      title: "An <em>MCP</em> server registry, because someone had to.",
-      brief: "Repo analysis, tool/prompt/resource detection, schema inference, .mcp.json generation, stdio → HTTP runtimes, and the deployment glue for running them somewhere real.",
-      cat: "AI Developer Tools",
-      role: "Founder · builder",
-      vintage: "2025"
+      title: "A threat-intelligence operating system, <em>minus the theatre.</em>",
+      brief: "Cyber data normalized into actor profiles, malware context, breach intelligence, exposures, entity enrichment, search, filtering, and analyst-facing investigation views.",
+      cat: "Cybersecurity · Threat Intelligence",
+      role: "Platform architecture · product engineering",
+      vintage: "2023–"
+    },
+    {
+      title: "SOC workflows that <em>stop wasting</em> the analyst's morning.",
+      brief: "Alert enrichment, prioritization, related-signal grouping, AI-drafted summaries, evidence collection, playbook-style automation, and investigation history.",
+      cat: "SOC Automation · SecOps",
+      role: "Product · engineering contribution",
+      vintage: "2023–"
+    },
+    {
+      title: "A deep research system for <em>cybersecurity intelligence.</em>",
+      brief: "Retrieval, correlation, memory, indexed intelligence, research synthesis, and operational summaries for investigations where search results alone are not enough.",
+      cat: "AI · Threat Intelligence",
+      role: "AI workflow systems · architecture",
+      vintage: "2025–"
     },
     {
       title: "The one where I tried to <em>delegate</em> my inbox to an AI &mdash; and (sort of) did.",
@@ -2217,6 +2271,13 @@
       vintage: "2024–"
     },
     {
+      title: "An <em>MCP</em> server registry, because someone had to.",
+      brief: "Repo analysis, tool/prompt/resource detection, schema inference, .mcp.json generation, stdio → HTTP runtimes, and the deployment glue for running them somewhere real.",
+      cat: "AI Developer Tools",
+      role: "Founder · builder",
+      vintage: "2025"
+    },
+    {
       title: "Making <em>object storage</em> do a search engine's job.",
       brief: "Search infrastructure built on top of object storage to cut cost at scale. Rust backend, full-text indexing, future vector support, query plans that end in S3 reads.",
       cat: "Search · Infrastructure",
@@ -2224,32 +2285,18 @@
       vintage: "2024"
     },
     {
-      title: "An AI agent that wants to <em>read the market</em>.",
-      brief: "Experimental: market data pipelines, JSONL dataset generation for fine-tuning, evaluation sets, and the slightly humbling experience of letting a model trade in paper.",
-      cat: "AI · Financial Research",
-      role: "Experimental builder",
-      vintage: "2024"
-    },
-    {
-      title: "Threat intelligence as a <em>real</em> operating system.",
-      brief: "A platform that turns raw cyber data into structured intelligence: threat actors, malware families, breach data, exposures &mdash; searchable, correlatable, profile-able.",
-      cat: "Cybersecurity · Data Platform",
-      role: "Platform architecture · product eng",
-      vintage: "2023–"
-    },
-    {
-      title: "SOC triage that <em>doesn't waste</em> the analyst's morning.",
-      brief: "Workflow automation for SOCs: prioritization, enrichment, related-signal grouping, AI-drafted summaries, evidence collection &mdash; with the analyst still on the steering wheel.",
-      cat: "SOC Automation",
-      role: "Product · engineering contributions",
-      vintage: "2023–"
-    },
-    {
       title: "Cloud operations, <em>via sentence.</em>",
       brief: "A DevOps automation platform for AWS/GCP: workflow engine, JSON/YAML task templates, audit logs, RBAC, and a natural-language interface for the boring stuff.",
       cat: "DevOps · Cloud Automation",
       role: "Product architect · builder",
       vintage: "2023"
+    },
+    {
+      title: "A cloud exposure tool for the buckets <em>you didn't know</em> were public.",
+      brief: "Cloud security discovery focused on public storage exposure and risky configurations: detection, classification, API surfaces, and defensive monitoring workflows.",
+      cat: "Cloud Security",
+      role: "Product builder",
+      vintage: "2021"
     },
     {
       title: "An ad-verification system that ingests <em>more than it should</em>.",
@@ -2266,18 +2313,18 @@
       vintage: "2022"
     },
     {
-      title: "Finding the buckets <em>you didn't know</em> were public.",
-      brief: "A cloud security tool focused on public storage exposure and misconfiguration. Discovery, risk classification, an interface, an API &mdash; defensive monitoring without the drama.",
-      cat: "Cloud Security",
-      role: "Product builder",
-      vintage: "2021"
-    },
-    {
       title: "Did <em>that ad</em> really run? &mdash; the offline edition.",
       brief: "A TV and print ad monitoring system: media capture, occurrence tracking, evidence management, campaign-level reporting, and the kind of audit trail advertisers want.",
       cat: "Media Monitoring",
       role: "System design",
       vintage: "2021"
+    },
+    {
+      title: "An AI agent that wants to <em>read the market</em>.",
+      brief: "Experimental: market data pipelines, JSONL dataset generation for fine-tuning, evaluation sets, and the humbling experience of letting a model trade in paper.",
+      cat: "AI · Financial Research",
+      role: "Experimental builder",
+      vintage: "2024"
     }
   ];
 
@@ -2300,6 +2347,12 @@
     { name: 'HuggingFace',    slug: 'huggingface',       cat: 'ai',    size: 'sm' },
     { name: 'MCP',            slug: null,                cat: 'ai',    fallback: 'M' },
     { name: 'LangGraph',      slug: null,                cat: 'ai',    fallback: 'L' },
+    { name: 'Langflow',       slug: null,                cat: 'ai',    fallback: 'LF' },
+    { name: 'RAG',            slug: null,                cat: 'ai',    size: 'sm', fallback: 'R' },
+
+    { name: 'SecOps',         slug: null,                cat: 'sec',   size: 'lg', flag: 'pin', fallback: 'S' },
+    { name: 'Threat Intel',   slug: null,                cat: 'sec',   fallback: 'TI' },
+    { name: 'SOC',            slug: null,                cat: 'sec',   size: 'sm', fallback: 'SOC' },
 
     { name: 'Kubernetes',     slug: 'kubernetes',        cat: 'cloud', size: 'lg', flag: 'pin' },
     { name: 'Docker',         slug: 'docker',            cat: 'cloud' },
