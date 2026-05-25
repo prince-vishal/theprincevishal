@@ -1,0 +1,63 @@
+name: Deploy Root Site
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: root-pages-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build static export
+        run: npm run build
+
+      - name: Prepare Pages files
+        run: |
+          touch out/.nojekyll
+          printf 'theprincevishal.in\n' > out/CNAME
+
+      - name: Start SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.ROOT_PAGES_DEPLOY_KEY }}
+
+      - name: Trust GitHub host key
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+      - name: Publish to root Pages repository
+        run: |
+          git clone git@github.com:prince-vishal/prince-vishal.github.io.git /tmp/root-pages
+          rsync -a --delete --exclude .git out/ /tmp/root-pages/
+          cd /tmp/root-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to deploy."
+            exit 0
+          fi
+          git commit -m "Deploy site from prince-vishal/theprincevishal@${GITHUB_SHA::7}"
+          git push origin master
