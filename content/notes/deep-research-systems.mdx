@@ -3,115 +3,1289 @@ number: "010"
 title: "Building deep research systems for cybersecurity intelligence"
 titleHtml: "Building <em>deep research systems</em> for cybersecurity intelligence."
 headingHtml: "Building deep research systems<br/>for <span class=\"red\">cybersecurity</span> intelligence."
-description: "Security investigations are research problems. The architecture has to move from search results to synthesized operational intelligence."
-ogDescription: "A note on deep research systems for cybersecurity intelligence: retrieval, correlation, reasoning, and memory."
-date: "2026-05-22"
-displayDate: "2026 · 05 · 22"
-readTime: "3 min"
-quirk: "— or one long query with notes"
-excerptHtml: "Security investigations are fundamentally research problems. Search is useful, but the real product is the <em>operational explanation</em>."
-dekHtml: "From retrieval to correlation to reasoning: what changes when a cybersecurity research system is expected to understand, not merely return results."
+description: "A detailed architecture note on building AI-assisted deep research systems for cybersecurity intelligence, threat research, vulnerability context, and analyst decision support."
+ogDescription: "Deep research systems for cybersecurity intelligence: retrieval, correlation, evidence, reasoning, memory, guardrails, and operational output."
+date: "2026-05-26"
+displayDate: "2026 · 05 · 26"
+readTime: "18 min"
+quirk: "— or one analyst with a calmer inbox"
+excerptHtml: "Security investigations are not search problems. They are evidence problems. Deep research systems need retrieval, correlation, memory, provenance, and a refusal to invent confidence."
+dekHtml: "What changes when a cybersecurity research system is expected to synthesize operational intelligence instead of returning a pile of links, IOCs, and vibes."
 tags: ["ai", "security", "research", "threat-intel"]
+tableOfContents: true
 nextSlug: "infrastructure-reliability-for-ai"
 ---
 
 <Lede>
-  Security investigations are fundamentally research problems.
+  Security investigations are not search problems. They are evidence problems.
 </Lede>
 
-Analysts constantly need to determine:
+A security analyst rarely begins with a clean question.
 
-- whether infrastructure is malicious;
-- whether campaigns are related;
-- whether historical overlaps exist;
-- whether organizational exposure is significant.
+They begin with a fragment:
 
-Traditional search systems are insufficient for modern investigations.
+- an IP address in an alert;
+- a domain from an endpoint event;
+- a CVE in a vendor advisory;
+- a hash in a malware report;
+- a suspicious login from an impossible place;
+- a cloud asset exposed in a way that feels wrong;
+- a sentence in a threat report that sounds relevant but not yet actionable.
 
-What security teams increasingly need are deep research systems capable of
-contextual reasoning and intelligence synthesis.
-
-## From search to intelligence.
-
-Legacy systems optimize for retrieval.
-
-Modern systems must optimize for understanding.
-
-There is a major difference between:
+The work is not simply to find more results. The work is to turn a messy
+starting point into an operational judgment:
 
 <PullQuote>
-  Here are 200 search results.
+  What is this, why does it matter, how confident are we, what is connected to
+  it, and what should we do next?
 </PullQuote>
 
-and:
+That is the real shape of cybersecurity research.
+
+Traditional search systems help analysts retrieve documents. Threat
+intelligence platforms help store and relate entities. SIEMs and EDRs help
+query telemetry. Vulnerability systems help track exposure. AI assistants help
+summarize and reason across context.
+
+A deep research system for cybersecurity has to combine all of those jobs
+without pretending they are the same job.
+
+It needs search, but it cannot stop at search.
+
+It needs a knowledge graph, but it cannot worship the graph.
+
+It needs an LLM, but it cannot trust the LLM as the source of truth.
+
+It needs automation, but it must know the difference between reading, reasoning,
+recommending, and acting.
+
+This note is a longer architecture map for building that kind of system: the
+retrieval fabric, entity model, reasoning loop, evidence ledger, memory layer,
+safety controls, evaluation strategy, and product surface that make deep
+research useful for cybersecurity intelligence.
+
+## What “deep research” means in security.
+
+In normal product language, deep research often means:
+
+- gather many sources;
+- read them;
+- summarize findings;
+- cite supporting evidence;
+- produce a coherent answer.
+
+That is useful, but cybersecurity raises the bar.
+
+Security research has adversarial data, incomplete evidence, conflicting
+sources, live operational consequences, and a constant temptation to overstate
+attribution. A wrong summary is not merely embarrassing. It can send responders
+after the wrong system, cause a team to ignore a real exploit path, or turn a
+weak indicator into an overconfident incident.
+
+For cybersecurity, a deep research system should do five things well:
+
+1. Gather relevant evidence from internal and external sources.
+2. Normalize entities so the same thing is not treated as ten unrelated things.
+3. Correlate weak signals across time, infrastructure, behavior, and ownership.
+4. Produce a reasoned answer with citations, confidence, and uncertainty.
+5. Preserve memory so future investigations get better instead of starting over.
+
+The important word is evidence.
+
+A good security research system does not say:
 
 <PullQuote>
-  Here is the operationally relevant explanation of what matters.
+  This domain is malicious because the model thinks so.
 </PullQuote>
 
-That shift changes the architecture entirely.
+It says:
 
-## Core components of deep research systems.
+<PullQuote>
+  This domain is suspicious because it appeared in these two telemetry sources,
+  shares nameserver history with this cluster, uses a certificate pattern seen
+  in this campaign, and was referenced by this report. Confidence: medium.
+</PullQuote>
 
-### Retrieval layer.
+The second answer is not just more detailed. It is operationally safer.
 
-The retrieval layer pulls information from:
+## The questions such a system should answer.
 
-- search infrastructure;
-- intelligence databases;
-- historical investigations;
-- internal documentation;
-- structured and unstructured data.
+Before designing the architecture, define the questions.
 
-### Correlation layer.
+Security teams do not need a generic “ask anything” interface. They need a
+research system that understands common investigation shapes.
 
-Correlation systems identify relationships between:
+### Indicator research.
 
-- indicators;
-- threat actors;
-- campaigns;
-- infrastructure;
-- behavioral patterns.
+Given a domain, IP, URL, hash, email address, wallet, user agent, file path, or
+registry key:
 
-This transforms isolated data into contextual intelligence.
+- Where has this appeared before?
+- Is it known malicious, suspicious, benign, or unknown?
+- Which sources support that judgment?
+- What infrastructure, malware, tools, campaigns, or actors are connected?
+- Has this touched our environment?
+- What detection or blocking action is appropriate?
 
-### Reasoning layer.
+### Campaign research.
 
-The reasoning engine synthesizes:
+Given a cluster of activity:
 
-- investigation summaries;
-- threat narratives;
-- operational risk;
-- related intelligence;
-- recommended actions.
+- Are these events related?
+- What behavior joins them?
+- Which tactics, techniques, and procedures are visible?
+- Does this resemble a known intrusion set or commodity pattern?
+- What changed over time?
+- What controls would have interrupted the chain?
 
-This becomes the actual operational output consumed by analysts.
+### Vulnerability research.
 
-## Why memory matters.
+Given a CVE, vendor advisory, product, version, or exploit mention:
 
-One of the most overlooked components in AI systems is memory.
+- Is this vulnerability relevant to our assets?
+- Is there evidence of exploitation in the wild?
+- Is it listed in CISA’s Known Exploited Vulnerabilities catalog?
+- What do CVSS, EPSS, vendor severity, public exploit availability, and asset
+  criticality say together?
+- Is the exploit path reachable in our environment?
+- What is the remediation priority?
 
-Investigations are iterative.
+### Exposure research.
 
-Analysts revisit:
+Given an exposed asset, leaked credential, public bucket, open port, or risky
+cloud configuration:
 
-- historical incidents;
-- previous campaigns;
-- prior intelligence;
-- investigation notes.
+- What is exposed?
+- Who owns it?
+- Is it reachable from the internet?
+- Is sensitive data involved?
+- Is it connected to known attacker behavior?
+- What is the smallest safe remediation?
 
-A strong memory architecture enables continuity across investigations.
+### Strategic intelligence.
+
+Given a business concern:
+
+- Which threat actors target our sector?
+- Which techniques are most relevant to our stack?
+- What controls should we improve first?
+- Which detections are missing?
+- Which intelligence sources have been useful historically?
+
+The interface can be conversational. The underlying system should not be vague.
+
+It should know which research mode it is in.
+
+## The source fabric.
+
+Deep research begins with ingestion, but ingestion is the least glamorous part
+of the system. It is also where many systems quietly fail.
+
+Security data arrives from everywhere:
+
+- threat intelligence feeds;
+- vendor reports;
+- malware sandboxes;
+- SIEM queries;
+- EDR telemetry;
+- DNS logs;
+- proxy logs;
+- cloud audit logs;
+- asset inventory;
+- identity systems;
+- vulnerability scanners;
+- package manifests;
+- code repositories;
+- incident tickets;
+- analyst notes;
+- Slack or Teams threads;
+- public web sources;
+- dark web or exposure monitoring sources;
+- MISP, OpenCTI, STIX/TAXII feeds, and ISAC/ISAO sharing communities.
+
+Each source has a different trust profile.
+
+Each source has a different latency.
+
+Each source has a different language.
+
+Each source has a different failure mode.
+
+An intelligence feed might be timely but noisy. A vendor report might be rich
+but not machine-readable. Internal telemetry might be authoritative but
+retention-limited. Analyst notes might contain the most useful context but the
+least consistent structure.
+
+The system needs a source registry, not just connectors.
+
+For every source, track:
+
+- ownership;
+- freshness;
+- update frequency;
+- license and sharing constraints;
+- sensitivity level;
+- historical precision;
+- historical recall;
+- known blind spots;
+- whether it can be cited externally;
+- whether it can be used for automated action.
+
+This matters because research is partly source arbitration.
+
+If a low-confidence feed says an IP is malicious but internal DNS shows a
+single lookup from a security researcher’s sandbox, the system should not scream.
+
+It should ask for more evidence.
+
+## Normalize entities before asking the model to reason.
+
+Cybersecurity intelligence is full of entities that look simple until you try to
+join them.
+
+Consider a “domain.”
+
+It might appear as:
+
+- `example.com`;
+- `http://example.com/login`;
+- `https://example.com/`;
+- a subdomain;
+- a punycode value;
+- a redirected URL;
+- a DNS answer;
+- a certificate subject alternative name;
+- a passive DNS record;
+- a line in a PDF report.
+
+The research system needs canonicalization and entity resolution before it asks
+an LLM to synthesize anything.
+
+This is where cyber threat intelligence standards matter.
+
+[STIX 2.1](https://docs.oasis-open.org/cti/stix/v2.1/stix-v2.1.html) provides a
+structured language for exchanging cyber threat intelligence. [TAXII
+2.1](https://www.oasis-open.org/standard/taxii2-1/) provides a protocol for
+transporting that intelligence. [MITRE ATT&CK](https://attack.mitre.org/) gives
+teams a shared vocabulary for adversary tactics and techniques based on
+real-world observations. Platforms such as
+[OpenCTI](https://docs.opencti.io/latest/usage/getting-started/) and
+[MISP](https://www.misp-project.org/features/) show what this looks like in
+practice: entities, relationships, sources, confidence, sharing models, and
+machine-readable outputs.
+
+You do not have to model everything as STIX internally.
+
+But you should steal the discipline.
+
+At minimum, your entity model should separate:
+
+- observables: IPs, domains, URLs, hashes, email addresses, file paths;
+- vulnerabilities: CVEs, affected products, versions, exploit references;
+- behaviors: ATT&CK techniques, procedures, malware capabilities;
+- actors and clusters: intrusion sets, campaigns, activity groups;
+- assets: hosts, services, cloud resources, identities, repositories;
+- evidence: logs, reports, sandbox output, tickets, analyst notes;
+- actions: blocks, detections, patches, containment steps, escalations.
+
+Then every relationship needs metadata:
+
+- source;
+- timestamp;
+- first seen;
+- last seen;
+- confidence;
+- freshness;
+- sensitivity;
+- citation;
+- analyst override;
+- expiration policy.
+
+Relationships are not eternal. A domain that was malicious in 2023 may be
+parked in 2026. An IP can change ownership. A cloud asset can move accounts. A
+threat actor label can be revised. A CVE can become urgent only after exploit
+code appears.
+
+The graph must be temporal.
+
+## The index is not the graph.
+
+Most research systems need both an index and a graph.
+
+The index answers:
+
+- Which documents mention this?
+- Which chunks are semantically similar?
+- Which logs match these constraints?
+- Which snippets are likely relevant to this question?
+
+The graph answers:
+
+- What is connected?
+- How are these things related?
+- Which path explains the relationship?
+- Which entity is central to this cluster?
+- Which edges are stale, weak, or disputed?
+
+Treating one as the other creates bad systems.
+
+A vector database is not a threat intelligence graph.
+
+A graph database is not a good full-text search engine.
+
+A keyword index is not enough for fuzzy research.
+
+The architecture should use each tool for what it is good at:
+
+- full-text search for exact terms, identifiers, and report lookup;
+- vector search for semantic recall across unstructured text;
+- structured stores for logs, events, and assets;
+- graph storage for entity relationships and paths;
+- object storage for original documents and raw evidence;
+- a metadata store for provenance, access control, and citation mapping.
+
+The research agent should not “search the web” in an abstract sense. It should
+issue typed retrieval operations:
+
+- find exact indicator;
+- find related entities;
+- search reports by semantic similarity;
+- query internal telemetry;
+- get vulnerability context;
+- expand infrastructure neighborhood;
+- retrieve previous investigations;
+- fetch source excerpts for citation;
+- compare against known techniques;
+- ask for missing evidence.
+
+Typed retrieval makes the system debuggable.
+
+It also makes it safer.
+
+## Retrieval should be planned, not improvised.
+
+The naive version of deep research is:
+
+1. Receive question.
+2. Search a bunch of sources.
+3. Dump results into a long prompt.
+4. Ask the model to answer.
+
+That works for demos.
+
+It breaks under real security workloads.
+
+A better system uses a research plan.
+
+For example, if the user asks:
+
+<PullQuote>
+  Is this domain connected to the phishing activity we saw last week?
+</PullQuote>
+
+The system should decompose the task:
+
+1. Normalize the domain.
+2. Retrieve internal DNS, proxy, EDR, and email telemetry for the domain and
+   subdomains.
+3. Retrieve passive DNS, WHOIS, certificate, and hosting context.
+4. Retrieve prior investigations from the last 90 days.
+5. Expand related infrastructure only within a bounded depth.
+6. Compare observed behavior to known phishing techniques.
+7. Produce an evidence-backed answer with confidence and uncertainty.
+
+The plan is important because it prevents the model from doing what models love
+to do: sound complete before the work is complete.
+
+The plan should be inspectable.
+
+An analyst should be able to see:
+
+- what the system searched;
+- which tools it called;
+- which sources failed;
+- which evidence was included;
+- which evidence was ignored;
+- how it arrived at its confidence.
+
+That is how you build trust.
+
+Not by making the answer more fluent.
+
+By making the research path visible.
+
+## Correlation is where the value is.
+
+Search finds facts.
+
+Correlation finds meaning.
+
+In cybersecurity, most valuable conclusions come from joining weak signals:
+
+- a domain with no reputation, but suspicious registration timing;
+- a certificate pattern reused across infrastructure;
+- an IP that hosted unrelated-looking domains in the same campaign window;
+- an endpoint event that matches a known technique;
+- a CVE that is high severity but unreachable in the local architecture;
+- a low-severity vulnerability that is exposed on an internet-facing control
+  plane;
+- a vendor report that mentions a tool also seen in internal telemetry.
+
+No single item is enough.
+
+The system needs correlation operators.
+
+Useful operators include:
+
+- temporal overlap;
+- shared infrastructure;
+- shared certificate fields;
+- passive DNS co-occurrence;
+- URL path similarity;
+- malware family overlap;
+- ATT&CK technique overlap;
+- asset ownership;
+- identity relationship;
+- campaign time window;
+- vulnerability-to-asset reachability;
+- exploit-to-control mapping;
+- internal sighting frequency;
+- external reporting frequency.
+
+OpenCTI’s inference model is useful inspiration here. Its documentation
+describes applying logical rules to existing relationships to infer new
+relationships. That is exactly the kind of bounded reasoning security systems
+need: not unconstrained imagination, but explainable relationship creation.
+
+Correlation should produce candidate hypotheses, not final truth.
+
+Example:
+
+```text
+Hypothesis:
+  Domain A and Domain B may belong to the same phishing cluster.
+
+Supporting evidence:
+  - same registrar
+  - same certificate issuer
+  - registered within 7 hours
+  - both appeared in email telemetry targeting finance users
+  - similar URL path structure
+
+Contradicting evidence:
+  - different hosting providers
+  - no shared passive DNS resolution
+
+Confidence:
+  Medium, pending additional telemetry.
+```
+
+That structure is much better than “likely related.”
+
+## Reasoning needs an evidence ledger.
+
+The most important artifact in a deep research system is not the final prose.
+
+It is the evidence ledger.
+
+The evidence ledger is a structured record of:
+
+- claims;
+- supporting evidence;
+- contradicting evidence;
+- source links;
+- timestamps;
+- confidence;
+- reasoning steps;
+- unresolved questions.
+
+Every meaningful sentence in the final answer should be traceable back to the
+ledger.
+
+If the system says “this resembles credential phishing,” it should know why.
+
+If it says “we found no evidence of exploitation,” it should say where it
+looked.
+
+If it says “this is not currently relevant to our environment,” it should
+separate:
+
+- no affected asset found;
+- affected asset found but not reachable;
+- affected asset found but patched;
+- scanner data missing;
+- inventory data stale.
+
+Those are different operational states.
+
+They should not collapse into the same sentence.
+
+## Confidence should be explicit and boring.
+
+Security writing has a dangerous failure mode: fluent uncertainty.
+
+The prose sounds careful, but the system has no real confidence model.
+
+A useful deep research system should express confidence in boring, inspectable
+ways:
+
+- high confidence: multiple independent high-quality sources agree, and there
+  is internal corroboration;
+- medium confidence: evidence is plausible but incomplete or source quality is
+  mixed;
+- low confidence: weak signal, stale source, single-source claim, or missing
+  telemetry;
+- unknown: the system does not have enough evidence.
+
+Confidence should not be a single model-generated adjective.
+
+It should be computed from signals such as:
+
+- source reliability;
+- source independence;
+- evidence recency;
+- internal telemetry match;
+- entity resolution strength;
+- contradiction count;
+- analyst confirmation;
+- historical precision of the source;
+- sensitivity of the conclusion.
+
+For attribution, the bar should be even higher.
+
+Security teams should resist turning infrastructure overlap into actor
+attribution. Shared tooling, rented infrastructure, copied TTPs, false flags,
+and vendor naming disagreements all make attribution fragile.
+
+Deep research should help analysts say:
+
+<PullQuote>
+  This activity overlaps with reporting on this cluster, but available evidence
+  is insufficient for actor attribution.
+</PullQuote>
+
+That sentence is less dramatic.
+
+It is also more useful.
+
+## Vulnerability research needs context, not just severity.
+
+Vulnerability research is a perfect example of why deep research matters.
+
+A CVE by itself is not a priority.
+
+CVSS helps communicate severity. The CVE Program gives the vulnerability a
+shared identifier. NIST’s National Vulnerability Database adds structured
+analysis. FIRST’s EPSS estimates probability of exploitation in the wild. CISA’s
+Known Exploited Vulnerabilities catalog identifies vulnerabilities known to have
+been exploited and gives defenders a high-priority signal.
+
+Each signal is useful.
+
+None is sufficient alone.
+
+A deep research system should combine:
+
+- CVE record;
+- vendor advisory;
+- affected products and versions;
+- CVSS vector;
+- EPSS probability;
+- CISA KEV status;
+- public exploit availability;
+- exploit maturity;
+- asset inventory;
+- internet exposure;
+- compensating controls;
+- business criticality;
+- patch availability;
+- change risk;
+- evidence of active exploitation against the organization.
+
+Then it should produce a decision, not just a score.
+
+Example:
+
+```text
+Recommendation:
+  Patch within 24 hours.
+
+Why:
+  - Affected product is internet-facing.
+  - Asset inventory confirms vulnerable version.
+  - CISA KEV includes this CVE.
+  - EPSS is elevated.
+  - Public exploit references exist.
+  - No compensating WAF rule is currently deployed.
+
+Uncertainty:
+  - Scanner data is 36 hours old.
+  - One business unit has incomplete ownership metadata.
+```
+
+That is the difference between vulnerability data and vulnerability
+intelligence.
+
+## Memory makes research compound.
+
+Most security organizations lose context constantly.
+
+An analyst investigates something, writes notes in a ticket, posts a summary in
+chat, adds a detection, closes the case, and six months later another analyst
+starts from nearly zero.
+
+Deep research systems should make organizational memory explicit.
+
+There are several kinds of memory:
+
+### Case memory.
+
+What happened in previous investigations?
+
+- original question;
+- evidence gathered;
+- hypotheses considered;
+- final conclusion;
+- actions taken;
+- detections added;
+- false positives discovered;
+- analyst comments.
+
+### Entity memory.
+
+What do we know about this entity over time?
+
+- first seen;
+- last seen;
+- prior classifications;
+- linked investigations;
+- linked assets;
+- confidence history;
+- expiration dates.
+
+### Environment memory.
+
+What matters in this organization?
+
+- crown-jewel assets;
+- important business systems;
+- cloud accounts;
+- identity structure;
+- exposed services;
+- high-risk vendors;
+- critical dependencies;
+- normal traffic patterns.
+
+### Research memory.
+
+How does this team prefer to make decisions?
+
+- escalation thresholds;
+- confidence language;
+- preferred sources;
+- known noisy feeds;
+- detection quality history;
+- past analyst overrides.
+
+Memory should not mean “dump every previous conversation into context.”
+
+That is a fast way to create leakage, confusion, and stale reasoning.
+
+Memory should be typed, scoped, permissioned, and expirable.
+
+## The agent loop.
+
+A good deep research system can be implemented as an agent, but the agent needs
+guardrails and structure.
+
+The loop should look something like this:
+
+1. Interpret the question.
+2. Classify the research mode.
+3. Build an initial plan.
+4. Retrieve evidence.
+5. Normalize and resolve entities.
+6. Build or update hypotheses.
+7. Search for supporting and contradicting evidence.
+8. Ask whether enough evidence exists.
+9. Produce a cited answer.
+10. Store the investigation memory.
+11. Recommend next actions, if appropriate.
+
+The critical step is number eight.
+
+Most AI systems are eager to answer.
+
+Security research systems must be comfortable saying:
+
+- “I do not have enough evidence.”
+- “This source failed.”
+- “Telemetry is missing.”
+- “The relationship is weak.”
+- “This requires human review.”
+- “The recommended action is blocked by insufficient asset context.”
+
+The best agent is not the boldest one.
+
+It is the one that knows when to slow down.
+
+## Tool permissions should match investigation risk.
+
+Deep research systems often need tools:
+
+- query SIEM;
+- search EDR;
+- fetch asset inventory;
+- retrieve threat intelligence;
+- open tickets;
+- draft detections;
+- create block recommendations;
+- generate reports;
+- update cases.
+
+Not all tools are equal.
+
+Use permission tiers.
+
+### Read-only tools.
+
+These are lowest risk:
+
+- search intelligence;
+- query logs;
+- retrieve reports;
+- inspect assets;
+- fetch vulnerability context.
+
+### Drafting tools.
+
+These create proposed artifacts:
+
+- draft detection rule;
+- draft ticket;
+- draft incident summary;
+- draft executive brief;
+- draft remediation plan.
+
+### Change tools.
+
+These affect the environment:
+
+- block indicator;
+- disable account;
+- isolate endpoint;
+- deploy detection;
+- patch asset;
+- change firewall rule.
+
+For deep research, most automation should stay in the first two tiers.
+
+Change tools require explicit approval, policy checks, and audit trails.
+
+That is not bureaucracy.
+
+That is how you keep a research assistant from becoming an incident.
+
+## AI-specific security controls.
+
+Because the system reads untrusted content, AI security becomes part of the
+architecture.
+
+Threat reports, malware notes, paste sites, emails, PDFs, and web pages can all
+contain hostile instructions. If those documents are passed into an LLM, they
+can become indirect prompt injection payloads.
+
+The [OWASP Top 10 for LLM Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications/)
+is a useful baseline because it covers risks such as prompt injection,
+sensitive information disclosure, supply-chain issues, vector and embedding
+weaknesses, excessive agency, and improper output handling.
+
+For cybersecurity research, the controls should include:
+
+- clear separation between instructions and retrieved evidence;
+- source quarantine for untrusted documents;
+- prompt-injection detection and labeling;
+- tool allowlists;
+- per-tool authorization;
+- secret redaction before model calls;
+- output validation before action;
+- citation requirements;
+- retrieval poisoning checks;
+- rate limits and cost controls;
+- audit logs for every tool call;
+- human approval for consequential actions.
+
+NIST’s AI work is also relevant here. The AI Risk Management Framework and the
+Generative AI Profile emphasize trustworthy AI characteristics and risk
+management. NIST’s Cyber AI Profile draft goes further into AI in cybersecurity,
+organizing concerns around securing AI systems, using AI for defense, and
+thwarting AI-enabled attacks.
+
+The practical takeaway:
+
+<PullQuote>
+  Treat the deep research system itself as a security product, not as a helper
+  script with a charming interface.
+</PullQuote>
+
+## The output should be a product, not a paragraph.
+
+The final answer matters, but analysts need structured output.
+
+For an indicator investigation, the output might include:
+
+- summary judgment;
+- confidence;
+- evidence table;
+- related entities;
+- internal sightings;
+- external reporting;
+- recommended containment;
+- detection opportunities;
+- open questions.
+
+For a vulnerability investigation:
+
+- affected assets;
+- reachability;
+- exploitation evidence;
+- KEV status;
+- EPSS context;
+- patch or mitigation;
+- business owner;
+- remediation SLA;
+- exceptions.
+
+For a campaign investigation:
+
+- timeline;
+- observed behaviors;
+- ATT&CK mapping;
+- related infrastructure;
+- impacted assets;
+- detection coverage;
+- containment plan;
+- narrative summary.
+
+For executive consumption:
+
+- business impact;
+- confidence;
+- risk level;
+- decision needed;
+- what is being done;
+- what remains unknown.
+
+The system should produce multiple views from the same evidence ledger.
+
+Analysts need detail.
+
+Leadership needs decisions.
+
+Detection engineers need behavior.
+
+Platform teams need affected assets.
+
+Legal and compliance teams need timelines and scope.
+
+One summary cannot serve everyone.
+
+## Evaluating a deep research system.
+
+You cannot evaluate these systems only by asking whether the answer sounds good.
+
+That is how bad systems survive demos.
+
+Evaluation needs a test suite.
+
+### Retrieval evaluation.
+
+Can the system find the right evidence?
+
+Measure:
+
+- recall for known relevant documents;
+- precision of retrieved chunks;
+- entity lookup accuracy;
+- stale source usage;
+- missed internal telemetry.
+
+### Correlation evaluation.
+
+Can the system connect the right things without connecting everything?
+
+Measure:
+
+- true relationship discovery;
+- false relationship rate;
+- entity resolution errors;
+- temporal reasoning errors;
+- over-expansion of graph neighborhoods.
+
+### Reasoning evaluation.
+
+Can the system make careful claims?
+
+Measure:
+
+- unsupported claims;
+- contradiction handling;
+- confidence calibration;
+- citation accuracy;
+- uncertainty quality;
+- attribution restraint.
+
+### Operational evaluation.
+
+Does it help analysts?
+
+Measure:
+
+- time to first useful answer;
+- time to evidence package;
+- reduction in manual pivots;
+- analyst correction rate;
+- escalation quality;
+- detection ideas produced;
+- remediation decisions accelerated.
+
+### Safety evaluation.
+
+Does it avoid dangerous behavior?
+
+Measure:
+
+- prompt-injection resistance;
+- secret leakage;
+- tool misuse;
+- excessive agency;
+- unsafe recommendations;
+- failure to request approval.
+
+Security research systems should be evaluated against historical cases:
+
+- closed incidents;
+- known false positives;
+- known malicious infrastructure;
+- known benign infrastructure;
+- vulnerability triage decisions;
+- previous campaign analyses.
+
+The test set should include uncomfortable cases.
+
+If every benchmark has a clean answer, the benchmark is lying.
+
+## A reference architecture.
+
+Here is the architecture I would start with.
+
+### 1. Ingestion layer.
+
+Connectors pull from:
+
+- threat feeds;
+- vendor reports;
+- MISP or OpenCTI;
+- STIX/TAXII collections;
+- SIEM;
+- EDR;
+- cloud logs;
+- asset inventory;
+- vulnerability scanners;
+- code and package metadata;
+- ticketing systems;
+- analyst notes.
+
+Raw data is stored before transformation.
+
+Never throw away the original evidence.
+
+### 2. Parsing and normalization layer.
+
+This layer extracts:
+
+- observables;
+- CVEs;
+- products;
+- versions;
+- ATT&CK techniques;
+- malware names;
+- actor names;
+- campaign references;
+- assets;
+- identities;
+- timestamps;
+- source metadata.
+
+It also canonicalizes entities and records confidence.
+
+### 3. Enrichment layer.
+
+This layer adds:
+
+- passive DNS;
+- WHOIS;
+- certificate context;
+- geolocation;
+- ASN;
+- sandbox results;
+- CVSS;
+- EPSS;
+- KEV status;
+- exploit references;
+- asset ownership;
+- exposure status.
+
+### 4. Storage layer.
+
+Use multiple stores:
+
+- object store for raw documents;
+- search index for exact and full-text search;
+- vector index for semantic retrieval;
+- graph database for entity relationships;
+- relational store for cases, tasks, and audit records;
+- time-series or log store for telemetry.
+
+### 5. Research orchestration layer.
+
+This is the agent runtime.
+
+It handles:
+
+- task classification;
+- research planning;
+- tool calls;
+- retrieval;
+- evidence ledger creation;
+- hypothesis tracking;
+- contradiction search;
+- answer generation;
+- memory updates.
+
+### 6. Policy and safety layer.
+
+This layer enforces:
+
+- source permissions;
+- user permissions;
+- data sensitivity;
+- prompt-injection handling;
+- tool authorization;
+- approval workflows;
+- audit logging;
+- output validation.
+
+### 7. Analyst experience layer.
+
+The UI should show:
+
+- answer;
+- evidence;
+- confidence;
+- timeline;
+- entity graph;
+- related cases;
+- open questions;
+- recommended actions;
+- exportable report.
+
+The analyst should always be able to inspect the machine’s work.
+
+## Build sequence.
+
+Do not start by building a general autonomous analyst.
+
+Start narrower.
+
+### Phase 1: Evidence-backed indicator research.
+
+Build a system that can take an indicator and produce:
+
+- internal sightings;
+- external reputation;
+- related entities;
+- evidence citations;
+- confidence;
+- recommended next step.
+
+This is constrained and useful.
+
+### Phase 2: Vulnerability context.
+
+Add CVE research:
+
+- affected assets;
+- KEV status;
+- EPSS;
+- CVSS;
+- vendor advisory;
+- exposure;
+- remediation priority.
+
+This gives the system a second research mode and forces asset context.
+
+### Phase 3: Case memory.
+
+Store investigations in a structured format.
+
+Make future investigations retrieve prior cases.
+
+This is where the product starts compounding.
+
+### Phase 4: Campaign correlation.
+
+Add multi-entity research:
+
+- timelines;
+- infrastructure clusters;
+- behavioral mapping;
+- internal sightings;
+- ATT&CK technique mapping.
+
+### Phase 5: Draft actions.
+
+Let the system draft:
+
+- detection rules;
+- tickets;
+- summaries;
+- containment recommendations;
+- executive briefs.
+
+Keep action execution human-approved.
+
+### Phase 6: Continuous research.
+
+Let the system monitor selected entities, CVEs, campaigns, vendors, and asset
+groups.
+
+The product becomes a research engine, not a chat box.
+
+## Common failure modes.
+
+### The “summarize these feeds” trap.
+
+This produces nice newsletters and little operational value.
+
+Feeds are not intelligence until they are joined to your environment.
+
+### The “one giant vector database” trap.
+
+Embeddings are useful, but they are not provenance, entity resolution, temporal
+reasoning, or access control.
+
+### The “agent with admin access” trap.
+
+Autonomy feels magical until it blocks the wrong domain or leaks a secret into a
+prompt.
+
+### The “confidence theater” trap.
+
+A confidence label without evidence logic is decoration.
+
+### The “all sources are equal” trap.
+
+They are not.
+
+Some are timely. Some are accurate. Some are noisy. Some are stale. Some are
+not allowed to leave the organization. The system has to know the difference.
+
+### The “attribution addiction” trap.
+
+Attribution is tempting because it sounds strategic.
+
+Most operations need containment, detection, and exposure reduction first.
+
+## What good looks like.
+
+A good deep research system feels less like a chatbot and more like a calm
+analyst who keeps receipts.
+
+It can say:
+
+- “I found three internal sightings.”
+- “Two sources support this relationship.”
+- “One source contradicts it.”
+- “The vulnerability is severe, but not reachable here.”
+- “This looks like the same campaign, but actor attribution is low confidence.”
+- “I need fresher telemetry before recommending action.”
+- “Here is the detection gap.”
+- “Here is the executive version.”
+
+That is the product.
+
+Not the model.
+
+Not the graph.
+
+Not the prompt.
+
+The product is the movement from uncertainty to defensible operational judgment.
+
+## Research notes and source map.
+
+This note was refreshed with current public references from standards bodies,
+government sources, and operational security projects:
+
+- [MITRE ATT&CK](https://attack.mitre.org/) for adversary tactics, techniques,
+  and procedures.
+- [OASIS STIX 2.1](https://docs.oasis-open.org/cti/stix/v2.1/stix-v2.1.html)
+  and [TAXII 2.1](https://www.oasis-open.org/standard/taxii2-1/) for CTI
+  representation and exchange.
+- [OpenCTI documentation](https://docs.opencti.io/latest/usage/data-model/) for
+  knowledge-graph-driven threat intelligence and relationship modeling.
+- [OpenCTI inferences and reasoning](https://docs.opencti.io/latest/usage/inferences/)
+  for automated relationship inference patterns.
+- [MISP features](https://www.misp-project.org/features/) for threat
+  intelligence sharing, collaboration, export formats, and operationalization.
+- [CISA Known Exploited Vulnerabilities Catalog](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+  for exploited-in-the-wild vulnerability prioritization.
+- [CVE Program overview](https://www.cve.org/About/Overview), [NIST
+  NVD](https://www.nist.gov/itl/nvd), [FIRST CVSS
+  v4.0](https://www.first.org/cvss/v4-0/cvss-v40-specification.pdf), and
+  [FIRST EPSS](https://www.first.org/epss/) for vulnerability identification,
+  severity, and exploit-likelihood context.
+- [OWASP Top 10 for LLM Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications/)
+  for LLM application risks relevant to agentic research systems.
+- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
+  and [NIST IR 8596 Cyber AI Profile draft](https://csrc.nist.gov/pubs/ir/8596/iprd)
+  for AI risk management and cybersecurity-specific AI guidance.
+- [Microsoft STRIDE threat modeling guidance](https://learn.microsoft.com/en-us/azure/security/develop/threat-modeling-tool-threats)
+  for structured threat thinking around system design.
 
 ## Final thoughts.
 
-The future of cybersecurity research belongs to systems capable of:
+Cybersecurity research is becoming too fast, too fragmented, and too
+context-heavy for search-only workflows.
 
-- autonomous retrieval;
-- contextual reasoning;
-- cross-source correlation;
-- investigation continuity;
-- operational summarization.
+But the answer is not “let the model figure it out.”
 
-The intelligence layer itself is becoming dynamic and adaptive.
+The answer is a research architecture:
+
+- typed retrieval;
+- normalized entities;
+- temporal graph relationships;
+- evidence-backed reasoning;
+- explicit confidence;
+- scoped memory;
+- safety controls;
+- analyst approval;
+- measurable output quality.
+
+Deep research systems will matter because they help teams preserve judgment
+under load.
+
+They do not replace analysts.
+
+They give analysts a better research instrument.
+
+One that remembers.
+
+One that cites its work.
+
+One that is willing to say “unknown.”
+
+In security, that may be the most intelligent answer a system can give.
 
 <EndMark />

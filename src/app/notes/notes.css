@@ -809,6 +809,221 @@ footer.bottom b {
   max-width: 680px;
 }
 
+.post-body {
+  margin: 0 auto;
+  max-width: 680px;
+}
+
+.post-body.has-toc {
+  align-items: start;
+  display: grid;
+  gap: 44px;
+  grid-template-columns: minmax(180px, 230px) minmax(0, 680px);
+  justify-content: center;
+  max-width: 980px;
+}
+
+.post-body.has-toc .article {
+  margin: 0;
+}
+
+.toc-card {
+  background:
+    radial-gradient(ellipse at 28% 18%, rgba(255, 250, 232, 0.45) 0%, transparent 55%),
+    radial-gradient(ellipse at 78% 82%, rgba(180, 145, 90, 0.05) 0%, transparent 60%),
+    linear-gradient(135deg,
+      color-mix(in oklab, var(--paper-2) 94%, #fff8e6 6%) 0%,
+      var(--paper-2) 55%,
+      color-mix(in oklab, var(--paper-2) 92%, #c9a560 8%) 100%);
+  box-shadow:
+    0 1px 0 rgba(60, 40, 20, 0.05),
+    2px 4px 10px rgba(60, 40, 20, 0.08),
+    8px 22px 44px rgba(60, 40, 20, 0.12),
+    0 1px 0 rgba(255, 250, 232, 0.55) inset;
+  clip-path: polygon(
+    0.9% 0.5%,
+    22% 0,
+    48% 0.35%,
+    73% 0.1%,
+    99.1% 0.55%,
+    99.7% 28%,
+    99.2% 62%,
+    99.55% 99.1%,
+    71% 99.6%,
+    44% 99.15%,
+    0.8% 99.45%,
+    0.2% 65%,
+    0.75% 31%
+  );
+  color: var(--ink-soft);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  line-height: 1.45;
+  max-height: calc(100vh - 56px);
+  overflow: auto;
+  padding: 28px 18px 18px;
+  position: sticky;
+  top: 24px;
+  transform: rotate(-0.5deg);
+}
+
+.toc-card::before {
+  background:
+    repeating-linear-gradient(90deg,
+      transparent 0,
+      transparent 5px,
+      rgba(255, 255, 255, 0.06) 5px,
+      rgba(255, 255, 255, 0.06) 6px),
+    linear-gradient(180deg,
+      rgba(245, 220, 130, 0.42) 0%,
+      rgba(232, 207, 115, 0.68) 50%,
+      rgba(245, 220, 130, 0.42) 100%);
+  box-shadow:
+    0 2px 3px rgba(60, 40, 20, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  content: "";
+  height: 20px;
+  left: 50%;
+  position: absolute;
+  top: -8px;
+  transform: translateX(-50%) rotate(3deg);
+  width: 76px;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 7%, black 93%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, black 7%, black 93%, transparent 100%);
+}
+
+.toc-card::after {
+  background: linear-gradient(135deg,
+    color-mix(in oklab, var(--paper-2) 60%, #fff8e6 40%) 0%,
+    color-mix(in oklab, var(--paper-2) 80%, #c9a560 20%) 70%,
+    color-mix(in oklab, var(--paper-2) 88%, #8b6a3d 12%) 100%);
+  bottom: 0;
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+  content: "";
+  filter: drop-shadow(-1px -1px 2px rgba(60, 40, 20, 0.18));
+  height: 20px;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  width: 20px;
+}
+
+[data-theme="dark"] .toc-card {
+  background:
+    radial-gradient(ellipse at 28% 18%, rgba(255, 230, 180, 0.04) 0%, transparent 55%),
+    radial-gradient(ellipse at 78% 82%, rgba(60, 40, 20, 0.30) 0%, transparent 60%),
+    linear-gradient(135deg,
+      color-mix(in oklab, var(--paper-2) 94%, #6e5a30 6%) 0%,
+      var(--paper-2) 55%,
+      color-mix(in oklab, var(--paper-2) 88%, #2b1f12 12%) 100%);
+  box-shadow:
+    0 1px 0 rgba(0, 0, 0, 0.4),
+    2px 4px 10px rgba(0, 0, 0, 0.4),
+    8px 22px 44px rgba(0, 0, 0, 0.55),
+    0 1px 0 rgba(255, 230, 180, 0.05) inset;
+}
+
+[data-theme="dark"] .toc-card::before {
+  background:
+    repeating-linear-gradient(90deg,
+      transparent 0,
+      transparent 5px,
+      rgba(255, 255, 255, 0.025) 5px,
+      rgba(255, 255, 255, 0.025) 6px),
+    linear-gradient(180deg,
+      rgba(190, 150, 70, 0.35) 0%,
+      rgba(170, 130, 55, 0.55) 50%,
+      rgba(190, 150, 70, 0.35) 100%);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 220, 150, 0.12);
+}
+
+[data-theme="dark"] .toc-card::after {
+  background: linear-gradient(135deg,
+    color-mix(in oklab, var(--paper-2) 55%, #5e4a2e 45%) 0%,
+    color-mix(in oklab, var(--paper-2) 78%, #2b1f12 22%) 70%,
+    color-mix(in oklab, var(--paper-2) 88%, #0a0805 12%) 100%);
+  filter: drop-shadow(-1px -1px 2px rgba(0, 0, 0, 0.45));
+}
+
+.toc-card .toc-kicker {
+  color: var(--red);
+  display: inline-block;
+  font-family: var(--hand);
+  font-size: 24px;
+  letter-spacing: 0;
+  line-height: 1;
+  margin-bottom: 5px;
+  transform: rotate(-2deg);
+}
+
+.toc-card h2 {
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 24px;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  margin-bottom: 14px;
+}
+
+.toc-card ol {
+  counter-reset: toc;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.toc-card li {
+  border-top: 1px dashed color-mix(in oklab, var(--rule) 82%, transparent);
+  margin: 0;
+}
+
+.toc-card li:first-child {
+  border-top: 0;
+}
+
+.toc-card li:not(.is-child) {
+  counter-increment: toc;
+}
+
+.toc-card a {
+  color: var(--ink-soft);
+  display: grid;
+  gap: 9px;
+  grid-template-columns: 26px 1fr;
+  padding: 9px 0;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.toc-card a::before {
+  color: var(--red);
+  content: counter(toc, decimal-leading-zero);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  transform: translateY(1px);
+}
+
+.toc-card a:hover {
+  color: var(--red);
+  transform: translateX(3px);
+}
+
+.toc-card .is-child a {
+  color: var(--ink-mute);
+  font-size: 10.5px;
+  padding-left: 18px;
+}
+
+.toc-card .is-child a::before {
+  content: "↳";
+  font-family: var(--hand);
+  font-size: 15px;
+  letter-spacing: 0;
+  transform: translateY(-1px);
+}
+
 .article p {
   margin: 0 0 1.2em;
 }
@@ -846,6 +1061,7 @@ footer.bottom b {
   letter-spacing: -0.012em;
   line-height: 1.08;
   margin: 1.6em 0 0.5em;
+  scroll-margin-top: 96px;
 }
 
 .article h2 em {
@@ -869,6 +1085,7 @@ footer.bottom b {
   font-size: 26px;
   line-height: 1.15;
   margin: 1.3em 0 0.3em;
+  scroll-margin-top: 96px;
 }
 
 .article ul,
@@ -1330,6 +1547,19 @@ footer.bottom b {
 }
 
 @media (max-width: 1080px) {
+  .post-body.has-toc {
+    gap: 32px;
+    grid-template-columns: minmax(0, 680px);
+    max-width: 680px;
+  }
+
+  .toc-card {
+    max-height: 360px;
+    position: relative;
+    top: auto;
+    transform: rotate(-0.2deg);
+  }
+
   .margin-note,
   .margin-note.left {
     background: var(--paper-2);
@@ -1366,6 +1596,17 @@ footer.bottom b {
 }
 
 @media (max-width: 720px) {
+  .toc-card {
+    font-size: 10.5px;
+    margin-bottom: 6px;
+    max-height: 300px;
+    padding: 26px 16px 16px;
+  }
+
+  .toc-card h2 {
+    font-size: 22px;
+  }
+
   .entry {
     gap: 12px;
     grid-template-columns: 1fr;

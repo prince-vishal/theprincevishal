@@ -4,6 +4,7 @@ import { compileMDX } from 'next-mdx-remote/rsc';
 import NotesTop from '@/components/notes/NotesTop';
 import { mdxComponents } from '@/components/notes/MdxComponents';
 import { getNoteBySlug, getPublishedNotes } from '@/lib/notes';
+import { addHeadingIds, buildTableOfContents } from '@/lib/table-of-contents';
 
 export const dynamicParams = false;
 
@@ -99,6 +100,24 @@ function ReadNext({ note }) {
   );
 }
 
+function TableOfContents({ items }) {
+  if (items.length === 0) return null;
+
+  return (
+    <aside className="toc-card" aria-labelledby="toc-title">
+      <div className="toc-kicker">field map</div>
+      <h2 id="toc-title">Table of contents</h2>
+      <ol>
+        {items.map((item) => (
+          <li className={item.depth === 3 ? 'is-child' : undefined} key={item.id}>
+            <a href={`#${item.id}`}>{item.text}</a>
+          </li>
+        ))}
+      </ol>
+    </aside>
+  );
+}
+
 export default async function NotePage({ params }) {
   const { slug } = await params;
   const [note, notes] = await Promise.all([getNoteBySlug(slug).catch(() => null), getPublishedNotes()]);
@@ -106,8 +125,11 @@ export default async function NotePage({ params }) {
   if (!note) notFound();
 
   const nextNote = note.nextSlug ? notes.find((item) => item.slug === note.nextSlug) : null;
+  const tocEnabled = Boolean(note.tableOfContents ?? note.toc);
+  const tableOfContents = tocEnabled ? buildTableOfContents(note.content) : [];
+  const mdxSource = tocEnabled ? addHeadingIds(note.content, tableOfContents) : note.content;
   const { content } = await compileMDX({
-    source: note.content,
+    source: mdxSource,
     components: mdxComponents(),
     options: { parseFrontmatter: false },
   });
@@ -138,7 +160,10 @@ export default async function NotePage({ params }) {
         </div>
       </header>
 
-      <article className="article">{content}</article>
+      <div className={tableOfContents.length > 0 ? 'post-body has-toc' : 'post-body'}>
+        <TableOfContents items={tableOfContents} />
+        <article className="article">{content}</article>
+      </div>
 
       <div className="filed">
         <span className="lab">filed under →</span>
