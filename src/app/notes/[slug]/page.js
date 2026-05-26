@@ -8,6 +8,8 @@ import { addHeadingIds, buildTableOfContents } from '@/lib/table-of-contents';
 
 export const dynamicParams = false;
 
+const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'https://theprincevishal.in').replace(/\/$/, '');
+
 export async function generateStaticParams() {
   const notes = await getPublishedNotes();
   return notes.map((note) => ({ slug: note.slug }));
@@ -22,12 +24,103 @@ export async function generateMetadata({ params }) {
   return {
     title: `${note.title} — Notes · Prince Sinha`,
     description: note.description,
+    alternates: {
+      canonical: `${siteUrl}${note.href}`,
+    },
     openGraph: {
       title: note.title,
       description: note.ogDescription ?? note.description,
       type: 'article',
+      url: `${siteUrl}${note.href}`,
+      publishedTime: note.date,
+      authors: ['Prince Sinha'],
+      tags: note.tags,
     },
   };
+}
+
+function stripMarkup(value = '') {
+  return String(value)
+    .replace(/<[^>]*>/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function jsonLd(value) {
+  return JSON.stringify(value).replace(/</g, '\\u003c');
+}
+
+function readTimeToMinutes(readTime) {
+  const match = String(readTime ?? '').match(/\d+/);
+  return match ? Number(match[0]) : undefined;
+}
+
+function buildNoteJsonLd(note) {
+  const url = `${siteUrl}${note.href}`;
+  const datePublished = note.date ? new Date(note.date).toISOString() : undefined;
+  const dateModified = note.updatedAt
+    ? new Date(note.updatedAt).toISOString()
+    : datePublished;
+  const wordCount = stripMarkup(note.content).split(/\s+/).filter(Boolean).length;
+  const timeRequired = readTimeToMinutes(note.readTime);
+
+  return [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      '@id': `${url}#article`,
+      mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': url,
+      },
+      headline: note.title,
+      description: note.ogDescription ?? note.description,
+      url,
+      datePublished,
+      dateModified,
+      inLanguage: 'en',
+      isAccessibleForFree: true,
+      wordCount,
+      timeRequired: timeRequired ? `PT${timeRequired}M` : undefined,
+      articleSection: note.tags?.[0] ?? 'Notes',
+      keywords: note.tags?.join(', '),
+      author: {
+        '@type': 'Person',
+        name: 'Prince Sinha',
+        url: siteUrl,
+      },
+      publisher: {
+        '@type': 'Person',
+        name: 'Prince Sinha',
+        url: siteUrl,
+      },
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      '@id': `${url}#breadcrumb`,
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: siteUrl,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Notes',
+          item: `${siteUrl}/notes`,
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: note.title,
+          item: url,
+        },
+      ],
+    },
+  ];
 }
 
 function DecoBand() {
@@ -133,9 +226,14 @@ export default async function NotePage({ params }) {
     components: mdxComponents(),
     options: { parseFrontmatter: false },
   });
+  const structuredData = buildNoteJsonLd(note);
 
   return (
     <main className="notes-page notes-post-page">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLd(structuredData) }}
+      />
       <NotesTop noteNumber={note.number} />
       <DecoBand />
 
