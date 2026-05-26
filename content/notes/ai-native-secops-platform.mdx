@@ -3,147 +3,1039 @@ number: "013"
 title: "Rethinking SecOps: designing an AI-native security operations platform"
 titleHtml: "Rethinking <em>SecOps</em>: designing an AI-native security operations platform."
 headingHtml: "Rethinking <em>SecOps</em>:<br/><span class=\"red\">AI-native</span> security operations."
-description: "On designing security systems where AI is the operational layer, not a decorative feature."
-ogDescription: "Architectural principles for AI-native SecOps platforms: autonomous investigation, context, correlation, and analyst augmentation."
-date: "2026-05-25"
-displayDate: "2026 · 05 · 25"
-readTime: "5 min"
+description: "A detailed architecture note on designing AI-native SecOps platforms for investigation, triage, telemetry, detection engineering, workflow orchestration, and human-supervised response."
+ogDescription: "How to design AI-native SecOps platforms: alert intake, evidence, correlation, workflows, detection engineering, safety, evaluation, and analyst trust."
+date: "2026-05-26"
+displayDate: "2026 · 05 · 26"
+readTime: "17 min"
 quirk: "— or one alert queue avoided"
-excerptHtml: "Traditional security platforms were designed around dashboards and manual workflows. The next generation treats AI as the <em>operational layer itself</em>."
-dekHtml: "Security operations do not need one more dashboard. They need systems that reason across context, orchestrate workflows, and keep analysts in control."
+excerptHtml: "Traditional security platforms were built around dashboards and queues. AI-native SecOps platforms need evidence, workflow memory, typed actions, guardrails, and analyst control."
+dekHtml: "Security operations do not need one more dashboard. They need systems that reason across context, orchestrate evidence, and keep humans in control of consequential action."
 tags: ["ai", "security", "secops", "building"]
 featured: true
+tableOfContents: true
 nextSlug: "darkweb-exposure-agent"
 ---
 
 <Lede>
-  Modern security operations centers are overwhelmed by alert fatigue,
-  fragmented tooling, repetitive investigations, and operational complexity.
+  Modern security operations are not failing because analysts are lazy. They are
+  failing because the operating model was designed around queues, dashboards,
+  and manual pivots.
 </Lede>
 
-Traditional security platforms were designed around dashboards and manual
-workflows. Analysts are expected to pivot between multiple tools, correlate
-alerts manually, enrich indicators from external systems, and make high-pressure
-operational decisions under severe time constraints.
+The typical SOC workflow still asks humans to perform an enormous amount of
+coordination work:
 
-The issue is not simply scale.
+- open the alert;
+- inspect the raw event;
+- identify the entity;
+- search endpoint telemetry;
+- search identity telemetry;
+- search network logs;
+- enrich indicators;
+- check asset context;
+- look for similar events;
+- decide whether the alert is real;
+- write a summary;
+- open or update a ticket;
+- escalate if needed;
+- repeat.
 
-The issue is architecture.
+That is not one workflow.
 
-The next generation of security systems will not treat AI as an optional
-feature. They will treat AI as the operational layer itself.
+That is a pile of small workflows pretending to be one workflow.
 
-This note explores the architectural principles behind designing AI-native
-SecOps systems capable of autonomous investigations, contextual reasoning,
-workflow orchestration, and continuous analyst augmentation.
+The result is familiar: alert fatigue, tool switching, inconsistent triage,
+slow investigations, incomplete handoffs, and a quiet dependence on the most
+experienced analyst in the room.
 
-## Problems in traditional SOC workflows.
+AI does not fix this by sitting in the corner as a chatbot.
 
-Most SOC environments struggle with:
+An AI-native SecOps platform has to become the operational layer that gathers
+evidence, preserves context, coordinates workflows, drafts decisions, and knows
+when it is not allowed to act.
 
-- alert overload;
-- context switching;
-- manual enrichment;
-- repetitive investigations;
-- workflow rigidity;
-- tool fragmentation;
-- poor cross-system visibility.
+That last part matters.
 
-Analysts often spend more time gathering information than making decisions.
+Security operations is not a place for magical autonomy. It is a place for
+controlled acceleration.
 
-That model does not scale.
+The right system does not replace analysts. It reduces the amount of clerical
+reasoning they must do before they can exercise judgment.
 
-## Designing AI as infrastructure.
+## What AI-native actually means.
 
-<MarginNote>
-  ← not a chatbot bolted to a dashboard;<br />
-  <span style={{ color: 'var(--pen)' }}>the workflow layer.</span>
-</MarginNote>
+Most “AI for SOC” products are still old products with a model attached.
 
-The biggest architectural shift is treating AI as infrastructure rather than UI
-enhancement.
+They add:
 
-In an AI-native platform:
+- a chat box;
+- a summary button;
+- a natural-language search bar;
+- a suggested remediation paragraph;
+- a handful of enrichment prompts.
 
-- AI drives investigations;
-- AI orchestrates workflows;
-- AI correlates intelligence;
-- AI builds operational summaries;
-- AI recommends actions;
-- AI handles repetitive reasoning.
+Some of that is useful.
 
-Humans move from operators to decision-makers.
+But it is not AI-native.
 
-## Context-driven operations.
+AI-native means the platform’s core objects, workflows, and permissions were
+designed around machine-assisted investigation from the beginning.
 
-Security operations are fundamentally context problems.
+The platform should know that an investigation is not merely an alert.
 
-A single IOC without context is rarely useful.
+It is a structured workspace containing:
 
-Modern systems must continuously enrich:
+- the original signal;
+- related entities;
+- evidence collected;
+- hypotheses;
+- supporting and contradicting signals;
+- confidence;
+- timeline;
+- recommended actions;
+- analyst decisions;
+- follow-up tasks;
+- memory for future cases.
 
-- indicators;
+AI-native SecOps is less about generating prose and more about maintaining this
+workspace.
+
+The model is useful because it can read, classify, summarize, compare, and plan.
+
+The platform is useful because it constrains those abilities into an operational
+system.
+
+## The old SOC model is queue-first.
+
+Most SOC platforms begin with a queue.
+
+The queue asks analysts to process units of work one alert at a time. That made
+sense when the main problem was collecting and displaying events. It makes less
+sense when the actual problem is understanding relationships across events,
+assets, identities, vulnerabilities, and business context.
+
+The queue-first model has several structural problems.
+
+### Alerts are too small.
+
+An alert is usually a symptom, not a case.
+
+A suspicious PowerShell event, impossible travel alert, public bucket exposure,
+or unusual OAuth grant may be meaningful only when joined with other signals.
+
+If the platform treats each alert as the primary object, the analyst has to
+rebuild context manually.
+
+### Tools own fragments of context.
+
+The SIEM has logs.
+
+The EDR has process trees.
+
+The identity provider has user context.
+
+The cloud platform has resource context.
+
+The vulnerability scanner has exposure.
+
+The ticketing system has decisions.
+
+The threat intel platform has external context.
+
+No single tool owns the investigation.
+
+### Triage is inconsistent.
+
+Different analysts ask different questions in different orders.
+
+That is not a skill issue. It is a workflow design issue.
+
+If the platform does not encode investigation playbooks, evidence requirements,
+and escalation criteria, consistency depends on memory and habit.
+
+### Knowledge evaporates.
+
+Closed cases become stale tickets. The same investigation pattern appears again
+three months later and the team repeats the same work.
+
+This is the hidden tax of SOC operations.
+
+Not alert volume.
+
+Repeated forgetting.
+
+## The AI-native operating model.
+
+NIST SP 800-61 describes incident response as a lifecycle: preparation;
+detection and analysis; containment, eradication, and recovery; and
+post-incident activity. NIST CSF 2.0 frames cybersecurity work through Govern,
+Identify, Protect, Detect, Respond, and Recover. Those frameworks are useful
+because they remind us that security operations is a system, not a screen.
+
+An AI-native SecOps platform should map to that system.
+
+### Govern.
+
+The platform should encode:
+
+- who can ask the system to do what;
+- what data each user can see;
+- which actions require approval;
+- which models and tools are allowed;
+- how decisions are logged;
+- how exceptions are reviewed.
+
+AI does not remove governance. It makes governance more important.
+
+### Identify.
+
+The platform should understand:
+
 - assets;
-- user identities;
-- historical incidents;
-- threat actor intelligence;
-- behavioral anomalies;
-- internal telemetry.
+- identities;
+- cloud resources;
+- business owners;
+- critical services;
+- internet exposure;
+- sensitive data locations;
+- dependencies.
 
-The goal is operational understanding, not raw data accumulation.
+Without this, AI can summarize alerts but cannot reason about risk.
 
-## Cross-system correlation.
+### Detect.
 
-Modern enterprises use dozens of security tools.
+The platform should connect detections to:
 
-AI-native platforms should correlate intelligence across:
+- ATT&CK techniques;
+- log sources;
+- expected telemetry;
+- rule logic;
+- false-positive history;
+- coverage gaps;
+- detection quality.
 
-- SIEM systems;
-- EDR platforms;
-- threat intelligence feeds;
-- identity providers;
-- ticketing systems;
-- internal investigation systems;
-- search infrastructure.
+The goal is not “more alerts.”
 
-Correlation should happen automatically instead of requiring analysts to
-manually pivot across interfaces.
+The goal is better evidence.
 
-## Conversational security operations.
+### Respond.
 
-Security operations are shifting from dashboard-driven workflows to
-conversational workflows.
+The platform should coordinate:
 
-Instead of manually filtering dashboards, analysts increasingly expect systems
-that can answer:
+- containment recommendations;
+- ticket creation;
+- approvals;
+- communication;
+- escalation;
+- handoff;
+- audit trails.
+
+Response should be workflow-driven, not chat-driven.
+
+### Recover.
+
+The platform should track:
+
+- remediation;
+- control improvement;
+- detection updates;
+- incident lessons;
+- residual risk;
+- follow-up ownership.
+
+Recovery is where many AI demos quietly stop.
+
+Real platforms cannot stop there.
+
+## Start with the investigation object.
+
+The central object should not be the alert.
+
+It should be the investigation.
+
+An investigation can be created from:
+
+- a SIEM alert;
+- an EDR alert;
+- a cloud misconfiguration;
+- a vulnerability exposure;
+- a suspicious user;
+- an analyst question;
+- a threat intelligence lead;
+- an external report;
+- an executive concern.
+
+The investigation object should contain:
+
+- status;
+- severity;
+- confidence;
+- owner;
+- impacted assets;
+- involved identities;
+- observables;
+- evidence;
+- timeline;
+- hypotheses;
+- actions;
+- decisions;
+- linked investigations.
+
+This changes the UI and the backend.
+
+The UI stops being a grid of alerts.
+
+The backend stops being a set of disconnected integrations.
+
+Everything becomes evidence attached to a case.
+
+## Evidence-first architecture.
+
+AI-native SecOps systems must be evidence-first.
+
+That means every important conclusion should trace back to:
+
+- source;
+- timestamp;
+- query;
+- raw event or excerpt;
+- transformation;
+- model output;
+- analyst confirmation.
+
+If the system says:
 
 <PullQuote>
-  Show me all related activity connected to this campaign and summarize the
-  operational risk.
+  This looks like credential theft.
 </PullQuote>
 
-This changes:
+It should show why:
 
-- UI design;
-- search architecture;
-- workflow systems;
-- context management;
-- investigation pipelines.
+- suspicious sign-in from new geography;
+- impossible travel sequence;
+- new device registration;
+- mailbox rule creation;
+- OAuth consent grant;
+- access to sensitive application;
+- similar pattern seen in prior case.
 
-The interface becomes intelligence-driven rather than navigation-driven.
+The answer is useful only if the evidence is inspectable.
+
+This is why a SecOps copilot cannot be built only with retrieval-augmented
+generation.
+
+RAG can retrieve context.
+
+The platform still needs an evidence ledger.
+
+## Telemetry normalization is the foundation.
+
+Every AI-native platform eventually discovers the same boring truth:
+
+the model cannot reason well over messy telemetry.
+
+If endpoint, identity, cloud, network, application, and SaaS events use
+different names for the same concept, the system spends its intelligence budget
+guessing.
+
+Security operations needs a normalized event model.
+
+The Open Cybersecurity Schema Framework is useful here because it provides a
+vendor-neutral schema for cybersecurity events. You do not have to adopt every
+OCSF category on day one, but you do need a consistent way to represent:
+
+- actor;
+- device;
+- user;
+- process;
+- file;
+- network connection;
+- cloud resource;
+- identity action;
+- finding;
+- severity;
+- outcome;
+- time;
+- source.
+
+OpenTelemetry is also relevant. Its semantic conventions establish shared names
+for telemetry across logs, metrics, traces, and resources. SecOps platforms
+should borrow that discipline: consistent attributes, consistent resource
+identity, consistent correlation IDs.
+
+If the telemetry layer is inconsistent, the AI layer will be theatrical.
+
+It will sound smart while losing the plot.
+
+## Detection logic should be portable.
+
+An AI-native platform should not trap detection logic inside one vendor’s query
+language.
+
+Sigma exists because security teams need a generic, shareable detection format
+for log data. ATT&CK exists because teams need a shared vocabulary for adversary
+behavior. These are not just standards. They are product-design clues.
+
+Detection engineering in an AI-native platform should track:
+
+- detection name;
+- behavior detected;
+- ATT&CK mapping;
+- required data sources;
+- query logic;
+- expected false positives;
+- severity logic;
+- test cases;
+- owner;
+- deployment targets;
+- version history;
+- last fired;
+- last reviewed;
+- linked incidents.
+
+The AI system can help draft detection logic.
+
+It can translate between query dialects.
+
+It can suggest data requirements.
+
+It can explain what a rule sees and does not see.
+
+But it should not silently deploy detections without review.
+
+Detection engineering is software engineering with operational consequences.
+
+Treat it that way.
+
+## Context is not enrichment.
+
+Many platforms use the word “enrichment” to mean “append more data.”
+
+That is not enough.
+
+Context is the answer to the question:
+
+<PullQuote>
+  What changes about this signal because of where, when, and to whom it
+  happened?
+</PullQuote>
+
+The same indicator can mean different things depending on:
+
+- asset criticality;
+- user role;
+- geolocation;
+- normal behavior;
+- exposure;
+- vulnerability state;
+- business process;
+- current campaigns;
+- time of day;
+- previous investigations.
+
+A failed login to a test account is different from a successful login to a
+privileged production admin.
+
+A CVE on an internal lab host is different from the same CVE on an
+internet-facing control plane.
+
+A suspicious domain lookup by a malware sandbox is different from the same
+lookup by a finance laptop.
+
+AI-native SecOps should not merely enrich events.
+
+It should contextualize them.
+
+## The reasoning loop.
+
+The investigation agent should run a structured loop.
+
+1. Classify the alert or question.
+2. Identify entities.
+3. Retrieve required evidence.
+4. Build a hypothesis.
+5. Search for supporting evidence.
+6. Search for contradicting evidence.
+7. Assign confidence.
+8. Recommend next action.
+9. Ask for approval when needed.
+10. Save memory.
+
+The most important step is contradiction search.
+
+Models are naturally good at making coherent narratives. Security systems need
+them to be good at breaking their own narratives.
+
+If the system thinks an alert is malicious, it should also ask:
+
+- Is this expected admin activity?
+- Is the asset a test system?
+- Was there a change window?
+- Has this user done this before?
+- Is the source a scanner?
+- Is the indicator stale?
+- Is the detection known noisy?
+- Is there any internal evidence at all?
+
+The platform should make this visible.
+
+The analyst should see not only what the system found, but what it tried to
+disprove.
+
+## Human control is part of the architecture.
+
+AI-native does not mean fully autonomous.
+
+It means the platform understands which actions can be automated, which can be
+drafted, and which require approval.
+
+Use action tiers.
+
+### Read actions.
+
+These gather context:
+
+- query SIEM;
+- search EDR;
+- fetch identity events;
+- retrieve asset metadata;
+- inspect vulnerability context;
+- pull threat intelligence;
+- find related cases.
+
+Read actions can often be autonomous with audit logging.
+
+### Draft actions.
+
+These prepare work:
+
+- draft case summary;
+- draft detection rule;
+- draft containment plan;
+- draft ticket;
+- draft executive update;
+- draft customer notification.
+
+Draft actions should be easy to edit and approve.
+
+### Change actions.
+
+These affect the environment:
+
+- isolate endpoint;
+- disable account;
+- revoke token;
+- block domain;
+- quarantine email;
+- update firewall policy;
+- deploy detection;
+- patch system.
+
+Change actions need explicit authorization, policy checks, rollback context, and
+audit trails.
+
+OWASP’s LLM guidance calls out risks such as prompt injection, sensitive
+information disclosure, and excessive agency. Those risks are not abstract in a
+SOC. A compromised research source, malicious email body, poisoned ticket, or
+untrusted report can become part of the model context.
+
+If that same model can trigger change actions, you have built a new attack
+surface inside the response workflow.
+
+Design accordingly.
+
+## Prompt injection is a SecOps problem.
+
+Security platforms read hostile data for a living.
+
+They ingest phishing emails, malware reports, attacker-controlled web pages,
+paste sites, suspicious PDFs, command lines, payloads, and chat transcripts.
+
+Those artifacts can contain instructions aimed at the AI system.
+
+The platform must separate evidence from instructions.
+
+Controls should include:
+
+- source labeling;
+- prompt-injection detection;
+- untrusted-content wrappers;
+- tool-call policies;
+- allowlisted tools;
+- model context scoping;
+- secret redaction;
+- output validation;
+- human approval for change actions;
+- audit logs for every tool call.
+
+MITRE ATLAS is useful here because it models adversary tactics and techniques
+against AI-enabled systems. NIST’s AI Risk Management Framework and Cyber AI
+Profile are also useful because they frame AI risk as something to govern,
+measure, manage, and secure.
+
+The uncomfortable truth:
+
+<PullQuote>
+  An AI-native SOC platform is itself a high-value security system.
+</PullQuote>
+
+It needs threat modeling.
+
+It needs access control.
+
+It needs monitoring.
+
+It needs incident response plans.
+
+## Workflow orchestration beats chat.
+
+Chat is useful for asking questions.
+
+It is not enough for operations.
+
+A real SecOps platform needs workflow state:
+
+- assigned analyst;
+- SLA;
+- required evidence;
+- pending approvals;
+- blocked tasks;
+- current hypothesis;
+- escalation path;
+- remediation owner;
+- linked detections;
+- communication history.
+
+The AI system should operate inside that state.
+
+It should know whether it is:
+
+- triaging;
+- investigating;
+- escalating;
+- waiting for approval;
+- monitoring;
+- drafting a report;
+- closing a case;
+- creating follow-up work.
+
+Without workflow state, the system becomes a helpful intern with amnesia.
+
+With workflow state, it becomes an operational assistant.
+
+## Memory should be scoped.
+
+SecOps memory is powerful and dangerous.
+
+Useful memory includes:
+
+- prior cases;
+- analyst decisions;
+- false-positive patterns;
+- known noisy detections;
+- business-critical assets;
+- recurring vendors;
+- exception lists;
+- escalation preferences;
+- detection coverage gaps.
+
+Dangerous memory includes:
+
+- secrets;
+- raw personal data;
+- overly broad user behavior histories;
+- stale conclusions;
+- unreviewed model summaries;
+- sensitive incident details outside the user’s permissions.
+
+Memory should be:
+
+- typed;
+- permissioned;
+- expirable;
+- source-linked;
+- reviewable;
+- reversible.
+
+The system should remember that a detection is noisy.
+
+It should not remember a private incident detail and leak it into a later
+unrelated prompt.
+
+## UX: from dashboards to investigation rooms.
+
+The user experience should feel less like a dashboard and more like an
+investigation room.
+
+The analyst needs:
+
+- the current question;
+- timeline;
+- evidence;
+- entities;
+- hypotheses;
+- related cases;
+- recommended actions;
+- confidence;
+- open questions;
+- approval controls.
+
+The UI should make the system’s work visible.
+
+Good screens answer:
+
+- What does the system think?
+- Why does it think that?
+- What evidence supports it?
+- What contradicts it?
+- What did it search?
+- What failed?
+- What needs human judgment?
+- What happens if I approve this action?
+
+This is how trust forms.
+
+Not through a prettier summary.
+
+Through inspectable reasoning.
+
+## Metrics that matter.
+
+Do not measure an AI-native SecOps platform only by answer quality.
+
+Measure operational movement.
+
+Useful metrics include:
+
+- time to first evidence package;
+- time to confident triage;
+- number of manual pivots avoided;
+- analyst correction rate;
+- unsupported claim rate;
+- detection false-positive reduction;
+- mean time to containment recommendation;
+- approval latency;
+- case reopening rate;
+- memory reuse rate;
+- number of repeated investigations avoided.
+
+Also measure safety:
+
+- prompt-injection attempts detected;
+- blocked unsafe tool calls;
+- secrets redacted;
+- actions requiring approval;
+- model outputs rejected by validators;
+- analyst overrides.
+
+The goal is not to prove the model is clever.
+
+The goal is to prove the system improves operations without quietly increasing
+risk.
+
+## Evaluation should use historical cases.
+
+The best evaluation set is not a synthetic benchmark.
+
+It is your own history.
+
+Use:
+
+- confirmed true positives;
+- confirmed false positives;
+- known noisy detections;
+- incidents with strong timelines;
+- vulnerability escalations;
+- cloud exposure cases;
+- identity compromise cases;
+- phishing investigations;
+- detection engineering pull requests.
+
+For each case, evaluate:
+
+- did the system retrieve the right evidence?
+- did it miss important evidence?
+- did it overstate confidence?
+- did it cite sources correctly?
+- did it ask for approval at the right time?
+- did it recommend the same action the team eventually took?
+- did it preserve useful memory?
+
+Then make evaluation part of the product.
+
+Every analyst correction should become training data for workflow logic,
+retrieval ranking, detection tuning, or prompt constraints.
+
+## A reference architecture.
+
+An AI-native SecOps platform needs several layers.
+
+### 1. Event intake.
+
+Collect events from:
+
+- SIEM;
+- EDR;
+- identity provider;
+- email security;
+- cloud logs;
+- SaaS audit logs;
+- vulnerability scanners;
+- asset inventory;
+- threat intelligence;
+- ticketing systems.
+
+Preserve raw events.
+
+Normalize copies for correlation.
+
+### 2. Entity and context layer.
+
+Resolve:
+
+- users;
+- devices;
+- cloud resources;
+- IPs;
+- domains;
+- files;
+- processes;
+- applications;
+- vulnerabilities;
+- business services.
+
+Attach ownership, sensitivity, exposure, and history.
+
+### 3. Evidence ledger.
+
+Store:
+
+- queries run;
+- results retrieved;
+- source excerpts;
+- summaries;
+- analyst notes;
+- confidence;
+- contradictions;
+- decisions.
+
+This becomes the trace of the investigation.
+
+### 4. Reasoning and planning layer.
+
+Classify investigation type, choose tools, build hypotheses, search for
+evidence, and decide whether the case is ready for analyst review.
+
+### 5. Workflow orchestration layer.
+
+Manage:
+
+- status;
+- assignment;
+- SLAs;
+- approvals;
+- handoffs;
+- escalations;
+- follow-ups;
+- closure criteria.
+
+### 6. Detection engineering layer.
+
+Connect investigations to detection lifecycle:
+
+- rule creation;
+- rule testing;
+- ATT&CK mapping;
+- Sigma-style portability;
+- deployment targets;
+- false-positive feedback;
+- coverage gaps.
+
+### 7. Safety and governance layer.
+
+Enforce:
+
+- role-based access;
+- tenant boundaries;
+- tool permissions;
+- approval gates;
+- secret handling;
+- prompt-injection controls;
+- audit logs;
+- policy checks.
+
+### 8. Analyst interface.
+
+Show:
+
+- answer;
+- evidence;
+- confidence;
+- timeline;
+- graph;
+- recommended action;
+- approval buttons;
+- exportable report.
+
+The architecture is not glamorous.
+
+That is why it works.
+
+## Build sequence.
+
+Do not begin with “autonomous SOC analyst.”
+
+Begin with one painful workflow.
+
+### Phase 1: Evidence package generation.
+
+Take one alert type and automatically gather the evidence an analyst usually
+collects manually.
+
+Do not decide yet.
+
+Just gather well.
+
+### Phase 2: Triage recommendation.
+
+Add classification:
+
+- likely true positive;
+- likely false positive;
+- needs review;
+- insufficient evidence.
+
+Require citations.
+
+### Phase 3: Case memory.
+
+Store investigations and retrieve similar cases.
+
+Make repeated work visible.
+
+### Phase 4: Draft actions.
+
+Draft tickets, detections, summaries, and containment plans.
+
+Keep execution manual.
+
+### Phase 5: Approval-gated response.
+
+Allow selected change actions behind explicit approval and policy checks.
+
+### Phase 6: Continuous improvement.
+
+Feed analyst corrections into detection tuning, workflow logic, and retrieval
+quality.
+
+This is how a platform earns autonomy.
+
+Slowly.
+
+## Common failure modes.
+
+### The summary machine.
+
+Summaries are useful, but they are not operations.
+
+If the system cannot gather evidence, track decisions, and coordinate action, it
+is a writing assistant.
+
+### The natural-language SIEM.
+
+Natural-language search is helpful, but it does not solve entity resolution,
+workflow state, confidence, or response governance.
+
+### The magic analyst.
+
+Systems that claim full autonomy usually hide the hard parts: source quality,
+permissions, approval, rollback, and audit.
+
+### The giant context window.
+
+Stuffing more logs into the model does not create understanding.
+
+It creates expensive confusion.
+
+### The ungoverned agent.
+
+An agent with broad tools and weak policy is not an analyst.
+
+It is a new privileged identity.
+
+Treat it like one.
+
+## Research notes and source map.
+
+This note was refreshed with current public references from standards bodies,
+government sources, and operational security projects:
+
+- [NIST SP 800-61 Rev. 2](https://csrc.nist.gov/pubs/sp/800/61/r2/final) for
+  incident handling lifecycle and response capability design.
+- [NIST Cybersecurity Framework 2.0](https://www.nist.gov/node/1840561) for the
+  Govern, Identify, Protect, Detect, Respond, and Recover operating model.
+- [CISA Cybersecurity Performance Goals](https://www.cisa.gov/cybersecurity-performance-goals-cpgs)
+  for practical defensive baseline goals such as log collection and incident
+  reporting practices.
+- [MITRE ATT&CK](https://attack.mitre.org/) for adversary tactics and
+  techniques based on real-world observations.
+- [ATT&CK detection strategy model](https://mitre-attack.github.io/attack-data-model/docs/principles/attack-detections/)
+  for detection-oriented relationships between techniques, data components, and
+  analytics.
+- [OCSF](https://github.com/ocsf) for vendor-neutral cybersecurity event schema
+  design.
+- [Sigma](https://sigmahq.io/docs/guide/about) and the
+  [Sigma specification](https://sigmahq.io/sigma-specification/) for portable
+  detection logic.
+- [OpenTelemetry semantic conventions](https://opentelemetry.io/docs/concepts/semantic-conventions/)
+  for consistent telemetry naming across logs, metrics, traces, and resources.
+- [OWASP Top 10 for LLM Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications/)
+  for risks such as prompt injection, sensitive information disclosure, and
+  excessive agency.
+- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
+  and [NIST IR 8596 Cyber AI Profile draft](https://csrc.nist.gov/pubs/ir/8596/iprd)
+  for AI risk management in cybersecurity contexts.
+- [MITRE ATLAS](https://atlas.mitre.org/) for adversarial threats to AI-enabled
+  systems.
 
 ## Final thoughts.
 
-The future of cybersecurity belongs to AI-native operational systems capable of:
+AI-native SecOps is not a chatbot.
 
-- autonomous investigations;
-- contextual reasoning;
-- cross-source intelligence correlation;
-- human-supervised automation;
-- continuous enrichment.
+It is not a summary button.
 
-The goal is not replacing analysts.
+It is not a prettier SIEM.
 
-The goal is reducing operational friction and accelerating decision-making.
+It is a different operating model for security work:
+
+- evidence-first;
+- context-aware;
+- workflow-driven;
+- memory-backed;
+- human-supervised;
+- policy-constrained;
+- measurable.
+
+The best version of this platform does not make analysts passive.
+
+It makes them faster at the parts only humans should own: judgment, escalation,
+tradeoffs, and accountability.
+
+The machine can gather.
+
+The machine can correlate.
+
+The machine can draft.
+
+The machine can remember.
+
+But when the action matters, the human should still be able to ask:
+
+<PullQuote>
+  Show me the evidence.
+</PullQuote>
+
+That is the real test of an AI-native security operations platform.
 
 <EndMark />
