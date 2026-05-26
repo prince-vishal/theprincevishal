@@ -418,12 +418,17 @@ body {
   border: 1px solid var(--rule);
   border-radius: 999px;
   color: var(--ink-soft);
-  cursor: default;
+  cursor: pointer;
   font-family: var(--mono);
   font-size: 11px;
   letter-spacing: 0.06em;
   padding: 5px 11px;
   transition: all 0.15s ease;
+}
+
+.tag-bar .tag:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
 }
 
 .tag-bar .tag:hover,
@@ -441,6 +446,20 @@ body {
 .tag-bar .tag:hover .count,
 .tag-bar .tag.active .count {
   color: color-mix(in oklab, var(--paper) 70%, transparent);
+}
+
+.filter-summary {
+  color: var(--ink-mute);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  margin: -36px 0 24px;
+  text-transform: uppercase;
+}
+
+.filter-summary b {
+  color: var(--red);
+  font-weight: 400;
 }
 
 .list {

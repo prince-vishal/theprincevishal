@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import NotesTop from '@/components/notes/NotesTop';
+import NotesFilterList from '@/components/notes/NotesFilterList';
 import { getAllNotes, getTagCounts } from '@/lib/notes';
 
 export const metadata = {
@@ -13,48 +14,15 @@ export const metadata = {
   },
 };
 
-function NoteTitle({ note }) {
-  if (note.draft) {
-    return <span className="title" dangerouslySetInnerHTML={{ __html: note.titleHtml }} />;
-  }
-
-  return <Link className="title" href={note.href} dangerouslySetInnerHTML={{ __html: note.titleHtml }} />;
-}
-
-function NoteEntry({ note }) {
-  return (
-    <article className={['entry', note.featured ? 'featured' : '', note.draft ? 'draft' : ''].filter(Boolean).join(' ')}>
-      <div className="gutter">
-        <b>{note.draft ? 'Draft' : `Note №.${note.number}`}</b>
-        <span className="date">{note.displayDate}</span>
-        {note.draftLabel ? <span className="stamp">{note.draftLabel}</span> : null}
-      </div>
-      <div className="body">
-        <NoteTitle note={note} />
-        <p className="lede" dangerouslySetInnerHTML={{ __html: note.excerptHtml }} />
-        <div className="meta">
-          <span className="read-time">{note.draft ? 'draft' : `≈ ${note.readTime}`}</span>
-          <span className="quirk">{note.quirk}</span>
-          <span className="tags">
-            {note.tags.map((tag) => (
-              <span key={tag}>{tag}</span>
-            ))}
-          </span>
-        </div>
-      </div>
-    </article>
-  );
-}
-
 export default async function Notes() {
   const [notes, tagCounts] = await Promise.all([getAllNotes(), getTagCounts()]);
-  const tags = [
-    ['all', tagCounts.all],
-    ['ai & agents', tagCounts.counts.get('ai') ?? 0],
-    ['security', tagCounts.counts.get('security') ?? 0],
-    ['infrastructure', tagCounts.counts.get('infrastructure') ?? 0],
-    ['opinions', tagCounts.counts.get('opinions') ?? 0],
-    ['drafts', tagCounts.drafts],
+  const filters = [
+    { key: 'all', label: 'all', count: tagCounts.all },
+    { key: 'ai', label: 'ai & agents', count: tagCounts.counts.get('ai') ?? 0 },
+    { key: 'security', label: 'security', count: tagCounts.counts.get('security') ?? 0 },
+    { key: 'infrastructure', label: 'infrastructure', count: tagCounts.counts.get('infrastructure') ?? 0 },
+    { key: 'opinions', label: 'opinions', count: tagCounts.counts.get('opinions') ?? 0 },
+    { key: 'drafts', label: 'drafts', count: tagCounts.drafts },
   ];
 
   return (
@@ -80,20 +48,7 @@ export default async function Notes() {
         </p>
       </section>
 
-      <div className="tag-bar">
-        <span className="label">filed by mood →</span>
-        {tags.map(([label, count], index) => (
-          <button className={['tag', index === 0 ? 'active' : ''].filter(Boolean).join(' ')} key={label} type="button">
-            {label} <span className="count">{String(count).padStart(2, '0')}</span>
-          </button>
-        ))}
-      </div>
-
-      <div className="list">
-        {notes.map((note) => (
-          <NoteEntry key={note.slug} note={note} />
-        ))}
-      </div>
+      <NotesFilterList filters={filters} notes={notes} />
 
       <div className="ornament">
         <span>✦</span>
