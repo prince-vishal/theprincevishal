@@ -1,0 +1,380 @@
+---
+number: "016"
+title: "Detection engineering for an AI-native SOC"
+titleHtml: "Detection engineering for an <em>AI-native SOC</em>."
+headingHtml: "Detection engineering<br/>for an <span class=\"red\">AI-native SOC</span>."
+description: "A technical guide to detection engineering in AI-native security operations: ATT&CK mapping, data sources, Sigma, OCSF, telemetry quality, AI-assisted rule writing, testing, and feedback loops."
+ogDescription: "AI-native SOC detection engineering: how to design detections around telemetry, ATT&CK data sources, Sigma, OCSF, tests, and analyst feedback."
+date: "2026-06-05"
+displayDate: "2026 · 06 · 05"
+readTime: "13 min"
+quirk: "-- or one noisy rule retired"
+excerptHtml: "AI can help write detections, but detection engineering is still an evidence discipline, not a prompt trick."
+dekHtml: "How builder-leaders should design AI-assisted detection engineering around telemetry quality, normalized schemas, ATT&CK data components, test cases, and production feedback."
+tags: ["ai", "security", "secops", "detection", "building"]
+tableOfContents: true
+nextSlug: "securing-agentic-ai-tools-for-soc"
+---
+
+<Lede>
+  AI can help write detections, but detection engineering is still an evidence
+  discipline, not a prompt trick.
+</Lede>
+
+One of the easiest AI demos in security is detection writing.
+
+Give the model a threat description.
+
+Ask for a Sigma rule.
+
+Receive something that looks convincing.
+
+Everyone nods.
+
+Then production happens.
+
+The rule is too broad. The log source does not exist. The field names are wrong.
+The false positives are obvious to the analyst who actually knows the
+environment. The detection maps to a MITRE ATT&CK technique in the title but
+not in the evidence. The rule catches a behavior once in a lab and screams at
+normal admin work on Tuesday.
+
+That is not an AI problem.
+
+That is a detection-engineering problem exposed by AI speed.
+
+An AI-native SOC should absolutely use models to accelerate detection work. But
+the model should be inside an engineering system: telemetry inventory, ATT&CK
+data mapping, normalized schemas, test data, rule lifecycle, false-positive
+tracking, deployment gates, and analyst feedback.
+
+## Detection starts with data reality.
+
+Every useful detection begins with a boring question:
+
+<PullQuote>
+  Do we collect the data needed to see this behavior?
+</PullQuote>
+
+MITRE ATT&CK's data sources and data components are useful because they force
+detection engineers to connect techniques to observable telemetry. It is not
+enough to say "detect credential dumping." You need to know whether you can see
+process creation, command-line arguments, file access, registry changes, memory
+access, authentication events, or endpoint sensor alerts.
+
+AI should not skip that step.
+
+An AI detection assistant should first produce a data requirement:
+
+- event source;
+- platform;
+- required fields;
+- optional fields;
+- collection gaps;
+- expected volume;
+- expected latency;
+- known blind spots.
+
+Only then should it draft a rule.
+
+If the required telemetry does not exist, the correct output is not a fictional
+query.
+
+The correct output is a collection gap.
+
+## Normalize before you generate.
+
+Security teams waste enormous time translating the same detection idea across
+different schemas.
+
+One tool calls it `src_ip`.
+
+Another calls it `source.ip`.
+
+Another calls it `client.address`.
+
+The endpoint agent has process fields. The cloud log has principal fields. The
+identity provider has user and device context. The SIEM has whatever the parser
+managed to produce that week.
+
+OCSF exists to reduce this pain by giving security events a vendor-agnostic
+schema. Sigma aims to express detections in a generic format that can be
+translated into backend-specific queries. These standards do not remove
+environment-specific work, but they give AI systems a better target language.
+
+For AI-assisted detection engineering, normalized schemas matter because they:
+
+- reduce field hallucination;
+- make rule templates reusable;
+- improve testability;
+- make coverage analysis easier;
+- help analysts compare detections across tools;
+- separate detection logic from backend syntax.
+
+A useful detection assistant should know the canonical schema and the local
+mapping.
+
+Without that, it is guessing.
+
+## A detection is not a rule.
+
+A detection is a product object with a lifecycle.
+
+It should include:
+
+- name;
+- hypothesis;
+- threat behavior;
+- ATT&CK mapping;
+- data sources;
+- query logic;
+- severity;
+- confidence;
+- false-positive notes;
+- test cases;
+- owner;
+- deployment status;
+- last reviewed date;
+- tuning history;
+- observed alert volume;
+- incident outcomes.
+
+The query is only one field.
+
+This matters because AI is good at producing the query-shaped part of the work.
+The rest is what makes the detection operational.
+
+If you only ask the model for a rule, you will get a rule.
+
+If you ask it for a detection package, you can force the system to reason about
+evidence, data, deployment, and maintenance.
+
+## The AI-assisted workflow.
+
+A practical AI-native detection workflow looks like this.
+
+### 1. Start with a behavior.
+
+The input should be a behavior, not a vague technique name.
+
+Bad:
+
+```
+Write a detection for T1078.
+```
+
+Better:
+
+```
+Detect an active user account signing in from a new country and new ASN within
+30 minutes of multiple failed password attempts, followed by access to an admin
+portal.
+```
+
+The second prompt gives the system an observable story.
+
+### 2. Map to ATT&CK cautiously.
+
+ATT&CK mapping is useful, but it can become decoration.
+
+The system should map behavior to relevant techniques, then explain why.
+
+For identity abuse, MITRE's Valid Accounts technique T1078 may apply. But a
+valid-account detection might also overlap with credential access, initial
+access, persistence, or defense evasion depending on the evidence.
+
+The rule should not claim coverage it does not have.
+
+### 3. Identify data requirements.
+
+Before logic, list required data:
+
+- identity sign-in logs;
+- user identity;
+- source IP;
+- geo and ASN enrichment;
+- device ID;
+- MFA result;
+- application target;
+- failure reason;
+- timestamp.
+
+If any field is missing, the assistant should say so.
+
+### 4. Draft logic in a portable format.
+
+Sigma is often a good intermediate representation for log detections because it
+separates the detection idea from a single SIEM syntax. For more complex
+correlations, the system may need a platform-native query or a detection
+pipeline definition.
+
+The output should include assumptions.
+
+### 5. Generate tests.
+
+Every detection needs test cases:
+
+- true positive;
+- benign admin travel;
+- VPN egress;
+- failed-only noise;
+- impossible travel with no sensitive app;
+- service account exception;
+- missing device context;
+- duplicate event ingestion.
+
+AI can help generate these cases, but the cases should be reviewed by someone
+who knows the environment.
+
+### 6. Stage deployment.
+
+The first deployment should often be shadow mode:
+
+- collect matches;
+- measure volume;
+- inspect false positives;
+- tune thresholds;
+- compare to known incidents;
+- decide severity.
+
+The goal is to avoid turning a new AI-written rule into an alert flood.
+
+### 7. Learn from outcomes.
+
+Every alert should feed back into the detection:
+
+- confirmed incident;
+- benign true behavior;
+- false positive;
+- duplicate;
+- no action;
+- missing evidence;
+- threshold too low;
+- logic too broad.
+
+AI can summarize the feedback and recommend tuning, but humans should approve
+semantic changes to production detections.
+
+## Use AI where it is strong.
+
+AI is useful for:
+
+- translating threat reports into candidate behaviors;
+- extracting observable entities;
+- drafting detection hypotheses;
+- mapping likely data sources;
+- generating rule scaffolds;
+- writing false-positive notes;
+- creating test cases;
+- explaining rules to analysts;
+- comparing similar detections;
+- summarizing tuning history.
+
+AI is risky for:
+
+- inventing field names;
+- overstating ATT&CK coverage;
+- ignoring local telemetry gaps;
+- producing broad regex-heavy rules;
+- missing business exceptions;
+- deploying without tests;
+- treating correlation as certainty.
+
+The answer is not to avoid AI.
+
+The answer is to put AI inside the detection lifecycle.
+
+## Coverage is not maturity.
+
+Many teams report detection maturity by ATT&CK coverage.
+
+Coverage is useful, but it is not the same as detection quality.
+
+A SOC can have a rule mapped to a technique and still miss the behavior that
+matters. It can also have five detections for the same noisy behavior and no
+coverage for a critical business path.
+
+Better questions:
+
+- Which high-risk behaviors can we actually see?
+- Which techniques map to our most likely threats?
+- Which detections have fired in real cases?
+- Which detections are noisy?
+- Which rules depend on fragile telemetry?
+- Which business systems are under-instrumented?
+- Which detections have current owners?
+- Which rules have test cases?
+
+AI can help maintain this inventory.
+
+But the inventory has to exist.
+
+## A detection object template.
+
+Here is the kind of structure I would want an AI assistant to produce:
+
+```
+name: Suspicious sign-in followed by admin portal access
+hypothesis: A compromised valid account is being used after password guessing.
+attck:
+  - T1078 Valid Accounts
+  - T1110 Brute Force
+data_sources:
+  - identity_provider.signin
+  - app.audit
+required_fields:
+  - user.id
+  - src.ip
+  - auth.result
+  - auth.mfa_result
+  - app.name
+  - timestamp
+logic_summary:
+  Multiple failed attempts followed by a successful login from a new ASN and
+  access to a sensitive admin application.
+false_positive_notes:
+  Travel, VPN changes, break-glass accounts, testing accounts.
+tests:
+  - true_positive_compromised_user
+  - benign_vpn_change
+  - failed_only_no_success
+deployment:
+  mode: shadow
+owner: detection-engineering
+review_after: 14 days
+```
+
+That object is much more useful than a naked query.
+
+It gives the SOC something to operate.
+
+## Final thoughts.
+
+AI-native detection engineering should not make detection work less rigorous.
+
+It should make rigor cheaper.
+
+The builder-leader position is to use AI to accelerate the repetitive parts:
+translation, scaffolding, documentation, test generation, and feedback
+summarization.
+
+Then keep the hard parts disciplined: telemetry truth, ATT&CK mapping, schema
+quality, deployment safety, and analyst feedback.
+
+The future of detection engineering is not "prompt to rule."
+
+It is "behavior to tested detection package."
+
+That is the version worth building.
+
+## Sources.
+
+- [MITRE ATT&CK Data Sources](https://attack.mitre.org/datasources)
+- [MITRE ATT&CK Analytics](https://attack.mitre.org/analytics/)
+- [MITRE ATT&CK Valid Accounts T1078](https://attack.mitre.org/techniques/T1078/)
+- [Sigma Detection Format documentation](https://sigmahq.io/docs/guide/about)
+- [Sigma rules documentation](https://sigmahq.io/docs/basics/rules.html)
+- [Open Cybersecurity Schema Framework](https://ocsf.io/)
+- [OpenTelemetry documentation](https://opentelemetry.io/docs/)
+
+<EndMark />

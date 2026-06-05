@@ -1,0 +1,399 @@
+---
+number: "018"
+title: "The identity-first AI SOC"
+titleHtml: "The <em>identity-first</em> AI SOC."
+headingHtml: "The <em>identity-first</em><br/><span class=\"red\">AI SOC</span>."
+description: "A technical guide to building identity-first AI security operations: valid accounts, phishing-resistant MFA, session risk, credential exposure, entity resolution, zero trust, and agent-assisted investigation."
+ogDescription: "Identity-first AI SOC architecture: valid accounts, MFA posture, credential exposure, entity resolution, session risk, and zero trust investigation workflows."
+date: "2026-06-05"
+displayDate: "2026 · 06 · 05"
+readTime: "13 min"
+quirk: "-- or one valid account caught early"
+excerptHtml: "Modern intrusions often look like normal users doing abnormal things. That makes identity the center of the AI-native SOC."
+dekHtml: "How to design AI-assisted security operations around identities, sessions, privileges, credential exposure, authentication strength, and zero trust context."
+tags: ["ai", "security", "secops", "identity", "building"]
+tableOfContents: true
+nextSlug: "evaluating-ai-soc-agents"
+---
+
+<Lede>
+  Modern intrusions often look like normal users doing abnormal things. That
+  makes identity the center of the AI-native SOC.
+</Lede>
+
+Malware is loud when you are lucky.
+
+Identity abuse is quieter.
+
+An adversary using a valid account can look like an employee, contractor,
+service identity, cloud principal, or admin doing work. The login succeeds. The
+application allows access. The activity appears authorized until context says
+otherwise.
+
+MITRE ATT&CK's Valid Accounts technique T1078 captures this well: adversaries
+may use existing accounts for initial access, persistence, privilege escalation,
+or defense evasion. Once the attacker has legitimate access, many traditional
+controls become less decisive.
+
+This is why the AI-native SOC has to be identity-first.
+
+Not identity-only.
+
+Identity-first.
+
+The system should treat users, accounts, sessions, devices, privileges, and
+authentication strength as core investigation objects.
+
+## The unit is not the alert. It is the identity.
+
+Many SOC queues begin with alerts:
+
+- impossible travel;
+- risky sign-in;
+- MFA fatigue;
+- suspicious OAuth grant;
+- password spray;
+- privilege change;
+- admin portal access;
+- credential leak;
+- session anomaly.
+
+Each alert is a fragment.
+
+The identity is the connective tissue.
+
+An AI SOC agent should be able to assemble an identity workspace:
+
+- user profile;
+- account status;
+- role and department;
+- privilege level;
+- groups;
+- devices;
+- MFA posture;
+- recent sign-ins;
+- session state;
+- recent password resets;
+- credential exposure;
+- SaaS activity;
+- cloud activity;
+- related cases;
+- manager or owner;
+- business criticality.
+
+This workspace lets the analyst ask better questions:
+
+- Is this user privileged?
+- Is this access normal for the user?
+- Is the device managed?
+- Was MFA phishing-resistant?
+- Did the user recently reset credentials?
+- Has the account appeared in stealer logs?
+- Did the session touch sensitive apps?
+- Are other identities showing similar behavior?
+
+The agent's value comes from assembling that context quickly and preserving the
+evidence.
+
+## MFA posture is not binary.
+
+"MFA enabled" is not enough.
+
+NIST SP 800-63B distinguishes authentication strength and discusses phishing
+resistance. CISA's phishing-resistant MFA guidance pushes organizations toward
+authenticators that resist verifier impersonation and replay.
+
+For SOC investigation, that distinction matters.
+
+An account with password plus SMS is not the same as an account with a FIDO2
+security key. Push MFA is not the same as passkeys. A managed device certificate
+is not the same as a phishing-resistant user authenticator. A privileged admin
+using legacy protocols may bypass controls entirely.
+
+The identity-first SOC should model:
+
+- password-only access;
+- SMS or voice MFA;
+- push MFA;
+- number matching;
+- TOTP;
+- FIDO2/WebAuthn;
+- passkeys;
+- certificate-backed access;
+- conditional access;
+- legacy protocol exceptions;
+- break-glass exceptions.
+
+Then the AI agent can reason about exposure realistically.
+
+An exposed password for a phishing-resistant account is a different risk than
+an exposed password for an account with no MFA.
+
+A suspicious login with a session cookie may bypass the question of password
+strength entirely.
+
+## Credential exposure belongs in identity triage.
+
+Credential exposure should not live in a separate monitoring silo.
+
+It belongs in identity investigation.
+
+When the SOC sees a risky sign-in, the agent should check:
+
+- known breach hits;
+- stealer-log exposure;
+- password reuse indicators;
+- exposed session material;
+- leaked API tokens;
+- personal email overlap;
+- contractor account exposure;
+- dark web or paste references.
+
+But the finding must be interpreted through identity context.
+
+Questions:
+
+- Is the account active?
+- Is it privileged?
+- Does the exposed credential look fresh?
+- Is the password still valid?
+- Was there a recent reset?
+- Are there suspicious successful logins?
+- Are there failed attempts from new infrastructure?
+- Are sessions still active?
+- Is the device managed?
+
+Exposure without access may be low urgency.
+
+Exposure plus active privileged access may be an incident.
+
+This is exactly where an AI agent can help: not by shouting "dark web hit," but
+by joining external exposure to internal identity reality.
+
+## Entity resolution is the hard part.
+
+Identity data is messy.
+
+The same person may appear as:
+
+- corporate email;
+- alias;
+- old domain;
+- contractor address;
+- GitHub username;
+- Slack handle;
+- HR ID;
+- Okta ID;
+- Azure object ID;
+- device owner;
+- cloud principal;
+- ticket requester.
+
+The agent should not blindly merge these.
+
+It should maintain candidate relationships:
+
+- exact match;
+- alias match;
+- domain match;
+- HR-confirmed match;
+- device ownership match;
+- historical account match;
+- weak fuzzy match;
+- analyst-confirmed match;
+- analyst-rejected match.
+
+Every relationship should carry evidence and confidence.
+
+Bad entity resolution can create real harm. It can accuse the wrong person,
+disable the wrong account, or connect unrelated personal data to a corporate
+case.
+
+Identity-first does not mean reckless matching.
+
+It means careful matching.
+
+## Zero trust gives the operating model.
+
+CISA's Zero Trust Maturity Model frames zero trust as a move toward granular,
+least-privilege, per-request access decisions in a world where the network is
+treated as compromised.
+
+That maps cleanly to identity-first SOC work.
+
+The agent should not ask only:
+
+<PullQuote>
+  Did the user authenticate?
+</PullQuote>
+
+It should ask:
+
+<PullQuote>
+  Given this identity, device, session, privilege, resource, behavior, and
+  context, should we still trust this access?
+</PullQuote>
+
+That is a richer question.
+
+It requires:
+
+- identity confidence;
+- device posture;
+- application sensitivity;
+- session risk;
+- authentication strength;
+- behavior history;
+- policy state;
+- exposure context;
+- business role;
+- current threat context.
+
+The AI-native SOC can help because it is good at gathering context across
+systems.
+
+The policy engine still needs deterministic controls.
+
+AI should inform trust decisions.
+
+It should not become the only trust decision.
+
+## A reference workflow.
+
+Here is an identity-first AI SOC workflow for suspicious sign-in triage.
+
+### Intake.
+
+Input:
+
+- alert ID;
+- user ID;
+- timestamp;
+- source IP;
+- application;
+- sign-in result;
+- MFA result;
+- device ID.
+
+### Entity assembly.
+
+The agent retrieves:
+
+- user profile;
+- privilege level;
+- group memberships;
+- account status;
+- known aliases;
+- devices;
+- owner or manager;
+- related service accounts.
+
+### Authentication posture.
+
+The agent checks:
+
+- MFA type;
+- phishing resistance;
+- conditional access policy;
+- legacy protocol access;
+- recent MFA changes;
+- password reset history.
+
+### Behavioral context.
+
+The agent checks:
+
+- normal countries;
+- normal ASNs;
+- normal devices;
+- normal applications;
+- recent failed logins;
+- recent privilege changes;
+- session creation;
+- sensitive app access.
+
+### Exposure context.
+
+The agent checks:
+
+- credential leaks;
+- stealer logs;
+- exposed session artifacts;
+- dark web mentions;
+- related personal account exposure.
+
+### Decision.
+
+The agent outputs:
+
+- risk level;
+- confidence;
+- evidence table;
+- unknowns;
+- recommended actions;
+- approval requirements.
+
+For example:
+
+<PullQuote>
+  High risk. Active privileged user. Successful login from new ASN after
+  password-spray pattern. MFA was push-based, not phishing-resistant. Recent
+  stealer-log exposure exists for the same email. Recommend session revocation
+  and password reset with analyst approval, plus endpoint review.
+</PullQuote>
+
+That is an identity-first investigation.
+
+## Metrics that matter.
+
+Identity-first SOC metrics should include:
+
+- time to identity context;
+- percentage of identity alerts with complete MFA posture;
+- percentage with device context;
+- percentage with exposure context;
+- false-positive rate for risky sign-ins;
+- successful containment time;
+- number of stale accounts found;
+- privileged accounts without phishing-resistant MFA;
+- legacy protocol exceptions;
+- analyst override rate;
+- confirmed incidents involving valid accounts.
+
+These metrics reveal whether identity is actually operationalized.
+
+They also help leaders prioritize hard work like MFA rollout, account cleanup,
+session controls, and identity data quality.
+
+## Final thoughts.
+
+AI-native SOC design should start with identity because adversaries increasingly
+operate through legitimate access.
+
+The builder-leader move is to connect identity posture, session behavior,
+credential exposure, device context, and business risk into one investigation
+workspace.
+
+That is more valuable than another alert summary.
+
+It tells the analyst what matters:
+
+- who is acting;
+- whether they are who they appear to be;
+- what they can reach;
+- what changed;
+- what exposure exists;
+- what should happen next.
+
+That is the shape of modern security operations.
+
+## Sources.
+
+- [MITRE ATT&CK Valid Accounts T1078](https://attack.mitre.org/techniques/T1078/)
+- [MITRE ATT&CK Credential Access](https://attack.mitre.org/tactics/TA0006/)
+- [NIST SP 800-63B: Digital Identity Guidelines](https://pages.nist.gov/800-63-4/sp800-63b.html)
+- [CISA: Implementing Phishing-Resistant MFA](https://www.cisa.gov/sites/default/files/2023-01/fact-sheet-implementing-phishing-resistant-mfa-508c.pdf)
+- [CISA Zero Trust Maturity Model](https://www.cisa.gov/resources-tools/resources/zero-trust-maturity-model)
+- [CISA Zero Trust](https://www.cisa.gov/topics/cybersecurity-best-practices/zero-trust)
+
+<EndMark />

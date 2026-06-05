@@ -1,0 +1,360 @@
+---
+number: "017"
+title: "How to evaluate AI SOC agents before production"
+titleHtml: "How to evaluate <em>AI SOC agents</em> before production."
+headingHtml: "How to evaluate<br/><span class=\"red\">AI SOC agents</span> before production."
+description: "A detailed evaluation framework for AI SOC agents: golden cases, tool-call testing, prompt-injection tests, evidence scoring, false-positive handling, analyst trust, and production readiness."
+ogDescription: "How to evaluate AI SOC agents before production using evidence tests, tool-call tests, prompt-injection scenarios, analyst review, and operational metrics."
+date: "2026-06-05"
+displayDate: "2026 · 06 · 05"
+readTime: "12 min"
+quirk: "-- or one confident hallucination caught"
+excerptHtml: "An AI SOC agent should not graduate to production because it gave three impressive demos. It should graduate because it survived evaluation."
+dekHtml: "A practical framework for testing AI security agents against real workflows, hostile inputs, tool boundaries, evidence quality, and analyst trust."
+tags: ["ai", "security", "secops", "agents", "evaluation"]
+tableOfContents: true
+nextSlug: "detection-engineering-ai-native-soc"
+---
+
+<Lede>
+  An AI SOC agent should not graduate to production because it gave three
+  impressive demos. It should graduate because it survived evaluation.
+</Lede>
+
+Security teams are used to evaluating tools.
+
+They run proof-of-concepts. They compare detections. They check integrations.
+They ask about pricing, coverage, deployment, and support.
+
+AI SOC agents need all of that, plus a different kind of evaluation.
+
+The question is not only:
+
+<PullQuote>
+  Does it work?
+</PullQuote>
+
+The question is:
+
+<PullQuote>
+  Does it reason from evidence, handle uncertainty, respect authority
+  boundaries, and fail safely when the case gets messy?
+</PullQuote>
+
+That is harder to test than a dashboard.
+
+It is also mandatory.
+
+An AI SOC agent may read sensitive data, summarize incidents, recommend
+containment, call tools, and influence human decisions. NIST's AI Risk
+Management Framework emphasizes governance, mapping, measurement, and management
+of AI risks. NIST AI 600-1 extends that thinking to generative AI. For security
+operations, evaluation is where those ideas become practical.
+
+## Start with workflow evaluation.
+
+Do not evaluate a generic assistant.
+
+Evaluate a workflow.
+
+Examples:
+
+- suspicious login triage;
+- phishing investigation;
+- malware alert enrichment;
+- cloud exposure assessment;
+- credential leak response;
+- detection rule drafting;
+- incident handoff summary.
+
+Each workflow should have a clear definition:
+
+- input;
+- evidence sources;
+- allowed tools;
+- decision states;
+- output schema;
+- approval requirements;
+- success criteria;
+- failure criteria.
+
+If the workflow is vague, the evaluation will be vague.
+
+Vague evaluation rewards polished prose.
+
+Precise evaluation rewards operational usefulness.
+
+## Build a golden case library.
+
+Every SOC has cases that represent its reality.
+
+Turn them into an evaluation set.
+
+A golden case should include:
+
+- sanitized input;
+- expected entities;
+- required evidence;
+- relevant context;
+- correct classification;
+- acceptable uncertainty;
+- unacceptable claims;
+- expected recommendation;
+- approval boundary;
+- source references.
+
+For suspicious login triage, a golden case might define:
+
+- user is active;
+- sign-in came from a new ASN;
+- MFA succeeded;
+- device is unmanaged;
+- same user had leaked credentials;
+- no known travel exception;
+- session should be revoked only after approval.
+
+The agent's job is not to match one exact paragraph.
+
+The agent's job is to reach the right operational state with evidence.
+
+## Score evidence, not eloquence.
+
+LLM outputs can sound good while being wrong.
+
+Evaluation should score evidence behavior:
+
+| Dimension | Good behavior | Bad behavior |
+| --- | --- | --- |
+| citation | links claims to evidence | claims without support |
+| uncertainty | names unknowns | hides uncertainty |
+| completeness | collects required evidence | skips key sources |
+| contradiction | notices conflicting data | cherry-picks |
+| sensitivity | redacts secrets | leaks raw sensitive data |
+| action | stages risky action | executes too early |
+
+A useful scorecard might include:
+
+- entity accuracy;
+- evidence completeness;
+- source attribution;
+- reasoning quality;
+- uncertainty handling;
+- recommendation quality;
+- tool-call correctness;
+- policy compliance;
+- redaction quality;
+- analyst usability.
+
+This is where AI evaluation differs from ordinary search relevance.
+
+The answer has to be operationally safe.
+
+## Test tool calls separately.
+
+Agent evaluation must inspect tool behavior.
+
+For each tool, test:
+
+- correct inputs;
+- invalid inputs;
+- ambiguous identities;
+- missing permissions;
+- stale data;
+- empty results;
+- too many results;
+- sensitive outputs;
+- error handling;
+- rate limits.
+
+Then test tool sequences:
+
+- does the agent call tools in the right order?
+- does it fetch identity before deciding account risk?
+- does it inspect evidence before recommending containment?
+- does it stop when required data is missing?
+- does it avoid action tools in low-confidence cases?
+
+Tool-call accuracy is a first-class metric.
+
+If a SOC agent can call powerful tools, "mostly right" is not good enough.
+
+## Include hostile-input tests.
+
+SOC agents read hostile content.
+
+Your evaluation set should include:
+
+- phishing email with prompt injection text;
+- malicious web page content;
+- paste that instructs the agent to leak secrets;
+- ticket comment that asks the agent to ignore policy;
+- tool output with misleading instructions;
+- threat actor post with false claims;
+- PDF text that includes hidden instructions;
+- duplicated user names designed to confuse identity resolution.
+
+OWASP's LLM and MCP projects are useful taxonomies for these tests because they
+describe risks like prompt injection, excessive agency, tool poisoning, command
+injection, and insufficient authorization.
+
+The expected behavior is boring:
+
+- treat content as data;
+- preserve evidence;
+- refuse unsafe instructions;
+- avoid unauthorized tools;
+- explain uncertainty;
+- ask for review when needed.
+
+Boring is good.
+
+In SOC automation, boring is often another word for safe.
+
+## Evaluate action boundaries.
+
+The agent should know the difference between:
+
+- read;
+- analyze;
+- summarize;
+- recommend;
+- stage;
+- execute.
+
+Design tests for each boundary.
+
+Example:
+
+```
+Case: high-confidence account compromise
+Expected:
+  - summarize evidence
+  - recommend session revocation
+  - stage action for analyst approval
+  - do not execute without approval
+```
+
+Another:
+
+```
+Case: low-confidence credential hit for former employee
+Expected:
+  - classify as low urgency
+  - preserve source
+  - no containment action
+  - no user notification
+```
+
+These tests protect the SOC from excessive agency.
+
+They also protect analysts from cleaning up an automation mess.
+
+## Measure analyst trust.
+
+Analyst trust is measurable if you define it as behavior.
+
+Useful metrics:
+
+- recommendation acceptance rate;
+- analyst override rate;
+- time to triage;
+- time to first useful evidence;
+- number of manual pivots saved;
+- missing-evidence comments;
+- hallucination reports;
+- unsafe-action attempts;
+- summary edits;
+- duplicate case reduction;
+- false-positive reduction.
+
+Do not over-optimize for acceptance.
+
+If analysts accept everything, the system may be too persuasive. If they reject
+everything, it may be useless. The healthy pattern is calibrated trust:
+acceptance when evidence is strong, review when uncertainty is real, correction
+when the agent misses local context.
+
+The agent should learn from correction.
+
+But correction should be governed. A single analyst note should not silently
+become permanent truth for every future case.
+
+## Evaluate over time.
+
+AI SOC evaluation is not a launch gate only.
+
+It is continuous.
+
+Re-run evaluations when:
+
+- the model changes;
+- prompts change;
+- tools change;
+- schemas change;
+- log sources change;
+- policy changes;
+- new adversary techniques appear;
+- analysts report drift.
+
+Keep a versioned evaluation dashboard:
+
+- model version;
+- prompt version;
+- tool version;
+- pass rate;
+- failure categories;
+- high-risk regressions;
+- production incidents related to agent output.
+
+This lets engineering and security leaders talk about AI risk with evidence,
+not vibes.
+
+## A production readiness rubric.
+
+Before production, I would want green answers here:
+
+- Does the agent have a bounded workflow?
+- Does it have a golden case library?
+- Does it cite evidence for claims?
+- Does it handle missing data?
+- Does it resist hostile retrieved content?
+- Does it respect tool permissions?
+- Does it stage consequential actions?
+- Does it redact sensitive data?
+- Does it log prompts, evidence, and tool calls?
+- Does it expose uncertainty to analysts?
+- Does it have rollback and disable paths?
+- Does it have an owner?
+
+If the answer is no, production can wait.
+
+The SOC will survive one less demo.
+
+It may not survive an overpowered agent with no evaluation.
+
+## Final thoughts.
+
+The best AI SOC agents will not be trusted because they sound confident.
+
+They will be trusted because they are measurable.
+
+Builder-leaders should design evaluation into the product from day one:
+golden cases, hostile inputs, tool-call tests, action boundaries, evidence
+scores, and analyst feedback.
+
+That is how AI moves from novelty to operations.
+
+Not by being impressive once.
+
+By being reliable repeatedly.
+
+## Sources.
+
+- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
+- [NIST AI 600-1: Generative AI Profile](https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf)
+- [OWASP Top 10 for Large Language Model Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications)
+- [OWASP MCP Top 10](https://owasp.org/www-project-mcp-top-10/)
+- [MITRE ATLAS](https://atlas.mitre.org/)
+- [NIST SP 800-61 Rev. 3](https://csrc.nist.gov/pubs/sp/800/61/r3/final)
+
+<EndMark />

@@ -1,0 +1,418 @@
+---
+number: "019"
+title: "Agentic incident response playbooks"
+titleHtml: "<em>Agentic incident response</em> playbooks."
+headingHtml: "<em>Agentic incident response</em><br/><span class=\"red\">playbooks</span>."
+description: "A detailed architecture guide for agentic incident response playbooks: NIST CSF 2.0, evidence handling, containment staging, human approvals, AI collaboration, TLP, and post-incident learning."
+ogDescription: "How to design agentic incident response playbooks with evidence, containment staging, approvals, collaboration, TLP handling, and post-incident learning."
+date: "2026-06-05"
+displayDate: "2026 · 06 · 05"
+readTime: "13 min"
+quirk: "-- or one incident bridge with fewer tabs"
+excerptHtml: "Agentic incident response is not autonomous panic. It is structured delegation inside a response system that preserves evidence and keeps humans in control."
+dekHtml: "A builder-leader architecture for AI-assisted incident response: typed playbooks, evidence ledgers, approval gates, collaboration rules, and recovery memory."
+tags: ["ai", "security", "secops", "incident-response", "agents"]
+featured: true
+tableOfContents: true
+nextSlug: "identity-first-ai-soc"
+---
+
+<Lede>
+  Agentic incident response is not autonomous panic. It is structured delegation
+  inside a response system that preserves evidence and keeps humans in control.
+</Lede>
+
+Incident response is where AI ambition should become more careful, not less.
+
+The pressure is higher. The information is incomplete. The business impact is
+real. The wrong action can interrupt production, tip off an adversary, preserve
+too little evidence, notify the wrong people, or create a legal mess.
+
+So when people talk about autonomous response, I get cautious.
+
+I do not want an agent that improvises incident response.
+
+I want an agent that can operate inside a well-designed playbook.
+
+NIST SP 800-61 Rev. 3 frames incident response as part of cybersecurity risk
+management and maps it to the NIST Cybersecurity Framework 2.0. CISA's AI
+Cybersecurity Collaboration Playbook emphasizes information sharing and
+collaboration for AI-related cyber incidents. FIRST's Traffic Light Protocol
+helps teams communicate handling expectations for sensitive information.
+
+Those sources point in the same direction: response is a system.
+
+Agentic AI should strengthen that system.
+
+Not replace it.
+
+## A playbook is not a checklist.
+
+Many incident playbooks are checklists.
+
+Checklists are useful.
+
+They are not enough for agentic response.
+
+An agentic playbook needs to define:
+
+- trigger conditions;
+- required evidence;
+- allowed tools;
+- decision states;
+- containment options;
+- approval requirements;
+- communication rules;
+- data handling labels;
+- handoff points;
+- recovery steps;
+- post-incident learning.
+
+The playbook should be executable by software but understandable by humans.
+
+That means it needs structure.
+
+A phishing playbook, credential-compromise playbook, cloud-key leak playbook,
+ransomware playbook, and AI-system abuse playbook should not all be the same
+flow with different titles.
+
+Each needs specific evidence and specific authority boundaries.
+
+## Map playbooks to CSF 2.0.
+
+NIST CSF 2.0 organizes cybersecurity outcomes around Govern, Identify, Protect,
+Detect, Respond, and Recover.
+
+Agentic playbooks can use that structure.
+
+### Govern.
+
+Define policy:
+
+- who can approve containment;
+- which actions are automated;
+- which data is restricted;
+- when legal or privacy joins;
+- which systems are critical;
+- what evidence must be preserved.
+
+### Identify.
+
+Assemble context:
+
+- affected identities;
+- assets;
+- business services;
+- data sensitivity;
+- owners;
+- dependencies;
+- third parties.
+
+### Protect.
+
+Apply guardrails:
+
+- least privilege;
+- access controls;
+- secret rotation paths;
+- backup posture;
+- segmentation;
+- communication templates.
+
+### Detect.
+
+Collect signals:
+
+- alerts;
+- logs;
+- endpoint telemetry;
+- identity events;
+- cloud activity;
+- network indicators;
+- threat intelligence.
+
+### Respond.
+
+Coordinate action:
+
+- triage;
+- containment;
+- eradication;
+- communication;
+- escalation;
+- evidence preservation.
+
+### Recover.
+
+Return to a trusted state:
+
+- restore services;
+- validate access;
+- monitor recurrence;
+- document lessons;
+- improve controls.
+
+This mapping keeps the agent from treating incident response as a single
+summary-writing task.
+
+## Evidence first, action second.
+
+Every response playbook should start with an evidence ledger.
+
+The agent should collect:
+
+- original alert;
+- affected entities;
+- timestamps;
+- source systems;
+- raw evidence pointers;
+- normalized observations;
+- analyst notes;
+- confidence;
+- open questions.
+
+The evidence ledger should be append-only for key events.
+
+That does not mean storing every raw artifact forever. Sensitive data still
+needs retention and access controls. But the response team needs enough
+provenance to reconstruct what happened and why decisions were made.
+
+Before containment, the agent should answer:
+
+- what do we know?
+- how do we know it?
+- what is missing?
+- what is the risk of waiting?
+- what is the risk of acting?
+
+This is the difference between response and panic.
+
+## Stage containment.
+
+Containment is where agentic systems need discipline.
+
+Actions include:
+
+- revoke sessions;
+- disable account;
+- isolate endpoint;
+- block indicator;
+- rotate secret;
+- quarantine email;
+- suspend token;
+- disable integration;
+- restrict cloud role;
+- pause pipeline.
+
+These actions have different blast radii.
+
+The playbook should stage containment options with impact:
+
+| Action | Impact | Approval |
+| --- | --- | --- |
+| revoke user session | low to medium | analyst |
+| reset password | medium | analyst |
+| disable privileged account | high | lead |
+| isolate production host | high | incident commander |
+| rotate production secret | medium to high | service owner |
+| block domain globally | medium | security lead |
+
+The agent can prepare the request:
+
+- target;
+- reason;
+- evidence;
+- expected effect;
+- possible downside;
+- rollback or recovery path.
+
+The approver makes the call.
+
+## Communication is part of response.
+
+Incident response fails when communication is improvised.
+
+Agentic playbooks should help draft:
+
+- analyst handoff notes;
+- incident commander summaries;
+- executive updates;
+- engineering tickets;
+- user notifications;
+- legal or privacy briefs;
+- vendor requests;
+- external sharing reports.
+
+But communication must obey handling rules.
+
+FIRST's Traffic Light Protocol is useful here. A finding marked with a
+restricted sharing label should not be copied into a broad Slack channel because
+the agent wrote a convenient summary.
+
+The agent should know:
+
+- audience;
+- sensitivity;
+- allowed recipients;
+- required redactions;
+- source restrictions;
+- approval requirements.
+
+Good response communication is accurate, short, and appropriately constrained.
+
+AI can help with that if it has the rules.
+
+## AI incidents need special playbooks.
+
+AI systems can be both responder tools and incident targets.
+
+An AI-related incident may involve:
+
+- prompt injection;
+- tool abuse;
+- data leakage;
+- model endpoint abuse;
+- training data poisoning;
+- embedding store poisoning;
+- agent memory manipulation;
+- unauthorized tool invocation;
+- model supply-chain compromise;
+- sensitive output disclosure.
+
+MITRE ATLAS helps teams reason about adversary tactics against AI-enabled
+systems. OWASP's LLM and MCP projects help categorize application and tool-layer
+risks.
+
+An AI incident playbook should include:
+
+- affected model or agent;
+- prompts and retrieved context;
+- tool calls;
+- data accessed;
+- output recipients;
+- connector permissions;
+- memory writes;
+- vector store changes;
+- model or prompt version;
+- evaluation failures;
+- containment path.
+
+If the SOC uses AI agents, the SOC needs a playbook for when those agents become
+part of the incident.
+
+## Post-incident learning is where AI shines.
+
+After the incident, teams are tired.
+
+This is where knowledge evaporates.
+
+An AI-assisted playbook can preserve:
+
+- timeline;
+- decisions;
+- evidence;
+- containment actions;
+- communication history;
+- root causes;
+- missed detections;
+- control gaps;
+- follow-up tasks;
+- detection improvements;
+- playbook changes.
+
+The agent can draft a post-incident review, but it should also extract
+structured improvements:
+
+- new detection;
+- new test case;
+- asset owner update;
+- identity policy change;
+- logging gap;
+- runbook update;
+- training need;
+- vendor follow-up.
+
+The goal is not a prettier incident report.
+
+The goal is a better security system after the incident.
+
+## A reference playbook object.
+
+An agentic playbook should look more like configuration than prose:
+
+```
+playbook: suspected_identity_compromise
+trigger:
+  - risky_signin
+  - credential_exposure_match
+required_evidence:
+  - identity_profile
+  - sign_in_history
+  - mfa_posture
+  - session_state
+  - device_context
+  - exposure_context
+decision_states:
+  - benign
+  - suspicious
+  - confirmed_compromise
+  - unresolved
+allowed_tools:
+  read:
+    - get_user
+    - get_signins
+    - get_sessions
+    - get_exposure_hits
+  stage:
+    - stage_session_revocation
+    - stage_password_reset
+  execute:
+    - revoke_sessions
+    - disable_account
+approvals:
+  revoke_sessions: analyst
+  disable_account: security_lead
+communications:
+  user_notice: approval_required
+  executive_summary: restricted
+post_incident:
+  - create_detection_followup
+  - update_identity_policy_gap
+```
+
+That is the shape of response automation I trust.
+
+## Final thoughts.
+
+Agentic incident response should not be a heroic agent making guesses during a
+crisis.
+
+It should be a disciplined response layer:
+
+- evidence first;
+- typed playbooks;
+- scoped tools;
+- staged containment;
+- clear approvals;
+- careful communication;
+- post-incident learning.
+
+The builder-leader job is to design the operating system around the agent.
+
+That is how AI improves incident response.
+
+Not by replacing judgment.
+
+By making judgment faster, better informed, and easier to review.
+
+## Sources.
+
+- [NIST SP 800-61 Rev. 3](https://csrc.nist.gov/pubs/sp/800/61/r3/final)
+- [NIST Cybersecurity Framework 2.0](https://www.nist.gov/cyberframework)
+- [CISA JCDC AI Cybersecurity Collaboration Playbook](https://www.cisa.gov/news-events/alerts/2025/01/14/cisa-releases-jcdc-ai-cybersecurity-collaboration-playbook-and-fact-sheet)
+- [FIRST Traffic Light Protocol](https://www.first.org/tlp/)
+- [MITRE ATLAS](https://atlas.mitre.org/)
+- [OWASP Top 10 for Large Language Model Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications)
+- [OWASP MCP Top 10](https://owasp.org/www-project-mcp-top-10/)
+
+<EndMark />
