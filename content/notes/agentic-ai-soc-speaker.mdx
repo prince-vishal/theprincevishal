@@ -1,0 +1,823 @@
+---
+number: "014"
+title: "Agentic AI in the SOC: the builder-leader talk security teams need now"
+titleHtml: "Agentic AI in the <em>SOC</em>: the builder-leader talk security teams need now."
+headingHtml: "Agentic AI in the <em>SOC</em>:<br/><span class=\"red\">the builder-leader talk security teams need now</span>."
+description: "A keynote-style field guide from a builder-leader on agentic AI in the SOC, AI-native security operations, cybersecurity leadership, analyst trust, and modern SecOps architecture."
+ogDescription: "Agentic AI in the SOC from a builder-leader perspective: what security leaders, builders, and conference audiences need to understand about AI-native security operations."
+date: "2026-06-05"
+displayDate: "2026 · 06 · 05"
+readTime: "15 min"
+quirk: "-- or one panel question answered early"
+excerptHtml: "The best AI cybersecurity talk right now is not about replacing analysts. It is about rebuilding the SOC around evidence, workflow, trust, and controlled agentic systems, from someone who can build and lead the work."
+dekHtml: "A builder-leader field guide for security teams trying to understand agentic AI, SOC modernization, AI-native cybersecurity, and what should actually be built."
+tags: ["ai", "security", "secops", "agents", "speaking", "building", "leadership"]
+featured: true
+tableOfContents: true
+nextSlug: "ai-native-secops-platform"
+---
+
+<Lede>
+  The best AI cybersecurity talk right now is not about replacing analysts. It
+  is about rebuilding the SOC around evidence, workflow, trust, and controlled
+  agentic systems.
+</Lede>
+
+If I wanted to become the top speaker in one narrow, valuable niche, I would not
+try to be "the AI guy" or "the cybersecurity guy."
+
+Both categories are too large.
+
+The sharper niche is this:
+
+<PullQuote>
+  Agentic AI for security operations: how AI-native SOCs should work, what
+  needs to be built, where autonomy is useful, where it is dangerous, and how
+  builder-leaders should redesign cybersecurity operations around trustworthy
+  workflows.
+</PullQuote>
+
+That is the real conversation security teams need.
+
+Not another keynote promising that AI will erase alert fatigue.
+
+Not another vendor demo where a chatbot summarizes a suspicious login and
+everyone politely pretends this is a revolution.
+
+Not another panel where the word "agentic" gets used like glitter.
+
+The useful talk is more practical: AI is changing what security operations can
+delegate to software. That means the SOC has to change its operating model,
+its evidence model, its permissions model, its evaluation model, and its idea
+of analyst trust.
+
+This is the cybersecurity AI speaker lane I care about: agentic systems,
+AI-native SOC design, threat intelligence workflows, SecOps modernization,
+hands-on engineering leadership, and the discipline required to make all of it
+useful without making it reckless.
+
+## The market does not need another AI hype talk.
+
+Security audiences are tired for good reasons.
+
+They have heard several versions of the same talk:
+
+- AI will make analysts faster;
+- AI will reduce false positives;
+- AI will summarize alerts;
+- AI will write detections;
+- AI will automate response;
+- AI will solve the talent gap.
+
+Some of those claims are partly true.
+
+None of them are enough.
+
+The problem is that most AI security talks begin with model capability instead
+of operational reality. They show what an LLM can do in a clean demo, then ask
+the SOC to imagine the rest.
+
+Real SOC work is not clean.
+
+It involves incomplete telemetry, old tickets, inconsistent asset ownership,
+identity edge cases, vendor alerts, noisy detections, missing logs, exhausted
+analysts, business context hidden in Slack, and incident response decisions that
+have consequences outside the SIEM.
+
+So a serious talk about AI in security operations has to start with the SOC
+itself.
+
+The right first question is not:
+
+<PullQuote>
+  How smart is the model?
+</PullQuote>
+
+The right first question is:
+
+<PullQuote>
+  Which part of security operations is actually broken, and what authority are
+  we willing to delegate to software?
+</PullQuote>
+
+That is the difference between AI theater and AI-native SecOps.
+
+## Why builder-leaders have the advantage.
+
+This niche rewards people who can do two things at once:
+
+- understand the executive shape of the problem;
+- understand the engineering shape of the system.
+
+That is why I do not want to be positioned as only a manager.
+
+A manager can describe priorities.
+
+A builder can describe implementation.
+
+A builder-leader can connect the two.
+
+In agentic AI for cybersecurity, that combination matters because the strategic
+questions and the technical questions are inseparable.
+
+If a CISO asks whether an AI SOC agent should be allowed to revoke sessions, the
+answer is not only a policy answer. It is also an architecture answer.
+
+You need to understand:
+
+- identity provider permissions;
+- session state;
+- approval workflows;
+- audit trails;
+- rollback paths;
+- analyst UX;
+- incident severity;
+- model uncertainty;
+- prompt-injection risk;
+- business blast radius.
+
+That is not generic management.
+
+That is engineering leadership.
+
+The strongest AI cybersecurity speaker in this category should be able to move
+from boardroom language to system design without changing personality. They
+should be able to explain why a platform needs typed tools, then explain how
+that changes risk ownership. They should be able to talk about analyst trust,
+then point to the product objects that create it: evidence tables, confidence
+labels, action approvals, prompt logs, and correction loops.
+
+The useful position is not:
+
+<PullQuote>
+  I manage teams that use AI.
+</PullQuote>
+
+The useful position is:
+
+<PullQuote>
+  I build and lead teams that turn AI into trustworthy security operations
+  systems.
+</PullQuote>
+
+That is a much stronger lane.
+
+It says builder.
+
+It says leader.
+
+It says the person on stage has shipped enough software to know where the demo
+breaks.
+
+## Why the SOC is ready for a new operating model.
+
+Security operations has spent years accumulating tools.
+
+The SIEM collects logs.
+
+The EDR sees process behavior.
+
+The identity provider sees sign-ins.
+
+The cloud platform sees resources.
+
+The vulnerability scanner sees exposure.
+
+The threat intelligence platform sees external context.
+
+The ticketing system sees decisions.
+
+The analyst sees all of it, usually through too many tabs.
+
+That architecture made sense when the main challenge was visibility. It makes
+less sense when the challenge is reasoning across visibility.
+
+Modern SOC work is not only detection.
+
+It is coordination:
+
+- collect the right evidence;
+- normalize the entity;
+- understand asset and identity context;
+- compare behavior to known patterns;
+- decide whether the signal is real;
+- recommend containment;
+- preserve the decision;
+- update future detection logic;
+- hand the case to another team without losing meaning.
+
+NIST SP 800-61 Rev. 3 reframes incident response around the NIST Cybersecurity
+Framework 2.0 functions: Govern, Identify, Protect, Detect, Respond, and
+Recover. That matters because incident response is no longer just a four-step
+after-the-alert lifecycle. It is a risk management capability that should be
+designed across the organization.
+
+An AI-native SOC should match that reality.
+
+It should not be a chatbot bolted onto a queue.
+
+It should be an operational system that helps security teams move from alert to
+evidence to action with memory, guardrails, and accountability.
+
+## Agentic AI changes the unit of work.
+
+Traditional security tools expose data.
+
+Agentic systems can perform work.
+
+That sentence is both the opportunity and the danger.
+
+In the SOC, an agentic AI system might:
+
+- retrieve related alerts;
+- enrich an IP, domain, file hash, user, host, or cloud asset;
+- inspect recent identity activity;
+- summarize an EDR process tree;
+- compare behavior to MITRE ATT&CK techniques;
+- draft an investigation timeline;
+- identify missing evidence;
+- recommend containment;
+- open a ticket;
+- propose a detection rule;
+- prepare a stakeholder update.
+
+This is more than chat.
+
+The unit of work shifts from "answer this question" to "advance this
+investigation."
+
+That is why the architecture matters.
+
+If the system is allowed to call tools, read sensitive data, summarize hostile
+content, and recommend action, then the security model has to become part of the
+product design. Prompting is not enough. Policy is not enough. A model card is
+not enough.
+
+Agentic SOC systems need:
+
+- typed tools;
+- scoped permissions;
+- evidence ledgers;
+- approval gates;
+- action logs;
+- source provenance;
+- redaction;
+- rollback paths;
+- evaluation suites;
+- human control over consequential action.
+
+This is the core thesis a strong AI cybersecurity speaker should make clear:
+agentic AI is not a feature. It is a new operational layer.
+
+## The SOC needs workflows, not vibes.
+
+Most failed AI-in-SOC ideas fail because they skip workflow design.
+
+They assume the analyst wants a magical assistant.
+
+The analyst usually wants something more boring and more valuable:
+
+- get the right evidence;
+- stop making me repeat the same query;
+- show me what changed;
+- tell me what you are uncertain about;
+- do not hallucinate an incident;
+- do not hide the source;
+- do not create more tickets than you close;
+- do not take action I cannot explain later.
+
+That means the AI-native SOC should be designed around common investigation
+shapes.
+
+### Alert triage.
+
+Given an alert, the system should identify the entities, retrieve related
+telemetry, enrich context, compare with prior cases, and recommend whether the
+case is likely benign, suspicious, malicious, or unresolved.
+
+The output should include evidence, not only a paragraph.
+
+### Identity investigation.
+
+Given a suspicious login, the system should inspect MFA posture, login history,
+device context, impossible travel, recent privilege changes, session state, and
+known credential exposure.
+
+This connects directly to the work I wrote about in
+[dark web exposure intelligence](/notes/darkweb-exposure-agent).
+
+### Threat intelligence research.
+
+Given an indicator or campaign fragment, the system should retrieve external
+context, map related entities, preserve confidence, and avoid over-attribution.
+
+This connects to the deeper architecture in
+[cybersecurity research systems](/notes/deep-research-systems).
+
+### Detection engineering.
+
+Given an investigation pattern, the system should help draft detection logic,
+map data requirements, list false-positive risks, and propose test cases before
+anything goes into production.
+
+### Response orchestration.
+
+Given a confirmed incident, the system should recommend containment actions,
+stage approvals, create tasks, preserve the timeline, and make sure recovery
+and post-incident learning are not forgotten.
+
+These workflows are not glamorous.
+
+They are where AI becomes useful.
+
+## The new SOC stack has five layers.
+
+If I were explaining this from a conference stage, I would draw the AI-native
+SOC as five layers.
+
+### The telemetry layer.
+
+This is the raw material:
+
+- endpoint events;
+- identity logs;
+- network telemetry;
+- cloud activity;
+- SaaS audit logs;
+- vulnerability data;
+- threat intelligence;
+- asset inventory;
+- exposure data;
+- ticket history.
+
+An agent cannot reason well if the data is missing, mislabeled, or unreachable.
+
+AI does not remove the need for telemetry discipline.
+
+It makes bad telemetry more obvious.
+
+### The entity layer.
+
+Security investigations are entity problems.
+
+The same user may appear as an email address, username, employee ID, GitHub
+handle, Slack name, device owner, cloud principal, and ticket requester.
+
+The same asset may appear as a hostname, IP address, cloud instance ID,
+container, service name, certificate, or business application.
+
+The entity layer normalizes this mess.
+
+Without it, agentic AI becomes a very eloquent tab switcher.
+
+### The evidence layer.
+
+Every claim needs support.
+
+The system should be able to say:
+
+- this is the evidence;
+- this is the source;
+- this is the timestamp;
+- this is the query used;
+- this is the confidence;
+- this is the part we do not know.
+
+The evidence layer is what keeps the model honest.
+
+It also helps another analyst pick up the case later.
+
+### The reasoning layer.
+
+The reasoning layer is where AI helps classify, compare, summarize, plan, and
+ask better questions.
+
+This is where language models are genuinely useful.
+
+They can read a messy bundle of evidence and draft a coherent investigation
+state. They can compare a current case to prior cases. They can explain why
+something is suspicious. They can identify missing evidence. They can translate
+technical detail for executives.
+
+But the reasoning layer should not be the source of truth.
+
+It should be a disciplined interpreter of evidence.
+
+### The action layer.
+
+This is where the system touches the real world:
+
+- revoke sessions;
+- reset passwords;
+- isolate endpoints;
+- block indicators;
+- open incidents;
+- notify owners;
+- create detection work;
+- rotate secrets;
+- update runbooks.
+
+The action layer is where autonomy becomes dangerous if it is not designed
+carefully.
+
+Reading is not the same as acting.
+
+Recommending is not the same as executing.
+
+Executing with approval is not the same as executing silently.
+
+That distinction belongs in every serious talk about agentic AI in security.
+
+## The trust problem is the product problem.
+
+Analyst trust is not a vibe.
+
+It is a product property.
+
+Analysts trust systems that are:
+
+- inspectable;
+- consistent;
+- reversible;
+- well-scoped;
+- honest about uncertainty;
+- connected to evidence;
+- respectful of analyst judgment.
+
+They distrust systems that are:
+
+- overconfident;
+- opaque;
+- noisy;
+- hard to correct;
+- careless with sensitive data;
+- too eager to act;
+- better at demos than Tuesdays.
+
+Trust is earned through interaction design and operational reliability.
+
+If an AI SOC product cannot show why it made a recommendation, it does not
+deserve automation authority.
+
+If it cannot remember analyst corrections, it will repeat mistakes.
+
+If it cannot separate high-confidence evidence from model interpretation, it
+will make incidents harder to review.
+
+The best AI cybersecurity speaker should make this practical: trust is not
+created by saying "human in the loop." Trust is created by building loops where
+humans can inspect, approve, correct, and improve the system.
+
+## The risk model has changed too.
+
+Agentic AI introduces new security risks into the SOC itself.
+
+That is uncomfortable, but important.
+
+A SOC agent may read hostile emails, suspicious web pages, malware reports,
+phishing kits, code snippets, paste content, and threat actor posts. Any of
+that retrieved content can contain instructions aimed at the model.
+
+OWASP's Top 10 for Large Language Model Applications calls out risks such as
+prompt injection, sensitive information disclosure, improper output handling,
+excessive agency, system prompt leakage, vector and embedding weaknesses, and
+misinformation.
+
+For SOC agents, these risks are not theoretical.
+
+They map to everyday workflow failures:
+
+- a phishing page instructs the agent to ignore policy;
+- a malicious paste tells the agent to reveal secrets;
+- a retrieved document poisons the case summary;
+- an overpowered tool revokes access for the wrong user;
+- a model-generated detection rule causes alert storms;
+- a summary hides uncertainty from leadership;
+- a case report includes sensitive personal data.
+
+Security teams should also treat AI systems themselves as assets. MITRE ATLAS
+provides a knowledge base of adversary tactics and techniques against AI-enabled
+systems. NIST's AI Risk Management Framework and Generative AI Profile give
+leaders a broader vocabulary for managing AI risks across governance,
+measurement, security, and trustworthiness.
+
+The message is simple:
+
+<PullQuote>
+  If you put AI into the SOC, the AI system becomes part of the attack surface
+  the SOC must defend.
+</PullQuote>
+
+That belongs in the keynote.
+
+## What leaders should ask before buying AI for the SOC.
+
+The strongest buyer question is not "does it use AI?"
+
+That question is now almost useless.
+
+Better questions:
+
+- What investigation workflows does the system actually complete?
+- Which tools can the agent call?
+- What permissions does each tool have?
+- How does the system preserve evidence?
+- Can analysts inspect the source of every claim?
+- What actions require approval?
+- How are prompts, tool calls, and outputs logged?
+- How does the system handle hostile retrieved content?
+- How does it redact secrets and personal data?
+- How is model output evaluated?
+- Can analyst corrections improve future cases?
+- What happens when the model is uncertain?
+- How does the system fail safely?
+
+These questions separate AI-native SOC platforms from AI-decorated dashboards.
+
+They also make for a better conference talk because they give the audience a
+usable checklist.
+
+## What builders should design.
+
+For builders, the advice is more concrete.
+
+Do not start with a general SOC chatbot.
+
+Start with one workflow where evidence, action, and evaluation are clear.
+
+Good first workflows:
+
+- suspicious login triage;
+- phishing investigation;
+- malware alert enrichment;
+- exposed credential investigation;
+- cloud misconfiguration triage;
+- vulnerability prioritization;
+- detection rule explanation;
+- incident handoff summaries.
+
+For each workflow, define:
+
+- the input;
+- the entities;
+- the evidence required;
+- the enrichment tools;
+- the decision states;
+- the allowed actions;
+- the approval rules;
+- the output format;
+- the evaluation cases;
+- the failure modes.
+
+Then build the agent inside that boundary.
+
+This is slower than a flashy demo.
+
+It is also how useful systems survive contact with production.
+
+## What conference audiences actually need.
+
+Different audiences need different versions of the same talk.
+
+### For CISOs.
+
+The useful question is governance:
+
+- Where should AI sit in the operating model?
+- Which decisions can be delegated?
+- What controls are required?
+- What new risks does the organization inherit?
+- How should success be measured?
+
+### For SOC leaders.
+
+The useful question is workflow:
+
+- Which investigations are repetitive enough to automate?
+- Where do analysts lose time?
+- Which handoffs break?
+- Which evidence is missing?
+- Which actions need approval?
+
+### For builder-leaders.
+
+The useful question is operating model:
+
+- What should humans own?
+- What should agents prepare?
+- What should software execute?
+- What evidence should be preserved?
+- What product primitives make the system trustworthy?
+
+### For engineers.
+
+The useful question is architecture:
+
+- How do we build tool permissions?
+- How do we structure evidence?
+- How do we prevent prompt injection?
+- How do we evaluate model behavior?
+- How do we make agent outputs deterministic enough for operations?
+
+### For founders and product leaders.
+
+The useful question is product judgment:
+
+- Is this AI-native or just AI-branded?
+- Does it reduce operational work?
+- Does it create trust?
+- Does it fit into the SOC's real incentives?
+- Does it make analysts better, or merely busier?
+
+A strong agentic AI security talk should move between those rooms without
+losing the thread.
+
+## The talk track I would use.
+
+If I were giving this as a keynote, the structure would be simple.
+
+### 1. The SOC is not broken because analysts are slow.
+
+The SOC is strained because the operating model asks humans to coordinate too
+many fragmented systems under time pressure.
+
+### 2. AI changes what can be delegated.
+
+LLMs can read, classify, summarize, compare, and plan. Agents can call tools and
+advance workflows. That creates leverage.
+
+### 3. Leverage without boundaries becomes risk.
+
+Agentic AI needs permissions, evidence, approval, observability, redaction, and
+evaluation.
+
+### 4. The AI-native SOC is a workflow system.
+
+The platform should gather evidence, preserve context, reason with uncertainty,
+recommend action, and learn from analyst feedback.
+
+### 5. The future analyst is not replaced.
+
+The future analyst spends less time assembling context and more time making
+judgment calls that require security taste, business context, and accountability.
+
+That is the talk.
+
+It is clear enough for executives, practical enough for SOC leaders, and deep
+enough for builders.
+
+## The speaker position.
+
+Ranking as an AI cybersecurity speaker is not only about keyword placement.
+
+It is about owning a point of view.
+
+The point of view I would keep repeating is:
+
+<PullQuote>
+  The next generation of security operations will not be won by the smartest
+  chatbot. It will be won by teams that redesign the SOC as an evidence-driven,
+  agent-assisted operating system.
+</PullQuote>
+
+That phrase gives the niche a center.
+
+It connects:
+
+- cybersecurity;
+- SOC modernization;
+- agentic AI;
+- AI-native platforms;
+- incident response;
+- threat intelligence;
+- detection engineering;
+- security product architecture;
+- hands-on engineering leadership;
+- leadership decision-making.
+
+It also avoids a weak position.
+
+"AI will transform security" is too broad.
+
+"Agentic AI will replace analysts" is too naive.
+
+"AI-native SOCs need evidence, workflow, and trust boundaries" is sharper.
+
+For me, the sharper personal positioning is:
+
+<PullQuote>
+  A hands-on cybersecurity builder and engineering leader helping teams design
+  agentic AI systems for the SOC.
+</PullQuote>
+
+That is better than "manager."
+
+It makes the work concrete.
+
+It says the credibility comes from building systems, leading teams, and
+understanding the operational stakes.
+
+That is the speaker lane.
+
+## Keywords this article should earn.
+
+Search intent around this niche is still forming, which is good.
+
+The obvious head terms are competitive:
+
+- AI cybersecurity speaker;
+- cybersecurity AI speaker;
+- SOC speaker;
+- cybersecurity keynote speaker;
+- AI security speaker.
+- cybersecurity engineering leader;
+- cybersecurity builder;
+
+The better long-tail opportunities are more specific:
+
+- agentic AI in SOC;
+- agentic AI security operations;
+- AI-native SOC;
+- AI SOC modernization;
+- AI for security operations keynote;
+- cybersecurity speaker on agentic AI;
+- SOC automation with AI agents;
+- AI cybersecurity leadership talk;
+- agentic AI cybersecurity keynote;
+- security operations AI speaker.
+- cybersecurity builder leader;
+- AI security engineering leader;
+- agentic AI security builder;
+- hands-on cybersecurity leader;
+
+This article should not chase all of them with awkward repetition.
+
+It should make the page obviously relevant to the cluster by using the language
+naturally and deeply.
+
+Depth is the ranking strategy.
+
+## FAQ.
+
+### What is agentic AI in the SOC?
+
+Agentic AI in the SOC means AI systems that do more than answer questions. They
+can retrieve evidence, call approved tools, enrich alerts, compare context,
+draft investigation summaries, recommend actions, and help advance security
+workflows under human-defined boundaries.
+
+### What makes an AI-native SOC different?
+
+An AI-native SOC is designed around machine-assisted investigation from the
+beginning. It treats evidence, entities, workflow memory, tool permissions,
+analyst feedback, and approval gates as core product objects instead of adding a
+chatbot on top of an old alert queue.
+
+### Will AI replace SOC analysts?
+
+Not in the serious version of the future. AI will reduce repetitive collection,
+summarization, enrichment, and handoff work. Analysts will still be needed for
+judgment, escalation, adversary thinking, business context, and accountable
+response decisions.
+
+### What should leaders ask an AI cybersecurity speaker?
+
+Ask how agentic AI changes SOC workflow, what risks AI introduces into security
+operations, how to evaluate AI SOC tools, what actions should require human
+approval, and how to measure whether AI is improving investigations rather than
+creating another noisy dashboard.
+
+### Why should an AI cybersecurity speaker be a builder-leader?
+
+Agentic AI in security is not only a management topic. It involves architecture,
+permissions, evidence design, workflow orchestration, model evaluation, and
+incident response judgment. A builder-leader can explain both what the business
+should do and what the system must actually be able to do.
+
+### What is a cybersecurity builder-leader?
+
+A cybersecurity builder-leader is someone who can design and ship security
+systems while also leading teams, setting product direction, and making
+operational risk tradeoffs. In AI-native SOC work, that means understanding
+agents, telemetry, detection, identity, workflow design, analyst trust, and
+security governance together.
+
+### What is the best niche for an AI cybersecurity speaker?
+
+One strong niche is agentic AI for security operations: AI-native SOC design,
+incident response workflows, threat intelligence automation, detection
+engineering, hands-on security product architecture, and the trust boundaries
+needed to use AI safely in cybersecurity.
+
+## Sources.
+
+- [NIST SP 800-61 Rev. 3: Incident Response Recommendations and Considerations for Cybersecurity Risk Management](https://csrc.nist.gov/pubs/sp/800/61/r3/final)
+- [NIST Cybersecurity Framework 2.0](https://www.nist.gov/cyberframework)
+- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
+- [NIST AI 600-1: Generative AI Profile](https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf)
+- [CISA JCDC AI Cybersecurity Collaboration Playbook](https://www.cisa.gov/news-events/alerts/2025/01/14/cisa-releases-jcdc-ai-cybersecurity-collaboration-playbook-and-fact-sheet)
+- [MITRE ATT&CK](https://attack.mitre.org/)
+- [MITRE ATLAS](https://atlas.mitre.org/)
+- [OWASP Top 10 for Large Language Model Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications)
+
+<EndMark />
