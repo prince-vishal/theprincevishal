@@ -816,7 +816,7 @@ footer.bottom b {
 
 .post-head .byline .who::before {
   color: var(--ink-mute);
-  content: "— ";
+  content: " -  ";
 }
 
 .article {
@@ -1123,7 +1123,7 @@ footer.bottom b {
 
 .article ul li::before {
   color: var(--red);
-  content: "—";
+  content: " - ";
   font-family: var(--mono);
   left: 0;
   position: absolute;

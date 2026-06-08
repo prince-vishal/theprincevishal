@@ -4,11 +4,11 @@ import NotesFilterList from '@/components/notes/NotesFilterList';
 import { getAllNotes, getTagCounts } from '@/lib/notes';
 
 export const metadata = {
-  title: 'Notes — Prince Sinha',
+  title: 'Notes  -  Prince Sinha',
   description:
     "Half essay, half marginalia. Notes by Prince Sinha on AI, security, infrastructure, and what I've learned by writing it down.",
   openGraph: {
-    title: 'Notes — Prince Sinha',
+    title: 'Notes  -  Prince Sinha',
     description: 'Notes on AI, security, and the boring details that make products actually work.',
     type: 'website',
   },
@@ -34,11 +34,11 @@ export default async function Notes() {
           <h4>now writing</h4>
           <p>
             <span className="live" />
-            <em>&quot;the boring case for boring infrastructure.&quot;</em> — about <span style={{ color: 'var(--red)' }}>73% done.</span>
+            <em>&quot;the boring case for boring infrastructure.&quot;</em>  -  about <span style={{ color: 'var(--red)' }}>73% done.</span>
           </p>
         </aside>
 
-        <span className="kicker">— a small writing room.</span>
+        <span className="kicker"> -  a small writing room.</span>
         <h1>
           <em>Notes.</em>
         </h1>

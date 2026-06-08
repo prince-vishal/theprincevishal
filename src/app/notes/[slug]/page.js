@@ -22,7 +22,7 @@ export async function generateMetadata({ params }) {
   if (!note) return {};
 
   return {
-    title: `${note.title} — Notes · Prince Sinha`,
+    title: `${note.title}  -  Notes · Prince Sinha`,
     description: note.description,
     alternates: {
       canonical: `${siteUrl}${note.href}`,

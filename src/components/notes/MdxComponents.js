@@ -24,7 +24,7 @@ export function EndMark() {
   return (
     <div className="end-mark">
       <div className="glyph">❦</div>
-      <span className="fin">— end of note —</span>
+      <span className="fin"> -  end of note  - </span>
     </div>
   );
 }

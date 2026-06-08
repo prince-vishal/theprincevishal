@@ -1,4 +1,4 @@
-# design.md — Prince Sinha Personal Site Theme
+# design.md  -  Prince Sinha Personal Site Theme
 
 ## Intent
 This is not a recruiter-first portfolio. It is a **personal internet space**.

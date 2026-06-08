@@ -2,7 +2,7 @@
   "name": "theprincevishal",
   "version": "1.0.0",
   "private": true,
-  "description": "Prince Sinha — personal internet space",
+  "description": "Prince Sinha  -  personal internet space",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
