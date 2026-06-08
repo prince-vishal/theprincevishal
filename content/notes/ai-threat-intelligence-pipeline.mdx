@@ -1,0 +1,445 @@
+---
+number: "021"
+title: "Designing an AI threat intelligence pipeline"
+titleHtml: "Designing an <em>AI threat intelligence pipeline</em>."
+headingHtml: "Designing an <em>AI threat intelligence</em><br/><span class=\"red\">pipeline</span>."
+description: "A technical guide to AI-assisted threat intelligence pipelines: source intake, STIX/TAXII, MISP, OpenCTI, TLP handling, entity normalization, retrieval, enrichment, summarization, and analyst review."
+ogDescription: "How to design an AI threat intelligence pipeline with source governance, STIX/TAXII, MISP, OpenCTI, TLP, entity normalization, enrichment, and analyst-safe AI."
+date: "2026-06-07"
+displayDate: "2026 · 06 · 07"
+readTime: "12 min"
+quirk: "-- or one IOC pile turned into context"
+excerptHtml: "Threat intelligence pipelines fail when they treat intelligence as a feed problem. The hard part is turning sources into evidence, context, and decisions."
+dekHtml: "A builder's architecture for AI-assisted threat intelligence that respects source handling, normalizes entities, preserves provenance, and gives analysts usable context."
+tags: ["ai", "security", "threat-intel", "secops", "building"]
+tableOfContents: true
+nextSlug: "soc-knowledge-graph-agentic-investigations"
+---
+
+<Lede>
+  Threat intelligence pipelines fail when they treat intelligence as a feed
+  problem. The hard part is turning sources into evidence, context, and
+  decisions.
+</Lede>
+
+Most threat intelligence programs collect more than they operationalize.
+
+They ingest reports, indicators, feeds, vendor notes, blog posts, advisories,
+malware writeups, vulnerability mentions, actor profiles, and community shares.
+
+Then the SOC asks a practical question:
+
+<PullQuote>
+  Does any of this matter to us right now?
+</PullQuote>
+
+That is where many pipelines break.
+
+They can store intelligence.
+
+They can search intelligence.
+
+They can forward indicators.
+
+But they struggle to connect intelligence to internal exposure, detection
+coverage, investigations, and response decisions.
+
+AI can help, but only if the pipeline is designed well. A model can summarize,
+classify, extract entities, compare reports, and draft analyst notes. It should
+not become the source of truth. It should operate inside a pipeline that
+preserves source handling, provenance, confidence, and review.
+
+## Start with source governance.
+
+Before ingestion, define source policy.
+
+Every source should have:
+
+- owner;
+- type;
+- collection method;
+- license or sharing terms;
+- TLP or handling label;
+- confidence defaults;
+- refresh cadence;
+- retention policy;
+- allowed uses;
+- downstream audiences.
+
+This is not bureaucracy.
+
+Threat intelligence can be sensitive, restricted, wrong, stale, or context-free.
+If the AI pipeline ignores source handling, it can leak sensitive intelligence
+or over-promote low-confidence claims.
+
+FIRST's Traffic Light Protocol is useful because it gives teams a common
+language for sharing restrictions. The pipeline should preserve handling labels
+through ingestion, enrichment, summarization, and export.
+
+If the agent writes a summary from restricted intelligence, the summary may need
+the same restriction.
+
+Derived text is not automatically safe.
+
+## Normalize into intelligence objects.
+
+Raw feeds are not enough.
+
+The pipeline should normalize inputs into objects:
+
+- report;
+- indicator;
+- observable;
+- malware;
+- tool;
+- vulnerability;
+- attack pattern;
+- threat actor;
+- intrusion set;
+- campaign;
+- course of action;
+- sighting;
+- relationship;
+- note;
+- opinion.
+
+STIX 2.1 provides a structured language for cyber threat intelligence. TAXII
+2.1 provides a protocol for exchanging STIX content. OpenCTI builds on a
+knowledge-graph model and uses STIX concepts. MISP provides sharing,
+correlation, analyst collaboration, and operational intelligence workflows.
+
+Those systems point toward the same principle:
+
+<PullQuote>
+  Threat intelligence should be structured enough to relate, not merely stored
+  enough to search.
+</PullQuote>
+
+AI extraction should map raw text into this structure.
+
+But extraction should be reviewed, scored, and source-linked.
+
+## Entity extraction is not understanding.
+
+LLMs are good at extracting:
+
+- domains;
+- IPs;
+- hashes;
+- CVEs;
+- file paths;
+- email addresses;
+- malware names;
+- actor names;
+- tool names;
+- ATT&CK techniques.
+
+That is useful.
+
+It is not understanding.
+
+Understanding requires relationships:
+
+- domain used by campaign;
+- malware associated with intrusion set;
+- CVE exploited in the wild;
+- hash related to sample;
+- technique observed in report;
+- infrastructure overlaps with prior cluster;
+- indicator sighted in internal telemetry;
+- course of action mitigates behavior.
+
+The pipeline should separate entity extraction from relationship assertion.
+
+Extracted entity:
+
+```
+domain: login-example-security.com
+```
+
+Relationship assertion:
+
+```
+domain login-example-security.com was used in phishing campaign X according to
+source Y, confidence medium.
+```
+
+The second statement needs provenance and confidence.
+
+## Retrieval should be task-specific.
+
+Do not build one generic threat-intel search and call it done.
+
+Different workflows need different retrieval.
+
+Indicator triage:
+
+- known reputation;
+- first seen;
+- last seen;
+- related malware;
+- internal sightings;
+- source confidence;
+- benign context.
+
+Vulnerability prioritization:
+
+- CVE;
+- affected products;
+- exploit availability;
+- exploitation in the wild;
+- CISA KEV status;
+- asset exposure;
+- business criticality.
+
+Campaign research:
+
+- TTPs;
+- infrastructure;
+- malware;
+- victims;
+- timeline;
+- confidence;
+- contradictions.
+
+Detection engineering:
+
+- observed behavior;
+- data sources;
+- ATT&CK mapping;
+- Sigma or query examples;
+- false-positive notes.
+
+The AI layer should retrieve for the question being asked.
+
+Threat intelligence is not one pile.
+
+It is a set of task-specific contexts.
+
+## Enrichment should connect to the business.
+
+External intelligence becomes operational when it connects to internal reality.
+
+Enrichment should answer:
+
+- have we seen this indicator?
+- do we run the affected product?
+- is the asset internet-facing?
+- who owns it?
+- does a detection exist?
+- has a similar case happened before?
+- is the account privileged?
+- is the control already in place?
+- is the data sensitive?
+
+The pipeline should join threat intelligence with:
+
+- SIEM sightings;
+- EDR telemetry;
+- DNS logs;
+- proxy logs;
+- identity logs;
+- asset inventory;
+- vulnerability data;
+- detection catalog;
+- incident history;
+- business service inventory.
+
+AI can help summarize these joins.
+
+The joins themselves should be evidence-backed.
+
+## Summaries need citations and uncertainty.
+
+AI-generated threat summaries are useful when they are constrained.
+
+A good summary says:
+
+- what the intelligence says;
+- which sources support it;
+- what is relevant internally;
+- what confidence level applies;
+- what is unknown;
+- what action is recommended.
+
+A bad summary says:
+
+<PullQuote>
+  This actor is targeting us and we should block everything immediately.
+</PullQuote>
+
+without evidence.
+
+Threat intel is full of uncertainty. Attribution is hard. Indicators expire.
+Infrastructure is reused. Reports contradict each other. Vendor names differ.
+Actor labels are messy.
+
+The AI pipeline should preserve this mess instead of smoothing it into false
+certainty.
+
+## Analyst review is a pipeline stage.
+
+Analyst review should not be an afterthought.
+
+It should be a stage:
+
+- approve extracted entities;
+- confirm relationships;
+- mark false positives;
+- adjust confidence;
+- add local context;
+- set handling labels;
+- publish to downstream systems;
+- reject low-quality intelligence.
+
+AI can prepare the work.
+
+Analysts should decide what becomes operational.
+
+This is especially important for:
+
+- actor attribution;
+- high-impact advisories;
+- broad blocking recommendations;
+- executive summaries;
+- customer-facing language;
+- legal or privacy-sensitive findings.
+
+The goal is not to remove analysts.
+
+The goal is to reduce their clerical load while preserving judgment.
+
+## A reference pipeline.
+
+A practical AI threat intelligence pipeline:
+
+1. Register source and handling rules.
+2. Ingest raw content.
+3. Preserve original artifact.
+4. Extract entities.
+5. Normalize into intelligence objects.
+6. Propose relationships with confidence.
+7. Enrich with internal telemetry and assets.
+8. Generate task-specific summary.
+9. Route to analyst review.
+10. Publish approved intelligence.
+11. Track downstream outcomes.
+12. Learn from feedback.
+
+Each step should be observable.
+
+Each generated claim should trace back to source evidence.
+
+Each sensitive output should respect handling rules.
+
+## Metrics that matter.
+
+Measure the pipeline by usefulness:
+
+- source freshness;
+- extraction accuracy;
+- relationship approval rate;
+- analyst rejection rate;
+- internal sighting match rate;
+- duplicate reduction;
+- time from report to operational summary;
+- detections created from intelligence;
+- incidents enriched by intelligence;
+- expired indicators removed;
+- handling-label violations;
+- summaries with evidence citations.
+
+Do not measure only volume.
+
+High-volume intelligence is often low-value intelligence.
+
+The useful pipeline is the one that turns selected intelligence into decisions.
+
+## Key takeaways.
+
+An AI threat intelligence pipeline should not be judged by how much content it
+ingests.
+
+It should be judged by how well it turns intelligence into operational context.
+
+The core design principles:
+
+- govern sources before ingestion;
+- preserve TLP and handling labels through derived summaries;
+- normalize raw text into structured intelligence objects;
+- separate entity extraction from relationship assertion;
+- attach confidence and provenance to claims;
+- retrieve context based on the analyst's task;
+- enrich external intelligence with internal telemetry and assets;
+- route high-impact outputs through analyst review;
+- track downstream outcomes, not just feed volume.
+
+The AI layer is useful for extraction, summarization, comparison, and drafting.
+
+The pipeline layer is responsible for truth management.
+
+That distinction is what keeps AI-assisted threat intelligence from becoming a
+faster rumor engine.
+
+## Final thoughts.
+
+AI threat intelligence pipelines should not be feed accelerators.
+
+They should be context builders.
+
+The builder-leader move is to design the pipeline around source governance,
+structured objects, relationship confidence, internal enrichment, analyst
+review, and handling rules.
+
+AI can make the pipeline faster.
+
+Architecture makes it trustworthy.
+
+That is the difference between an IOC pile and operational intelligence.
+
+## FAQ.
+
+### What is an AI threat intelligence pipeline?
+
+An AI threat intelligence pipeline is a workflow that uses AI to help ingest,
+extract, normalize, enrich, summarize, and route threat intelligence while
+preserving source handling, provenance, confidence, and analyst review.
+
+### Why is source governance important in threat intelligence?
+
+Threat intelligence can be sensitive, restricted, stale, inaccurate, or
+misinterpreted. Source governance defines ownership, handling labels, retention,
+allowed uses, confidence defaults, and downstream sharing rules before the data
+is processed by AI systems.
+
+### How should AI use STIX and TAXII?
+
+AI can help extract and map raw intelligence into STIX-like objects and
+relationships, while TAXII can support structured exchange between systems. The
+model should not invent unsupported relationships; it should preserve evidence,
+confidence, and source references.
+
+### What is the difference between an indicator feed and operational intelligence?
+
+An indicator feed lists observables such as domains, IPs, hashes, or URLs.
+Operational intelligence connects those observables to context: internal
+sightings, affected assets, detection coverage, source confidence, business
+impact, and recommended action.
+
+### What should builder-leaders measure in an AI threat intelligence pipeline?
+
+Useful metrics include extraction accuracy, relationship approval rate,
+internal sighting match rate, analyst rejection rate, time from report to
+operational summary, detections created, expired indicators removed, and
+handling-label violations.
+
+## Sources.
+
+- [OASIS: STIX 2.1 and TAXII 2.1 standards](https://www.oasis-open.org/2021/06/23/stix-v2-1-and-taxii-v2-1-oasis-standards-are-published/)
+- [TAXII 2.1 specification](https://docs.oasis-open.org/cti/taxii/v2.1/taxii-v2.1.html)
+- [OpenCTI documentation](https://docs.opencti.io/latest/)
+- [MISP features](https://www.misp-project.org/features/)
+- [FIRST Traffic Light Protocol](https://www.first.org/tlp/)
+- [MITRE ATT&CK](https://attack.mitre.org/)
+
+<EndMark />

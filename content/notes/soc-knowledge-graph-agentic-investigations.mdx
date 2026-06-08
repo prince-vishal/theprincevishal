@@ -1,0 +1,466 @@
+---
+number: "020"
+title: "Building a SOC knowledge graph for agentic investigations"
+titleHtml: "Building a <em>SOC knowledge graph</em> for agentic investigations."
+headingHtml: "Building a <em>SOC knowledge graph</em><br/>for <span class=\"red\">agentic investigations</span>."
+description: "A technical guide to building SOC knowledge graphs for AI-native security operations: entities, relationships, evidence, provenance, confidence, ATT&CK mapping, and agentic investigation workflows."
+ogDescription: "How to build a SOC knowledge graph for agentic AI investigations using entities, evidence, provenance, confidence, ATT&CK, STIX, and analyst feedback."
+date: "2026-06-07"
+displayDate: "2026 · 06 · 07"
+readTime: "12 min"
+quirk: "-- or one less tab spiral"
+excerptHtml: "Agentic SOC systems need memory, but not the soft kind. They need a structured graph of entities, evidence, relationships, and decisions."
+dekHtml: "A builder-leader architecture for turning alerts, identities, assets, vulnerabilities, threat intelligence, and analyst decisions into a graph agents can investigate safely."
+tags: ["ai", "security", "secops", "agents", "knowledge-graph"]
+featured: true
+tableOfContents: true
+nextSlug: "agentic-incident-response-playbooks"
+---
+
+<Lede>
+  Agentic SOC systems need memory, but not the soft kind. They need a structured
+  graph of entities, evidence, relationships, and decisions.
+</Lede>
+
+Most SOC tools remember badly.
+
+They remember alerts as rows.
+
+They remember incidents as tickets.
+
+They remember detections as rules.
+
+They remember threat intelligence as indicators.
+
+They remember assets as inventory.
+
+They remember identity as directory objects.
+
+Then the analyst has to remember how all of it connects.
+
+That is the problem a SOC knowledge graph should solve. Not because graphs are
+fashionable, but because security investigations are relationship problems.
+
+An alert is rarely the whole story. A suspicious login matters because of the
+user, device, session, application, privilege, location, exposure history, and
+similar past cases. A domain matters because of DNS history, certificate reuse,
+campaign context, internal sightings, and detections that fired. A vulnerability
+matters because of asset ownership, exploitability, internet exposure, business
+criticality, and active threat context.
+
+Agentic AI makes this more important.
+
+If an agent is expected to investigate, it needs somewhere structured to put the
+investigation.
+
+## The graph is not the source of truth.
+
+The first design rule: the SOC knowledge graph is not the source of truth.
+
+The source of truth is still the system that produced the evidence:
+
+- identity provider;
+- EDR;
+- SIEM;
+- cloud platform;
+- vulnerability scanner;
+- asset inventory;
+- threat intelligence platform;
+- ticketing system;
+- code scanner;
+- exposure monitoring source.
+
+The graph is the relationship layer.
+
+It should preserve pointers to original evidence, not pretend to replace every
+source system. This matters because SOC data changes. Users are deprovisioned.
+Sessions expire. Assets move. Alerts close. Vulnerabilities are remediated.
+Threat intelligence is corrected.
+
+The graph should know:
+
+- what was observed;
+- where it came from;
+- when it was observed;
+- how confident the relationship is;
+- whether the relationship is current;
+- which analyst or system confirmed it;
+- which source should be checked for live state.
+
+This distinction keeps the graph useful without turning it into a stale mirror
+of the SOC.
+
+## The core entities.
+
+A practical SOC graph should begin with a small set of entities.
+
+Start with the nouns that appear in investigations:
+
+- user;
+- account;
+- role;
+- session;
+- device;
+- host;
+- cloud resource;
+- application;
+- service;
+- domain;
+- IP address;
+- URL;
+- file hash;
+- email;
+- secret;
+- vulnerability;
+- alert;
+- case;
+- detection;
+- threat actor;
+- intrusion set;
+- malware;
+- campaign;
+- ATT&CK technique;
+- business service;
+- owner;
+- evidence item.
+
+Do not start by modeling the whole universe.
+
+Start with the entities analysts pivot across every day.
+
+Then define relationships:
+
+- user owns device;
+- account has role;
+- session accessed application;
+- alert involves host;
+- vulnerability affects asset;
+- indicator seen in telemetry;
+- detection maps to technique;
+- case contains evidence;
+- domain resolves to IP;
+- secret belongs to service;
+- asset supports business service;
+- analyst confirmed relationship.
+
+The graph becomes useful when relationships are typed and explainable.
+
+## Evidence must be first-class.
+
+A SOC graph without evidence is just a rumor machine.
+
+Every meaningful edge should have provenance:
+
+- source;
+- timestamp;
+- collector;
+- query or event ID;
+- confidence;
+- handling label;
+- expiration if applicable;
+- raw evidence pointer.
+
+For example:
+
+```
+edge:
+  from: user:prince@example.com
+  relationship: authenticated_from
+  to: ip:203.0.113.10
+  observed_at: 2026-06-07T05:31:00Z
+  source: idp.signin_log
+  evidence_id: signin-923884
+  confidence: high
+```
+
+That edge is useful because it can be inspected.
+
+The agent can say:
+
+<PullQuote>
+  This user authenticated from this IP because the identity provider sign-in log
+  recorded it at this time.
+</PullQuote>
+
+That is very different from:
+
+<PullQuote>
+  The graph says they are connected.
+</PullQuote>
+
+Agents need the first kind of answer.
+
+## Confidence is not decoration.
+
+Security graphs contain relationships with different certainty.
+
+Examples:
+
+- exact user ID match: high confidence;
+- email alias match: medium confidence;
+- fuzzy name match: low confidence;
+- threat actor attribution: often low or medium confidence;
+- indicator from a high-quality internal log: high confidence;
+- forum claim: low confidence until corroborated.
+
+The graph should model confidence explicitly.
+
+It should also model relationship status:
+
+- observed;
+- inferred;
+- analyst-confirmed;
+- analyst-rejected;
+- expired;
+- contradicted.
+
+This matters for agentic systems because agents can over-flatten uncertainty.
+
+If a graph says "domain related to campaign" without confidence, a model may
+write a confident case summary that overstates attribution. If the graph says
+"relationship inferred from one low-confidence source," the model has a better
+chance of preserving caution.
+
+## Use standards where they help.
+
+Cyber threat intelligence already has useful graph-shaped standards.
+
+STIX 2.1 provides a language and serialization format for cyber threat
+intelligence. TAXII 2.1 provides a protocol for exchanging that intelligence.
+OpenCTI uses a knowledge graph model and is based on STIX 2.1. MISP supports
+sharing, storing, correlating, and collaborating on indicators and analysis.
+
+Use those ideas.
+
+Do not blindly force every SOC object into STIX if it does not fit cleanly.
+
+Internal SOC graphs often need local objects:
+
+- business service;
+- service owner;
+- incident commander;
+- deployment pipeline;
+- cloud account;
+- SaaS tenant;
+- detection owner;
+- agent action;
+- approval request;
+- analyst correction.
+
+The right approach is hybrid:
+
+- use STIX-friendly modeling for threat intelligence;
+- use ATT&CK for tactics, techniques, and data-source thinking;
+- use local schemas for operational objects;
+- keep mappings explicit.
+
+Standards create interoperability.
+
+Local models create usefulness.
+
+You need both.
+
+## How agents should use the graph.
+
+The graph should support investigation workflows.
+
+Example: suspicious login.
+
+The agent should query:
+
+- user;
+- account status;
+- role and privilege;
+- active sessions;
+- source IP;
+- previous sign-in locations;
+- device history;
+- credential exposure;
+- related alerts;
+- prior cases;
+- business service access.
+
+The output should not be a giant graph visualization.
+
+It should be an investigation workspace:
+
+- key entities;
+- evidence table;
+- relationship map;
+- risk factors;
+- unresolved questions;
+- recommended next steps.
+
+For threat intel:
+
+- indicator sightings;
+- related infrastructure;
+- campaign links;
+- source confidence;
+- internal exposure;
+- detection coverage;
+- handling labels.
+
+For vulnerability response:
+
+- affected assets;
+- exploit evidence;
+- internet exposure;
+- business owner;
+- patch status;
+- compensating controls;
+- related incidents.
+
+Agents should use the graph to reduce pivots, not to impress people with a hairball.
+
+## Analyst feedback is graph maintenance.
+
+Every analyst correction is valuable graph data.
+
+When an analyst says:
+
+- this is a false positive;
+- this user is the same person;
+- this alias is wrong;
+- this asset owner changed;
+- this detection is noisy;
+- this indicator is benign in our environment;
+- this case is related to that case;
+
+the graph should learn.
+
+But it should learn with governance:
+
+- who made the correction;
+- when;
+- confidence;
+- expiration;
+- affected edges;
+- review requirement.
+
+Do not let a casual correction become permanent global truth.
+
+Security memory should be editable, inspectable, and reversible.
+
+## Graph quality metrics.
+
+Measure the graph like a product.
+
+Useful metrics:
+
+- percentage of cases with complete entity mapping;
+- evidence-backed edge ratio;
+- stale edge count;
+- analyst correction rate;
+- rejected inference rate;
+- unknown owner count;
+- orphaned assets;
+- duplicate identity clusters;
+- relationship confidence distribution;
+- time to build investigation context;
+- graph queries used per case.
+
+The goal is not the largest graph.
+
+The goal is the graph that makes investigations faster and safer.
+
+## Key takeaways.
+
+A SOC knowledge graph is useful when it improves investigation work, not when it
+looks impressive in a visualization.
+
+The practical takeaways:
+
+- start with the entities analysts already pivot across;
+- make evidence a first-class object;
+- attach provenance to important relationships;
+- model confidence and relationship status explicitly;
+- use STIX, TAXII, OpenCTI, MISP, and ATT&CK where they fit;
+- keep local operational objects for things standards do not model well;
+- preserve analyst corrections as governed graph updates;
+- measure graph quality by investigation speed, evidence coverage, and
+  correction rate.
+
+This is the difference between a graph as a diagram and a graph as SOC
+infrastructure.
+
+For AI-native security operations, the graph should answer:
+
+<PullQuote>
+  What is connected, why do we believe it, how confident are we, and what should
+  the agent inspect next?
+</PullQuote>
+
+That is the question worth optimizing for.
+
+## Final thoughts.
+
+AI-native security operations need more than chat memory.
+
+They need operational memory.
+
+A SOC knowledge graph can provide that memory if it is built around evidence,
+provenance, confidence, and analyst correction.
+
+The builder-leader move is to resist the fantasy graph and build the useful
+one:
+
+- small enough to maintain;
+- rich enough to investigate;
+- honest enough to preserve uncertainty;
+- structured enough for agents;
+- inspectable enough for analysts.
+
+That is how a SOC graph becomes infrastructure.
+
+Not a diagram.
+
+Infrastructure.
+
+## FAQ.
+
+### What is a SOC knowledge graph?
+
+A SOC knowledge graph is a structured relationship layer that connects security
+entities such as users, accounts, devices, alerts, indicators, vulnerabilities,
+assets, detections, cases, and threat intelligence. Its value comes from
+evidence-backed relationships, provenance, confidence, and analyst feedback.
+
+### Why do agentic SOC systems need a knowledge graph?
+
+Agentic SOC systems need structured context to investigate safely. A knowledge
+graph helps an agent retrieve related entities, understand relationships,
+preserve evidence, avoid repeated pivots, and explain why it believes two
+security objects are connected.
+
+### Is a SOC knowledge graph the source of truth?
+
+No. The graph should usually be the relationship layer, not the source of truth.
+Live state should remain in systems like the identity provider, SIEM, EDR, cloud
+platform, vulnerability scanner, and ticketing system. The graph should preserve
+evidence pointers and relationship context.
+
+### How is a SOC graph different from a threat intelligence graph?
+
+A threat intelligence graph often focuses on indicators, malware, campaigns,
+actors, intrusion sets, attack patterns, and reports. A SOC graph also needs
+operational objects: users, sessions, devices, assets, business services,
+detections, approvals, cases, and analyst decisions.
+
+### What should builder-leaders measure in a SOC knowledge graph?
+
+Measure investigation usefulness: time to context, evidence-backed edge ratio,
+stale relationship count, analyst correction rate, entity mapping completeness,
+orphaned assets, duplicate identities, and how often the graph improves case
+triage.
+
+## Sources.
+
+- [OASIS: STIX 2.1 and TAXII 2.1 standards](https://www.oasis-open.org/2021/06/23/stix-v2-1-and-taxii-v2-1-oasis-standards-are-published/)
+- [TAXII 2.1 specification](https://docs.oasis-open.org/cti/taxii/v2.1/taxii-v2.1.html)
+- [OpenCTI documentation](https://docs.opencti.io/latest/usage/getting-started/)
+- [MISP features](https://www.misp-project.org/features/)
+- [MITRE ATT&CK](https://attack.mitre.org/)
+- [FIRST Traffic Light Protocol](https://www.first.org/tlp/)
+
+<EndMark />
