@@ -1,0 +1,273 @@
+---
+number: "035"
+title: "A reference architecture for an AI-native security platform"
+titleHtml: "A reference architecture for an <em>AI-native security platform.</em>"
+headingHtml: "A reference architecture for an<br/><span class=\"red\">AI-native security platform</span>."
+description: "A production reference architecture for AI security platforms: evidence, identity, retrieval, orchestration, tools, policy, evaluation, observability, and trust UX."
+ogDescription: "The platform layers required to move an AI security product from a fluent demo to a controlled production system."
+date: "2026-07-09"
+displayDate: "2026 · 07 · 09"
+readTime: "10 min"
+quirk: "-- the model is one box, not the architecture"
+excerptHtml: "A production AI security platform is an evidence and control system with models inside it."
+dekHtml: "A practical reference design for teams building agentic SOC, threat-intelligence, and security automation products."
+tags: ["ai", "security", "secops", "platform", "infrastructure"]
+featured: true
+tableOfContents: true
+nextSlug: "red-teaming-autonomous-security-agents"
+---
+
+<Lede>
+  A production AI security platform is an evidence and control system with
+  models inside it.
+</Lede>
+
+Many AI security diagrams begin with a user, an LLM, and a row of tools.
+
+That is enough to explain a demo. It is not enough to operate a security
+platform.
+
+Security work introduces hostile inputs, sensitive evidence, tenant boundaries,
+privileged actions, asynchronous workflows, human approvals, and audit
+requirements. The architecture has to make those constraints explicit.
+
+## The nine layers.
+
+I would describe an AI-native security platform through nine layers:
+
+1. experience and trust;
+2. identity and tenant context;
+3. workflow orchestration;
+4. policy and approvals;
+5. evidence and security data;
+6. retrieval and context assembly;
+7. model and reasoning services;
+8. tool execution;
+9. evaluation and observability.
+
+The layers can be deployed as fewer services. Their responsibilities should not
+be collapsed.
+
+## 1. Experience and trust.
+
+The interface is where analysts inspect:
+
+- the question or alert;
+- collected evidence;
+- entity and timeline views;
+- assumptions and uncertainty;
+- proposed actions;
+- approval boundaries;
+- execution results;
+- investigation history.
+
+Chat can be one interaction mode, but security work also needs structured views.
+An analyst should not have to reverse-engineer a paragraph to learn which
+process executed, which identity was involved, or why an action is recommended.
+
+The interface should make correction cheap. Every changed disposition, removed
+claim, edited recommendation, and rejected action can become evaluation data.
+
+## 2. Identity and tenant context.
+
+Every request needs a verified principal and tenant context before retrieval or
+tool selection begins.
+
+That context should include:
+
+- user and service identity;
+- tenant;
+- role;
+- case or investigation scope;
+- data entitlements;
+- region and residency policy;
+- action permissions;
+- session risk;
+- approval chain.
+
+AWS's SaaS architecture guidance makes an important distinction: authentication
+and authorization do not automatically create tenant isolation. Tenant context
+must constrain access to each resource.
+
+For an AI platform, that includes vector indexes, prompt caches, memories,
+traces, files, model-provider requests, and tool credentials.
+
+## 3. Workflow orchestration.
+
+The orchestrator owns durable state.
+
+It should model the investigation as steps with:
+
+- typed inputs and outputs;
+- deadlines;
+- retry policy;
+- idempotency keys;
+- compensating actions;
+- approval states;
+- failure reasons;
+- provenance links.
+
+The model can propose a plan. The workflow engine decides how that plan becomes
+recoverable work.
+
+Long-running investigations should survive process restarts, provider failures,
+and analyst handoffs. This is why I prefer durable workflow semantics over a
+single recursive agent loop.
+
+## 4. Policy and approvals.
+
+The policy layer answers whether an operation is allowed now, for this principal,
+tenant, case, tool, and target.
+
+Useful inputs include:
+
+- action risk tier;
+- confidence and evidence requirements;
+- target criticality;
+- blast radius;
+- business hours or incident mode;
+- dual-control requirements;
+- customer-specific policy.
+
+The output should be more expressive than allow or deny. It may require an
+approval, simulation, narrower scope, additional evidence, or a different tool.
+
+This layer is the practical center of the
+[SecOps agent control plane](/notes/secops-agent-control-plane).
+
+## 5. Evidence and security data.
+
+Normalize incoming records into evidence objects with:
+
+- source and collection time;
+- event time;
+- tenant and sensitivity;
+- entities;
+- raw-record pointer;
+- integrity or version metadata;
+- confidence;
+- retention policy;
+- lineage to derived claims.
+
+Do not force every source into one giant schema. Preserve raw records and build
+stable contracts for the facts the workflow needs.
+
+The [evidence layer](/notes/evidence-layer-ai-security-platforms) should make it
+possible to move from a generated claim back to the source observation.
+
+## 6. Retrieval and context assembly.
+
+Retrieval is an authorization-sensitive pipeline:
+
+1. understand the information need;
+2. resolve tenant, case, time, and entity scope;
+3. select permitted sources;
+4. retrieve lexical, semantic, graph, or structured results;
+5. rerank;
+6. detect stale or conflicting evidence;
+7. package context with citations and sensitivity labels.
+
+Retrieved text is data, not instruction. Indirect prompt injection is possible
+when an attacker places instructions in documents, web pages, tickets, or
+intelligence feeds that a model later consumes. Context assembly therefore needs
+content boundaries, provenance, validation, and downstream tool controls.
+
+## 7. Model and reasoning services.
+
+Put models behind a gateway that can enforce:
+
+- approved providers and model versions;
+- routing by task and sensitivity;
+- request and response size;
+- regional processing;
+- timeout and fallback policy;
+- content handling;
+- token budgets;
+- cache policy;
+- structured-output validation.
+
+The reasoning service should produce typed artifacts: hypotheses, evidence
+requests, findings, confidence, and proposed actions. Free-form text is for the
+human explanation, not the only system contract.
+
+## 8. Tool execution.
+
+Tools should be narrow capabilities, not a shared bag of administrator
+credentials.
+
+Each tool adapter needs:
+
+- a versioned schema;
+- server-side argument validation;
+- short-lived scoped credentials;
+- rate and concurrency limits;
+- target allowlists;
+- dry-run support where possible;
+- idempotency;
+- complete action logging;
+- normalized errors.
+
+OWASP's MCP guidance highlights token exposure, scope creep, tool poisoning,
+supply-chain risk, command injection, and contextual prompt injection. Those are
+architecture requirements, not prompt-writing problems.
+
+## 9. Evaluation and observability.
+
+Evaluation needs three loops:
+
+- **offline**: curated cases, adversarial suites, regression gates;
+- **shadow**: production inputs with actions disabled;
+- **online**: outcome metrics, corrections, policy events, and sampled review.
+
+Trace the full workflow:
+
+- model calls;
+- retrieval queries and result IDs;
+- tool calls;
+- policy decisions;
+- approvals;
+- state transitions;
+- cost and latency;
+- final evidence and outcome.
+
+Sensitive content should be opt-in, redacted, and separately controlled.
+Observability is not permission to copy incident data into every telemetry
+backend.
+
+## Deployment shape.
+
+I would usually separate:
+
+- a shared control plane for configuration, policy, evaluation, and operations;
+- tenant-aware application services;
+- data-plane resources selected by isolation and residency needs;
+- dedicated workers for privileged or high-risk tools;
+- append-only audit storage;
+- an event bus for state transitions and evidence updates.
+
+Some customers may use pooled infrastructure; others may require siloed data or
+execution. The product should keep one operational model across both.
+
+## The architecture test.
+
+A reference architecture is useful only if it answers failure questions:
+
+- What happens when the model is unavailable?
+- Can one tenant's context enter another tenant's prompt?
+- Can a retrieved document alter tool behavior?
+- Can an analyst reproduce a finding?
+- Can a high-risk action run without the required approver?
+- Can the team replay a workflow after a model upgrade?
+- Can cost and latency be attributed to a completed security outcome?
+- Can a customer delete its evidence, memory, and traces?
+
+If the diagram cannot answer those questions, it is still a demo diagram.
+
+## Sources and further reading.
+
+- [AWS SaaS architecture: tenant isolation](https://docs.aws.amazon.com/whitepapers/latest/saas-architecture-fundamentals/tenant-isolation.html)
+- [OWASP MCP Top 10](https://owasp.org/www-project-mcp-top-10/)
+- [OWASP: Agentic AI threats and mitigations](https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/)
+- [CISA and NCSC guidelines for secure AI system development](https://www.cisa.gov/news-events/alerts/2023/11/26/cisa-and-uk-ncsc-unveil-joint-guidelines-secure-ai-system-development)
+- [NIST AI Agent Standards Initiative](https://www.nist.gov/artificial-intelligence/ai-agent-standards-initiative)
+

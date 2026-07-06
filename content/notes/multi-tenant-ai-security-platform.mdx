@@ -1,0 +1,154 @@
+---
+number: "037"
+title: "Multi-tenant architecture for AI security platforms"
+titleHtml: "Multi-tenant architecture for <em>AI security platforms.</em>"
+headingHtml: "Multi-tenant architecture for<br/><span class=\"red\">AI security platforms</span>."
+description: "How to isolate evidence, retrieval, memory, models, tools, traces, and operations in a multi-tenant AI security SaaS platform."
+ogDescription: "A practical isolation model for multi-tenant AI security products handling sensitive evidence and privileged tools."
+date: "2026-07-13"
+displayDate: "2026 · 07 · 13"
+readTime: "9 min"
+quirk: "-- tenant context all the way down"
+excerptHtml: "In AI security SaaS, tenant isolation has to survive retrieval, memory, tools, traces, and every cache between them."
+dekHtml: "A platform design note for teams balancing SaaS efficiency with customer trust and security boundaries."
+tags: ["security", "ai", "platform", "infrastructure", "building"]
+featured: true
+tableOfContents: true
+nextSlug: "ai-soc-evaluation-dataset"
+---
+
+<Lede>
+  In AI security SaaS, tenant isolation has to survive retrieval, memory, tools,
+  traces, and every cache between them.
+</Lede>
+
+Traditional SaaS isolation is already difficult. AI adds new places for data to
+cross a boundary: embeddings, prompt caches, conversation memory, model logs,
+tool results, evaluation datasets, and human feedback.
+
+AWS's SaaS guidance is precise: authentication and authorization do not, by
+themselves, prove tenant isolation. Isolation requires tenant context to limit
+every resource access.
+
+## Make tenant context immutable.
+
+Derive tenant identity from a verified server-side principal. Do not let a model,
+prompt, request body, or tool argument select it.
+
+Propagate that context through:
+
+- API and workflow state;
+- queues and events;
+- data queries;
+- retrieval filters;
+- cache keys;
+- model requests;
+- tool credentials;
+- traces and audit records.
+
+Reject work when the context is missing. A "default tenant" is a future incident.
+
+## Choose isolation per resource.
+
+One architecture does not need one isolation pattern.
+
+| Resource | Common choice |
+| --- | --- |
+| control-plane configuration | pooled with policy-enforced rows |
+| raw security evidence | pooled, bridged, or siloed by customer tier |
+| search and vector indexes | tenant partitions or dedicated indexes |
+| privileged execution | isolated workers with scoped credentials |
+| model inference | shared gateway with tenant-aware policy |
+| audit records | append-only tenant partition |
+
+Siloed infrastructure can satisfy strong compliance or residency requirements,
+but it raises deployment and operations cost. Pooled infrastructure improves
+efficiency, but demands fine-grained policy and extensive negative testing. A
+bridge model is often practical.
+
+## Retrieval is a boundary.
+
+Every retrieval path must apply tenant constraints before ranking, not filter
+results after retrieval.
+
+That includes lexical search, vector search, graph traversal, object storage,
+SQL, and cached context. Include tenant and policy version in cache keys. Keep
+citations tenant-scoped. Test guessed identifiers and adversarial nearest
+neighbors.
+
+The [evidence-layer design](/notes/evidence-layer-ai-security-platforms) should
+carry tenant, sensitivity, region, and retention metadata on every object.
+
+## Memory needs provenance and lifecycle.
+
+Shared agent memory is especially risky because derived summaries can hide the
+original tenant or source.
+
+Memory records need:
+
+- tenant and principal;
+- source evidence IDs;
+- writer identity;
+- creation and expiry;
+- sensitivity;
+- correction history;
+- deletion support.
+
+Do not use global semantic memory for customer security facts. If product
+learning is shared, aggregate it through a separate reviewed pipeline.
+
+## Tools need tenant-bound credentials.
+
+The strongest retrieval isolation can be undone by a tool that accepts an
+arbitrary customer ID.
+
+Issue short-lived credentials for the specific tenant, tool, and operation.
+Validate targets server-side. Keep privileged workers isolated. Bind approvals
+to the exact tenant, action, arguments, and expiry.
+
+## Keep observability useful without copying evidence.
+
+Traces should default to identifiers, durations, policy decisions, model
+metadata, and redacted attributes. Full prompts and tool results may contain
+credentials, malware content, employee data, or customer incidents.
+
+Use separate access controls and retention for content-bearing telemetry. Test
+support tooling too; an internal trace viewer can become the easiest
+cross-tenant path.
+
+## Prove isolation continuously.
+
+I would maintain:
+
+- unit tests for tenant-aware repositories;
+- policy tests for every resource type;
+- cross-tenant integration suites;
+- adversarial retrieval tests;
+- cache collision tests;
+- tool target-substitution tests;
+- backup and restore isolation tests;
+- support-access audit tests.
+
+Run synthetic canaries with unique tenant markers. Alert if a marker appears in
+another tenant's search result, prompt, trace, or output.
+
+## Design one operating model.
+
+AWS notes that even siloed SaaS should retain unified onboarding, deployment,
+and operations. That principle matters here. Dedicated customer stacks should
+not become bespoke forks.
+
+Use the same contracts, policy model, evaluation suite, release process, and
+control plane across pooled and siloed deployments.
+
+Multi-tenancy is not a database setting. In an AI security platform, it is an
+end-to-end invariant that must survive every transformation of customer data.
+
+## Sources and further reading.
+
+- [AWS SaaS architecture fundamentals: tenant isolation](https://docs.aws.amazon.com/whitepapers/latest/saas-architecture-fundamentals/tenant-isolation.html)
+- [AWS SaaS tenant isolation strategies](https://docs.aws.amazon.com/whitepapers/latest/saas-tenant-isolation-strategies/saas-tenant-isolation-strategies.html)
+- [AWS SaaS Lens: full-stack isolation](https://docs.aws.amazon.com/wellarchitected/latest/saas-lens/full-stack-isolation.html)
+- [Google GKE multi-tenancy overview](https://docs.cloud.google.com/kubernetes-engine/docs/concepts/multitenancy-overview)
+- [A reference architecture for an AI-native security platform](/notes/ai-security-reference-architecture)
+

@@ -45,6 +45,7 @@ function buildRecruiterJsonLd() {
         email: 'mailto:vishal.prince30@gmail.com',
         sameAs: ['https://www.linkedin.com/in/princevishal/'],
         jobTitle: [
+          'Engineering Manager',
           'AI Security Engineering Leader',
           'Cybersecurity Engineering Leader',
           'SecOps Platform Builder',
@@ -144,7 +145,7 @@ function buildRecruiterJsonLd() {
           acceptedAnswer: {
             '@type': 'Answer',
             text:
-              'Engineering leadership, Head of Engineering, VP Engineering, Principal-level IC, CTO or founding CTO roles at funded early-stage startups, and advisory roles in AI-native cybersecurity, SecOps, infrastructure, or security platform companies.',
+              'Engineering Manager, Head of Engineering, VP Engineering, Principal-level IC, CTO or founding CTO roles at funded early-stage startups, and advisory roles in AI-native cybersecurity, SecOps, infrastructure, or security platform companies.',
           },
         },
         {

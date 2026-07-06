@@ -1,0 +1,113 @@
+---
+number: "041"
+title: "An operating model for AI governance in cybersecurity"
+titleHtml: "An operating model for <em>AI governance in cybersecurity.</em>"
+headingHtml: "An operating model for<br/><span class=\"red\">AI governance in cybersecurity</span>."
+description: "A practical AI cybersecurity governance model connecting risk ownership, architecture, evaluation, release gates, incident response, and continuous evidence."
+ogDescription: "How to turn AI governance for cybersecurity from a committee into an engineering operating system."
+date: "2026-07-21"
+displayDate: "2026 · 07 · 21"
+readTime: "8 min"
+quirk: "-- governance that can survive a deploy"
+excerptHtml: "AI governance becomes useful when every principle has an owner, an engineering control, and evidence."
+dekHtml: "A lightweight operating model for security teams building and using AI systems."
+tags: ["ai", "security", "leadership", "platform", "opinions"]
+featured: true
+tableOfContents: true
+nextSlug: "cost-engineering-ai-security-agents"
+---
+
+<Lede>
+  AI governance becomes useful when every principle has an owner, an engineering
+  control, and evidence.
+</Lede>
+
+A policy document cannot govern a security agent at runtime. A review committee
+cannot inspect every prompt change. Governance has to become part of product
+delivery.
+
+NIST AI RMF uses four functions: Govern, Map, Measure, and Manage. I would turn
+those into an operating loop.
+
+## Govern: assign decisions.
+
+Name accountable owners for:
+
+- approved use cases and prohibited actions;
+- data and model providers;
+- identity and tool permissions;
+- evaluation thresholds;
+- production release;
+- incident response;
+- customer disclosures;
+- exceptions and expiry.
+
+Use one risk register tied to systems and workflows, not a separate spreadsheet
+for every committee.
+
+## Map: model the actual system.
+
+Maintain an inventory of models, prompts, retrieval sources, tools, data flows,
+tenants, human approvals, and downstream effects. Classify workflows by data
+sensitivity, autonomy, reversibility, and blast radius.
+
+The map must include third-party and open-source components. CISA's secure AI
+guidance emphasizes ownership of customer security outcomes across design,
+development, deployment, and operation.
+
+## Measure: require repeatable evidence.
+
+Each risk tier needs evaluation:
+
+- quality and calibration;
+- prompt-injection resilience;
+- tenant isolation;
+- tool and policy behavior;
+- privacy and retention;
+- reliability, latency, and cost;
+- human review effectiveness.
+
+Store evaluation results, approvals, model versions, and known limitations as
+release evidence. The [evaluation dataset](/notes/ai-soc-evaluation-dataset)
+should evolve with production failures.
+
+## Manage: operate controls continuously.
+
+Use policy-as-code, scoped credentials, approval gates, model routing,
+observability, kill switches, and rollback. Review exceptions automatically
+before they become permanent.
+
+When an incident occurs, preserve prompts, retrieved evidence, tool calls,
+policy decisions, model versions, and human actions. Feed the result back into
+the risk register and regression suite.
+
+## Keep the forum small and frequent.
+
+A useful monthly forum can include product, security, engineering, privacy,
+legal, and operations, but it should review decisions and evidence rather than
+receive presentations.
+
+The questions are:
+
+- Which risk changed?
+- Which control failed or improved?
+- Which release needs an exception?
+- Which customer promise needs evidence?
+- Which incident created a new test?
+
+## Measure governance itself.
+
+Track time to approve bounded changes, expired exceptions, systems without
+owners, releases missing evaluation evidence, unresolved high-risk findings,
+and time from incident to regression test.
+
+Good governance should make safe delivery faster by making expectations
+predictable. If it only adds meetings, teams will route around it.
+
+## Sources and further reading.
+
+- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
+- [NIST Generative AI Profile](https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf)
+- [CISA and NCSC secure AI system development guidance](https://www.cisa.gov/news-events/alerts/2023/11/26/cisa-and-uk-ncsc-unveil-joint-guidelines-secure-ai-system-development)
+- [OWASP agentic AI threats and mitigations](https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/)
+

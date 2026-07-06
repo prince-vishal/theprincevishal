@@ -1,0 +1,107 @@
+---
+number: "040"
+title: "Migrating a SOC without breaking the analysts"
+titleHtml: "Migrating a SOC without <em>breaking the analysts.</em>"
+headingHtml: "Migrating a SOC without<br/><span class=\"red\">breaking the analysts</span>."
+description: "A phased SOC platform migration plan covering workflow discovery, telemetry, detections, integrations, parallel operations, analyst trust, and rollback."
+ogDescription: "How to migrate a SOC platform while preserving detection coverage, evidence, operations, and analyst trust."
+date: "2026-07-19"
+displayDate: "2026 · 07 · 19"
+readTime: "8 min"
+quirk: "-- migrations fail in the handoffs"
+excerptHtml: "A SOC migration is an operating-model change disguised as a platform project."
+dekHtml: "A practical sequence for changing security platforms without losing coverage, context, or the people doing the work."
+tags: ["security", "secops", "leadership", "platform", "infrastructure"]
+featured: true
+tableOfContents: true
+nextSlug: "ai-cybersecurity-governance-operating-model"
+---
+
+<Lede>
+  A SOC migration is an operating-model change disguised as a platform project.
+</Lede>
+
+Replacing a SIEM, case system, threat-intelligence platform, or automation layer
+changes more than technology. It changes evidence, detections, queues, handoffs,
+permissions, reports, and the small habits analysts use to compensate for
+imperfect systems.
+
+## Discover the real workflow.
+
+Before designing the target, observe how work happens:
+
+- where analysts search outside the platform;
+- which detections are trusted or ignored;
+- which fields drive escalation;
+- which spreadsheets and scripts hold hidden logic;
+- which integrations fail quietly;
+- how evidence is preserved;
+- who approves disruptive actions.
+
+Inventory telemetry by decision value, not ingestion volume. MITRE ATT&CK's data
+components and analytics can help connect collected data to detection
+strategies, but the team still needs to validate its own environment.
+
+## Define migration invariants.
+
+Write conditions that cannot be compromised:
+
+- critical detection coverage remains monitored;
+- raw evidence remains retrievable;
+- case history and audit records are preserved;
+- tenant and role boundaries survive;
+- response actions retain approval controls;
+- every cutover has rollback;
+- analysts know which system is authoritative.
+
+## Migrate in vertical slices.
+
+Move one complete workflow at a time: source, normalization, detection, alert,
+enrichment, case, action, and reporting.
+
+A vertical slice exposes broken contracts. Migrating all telemetry first and
+workflows later can produce a technically full platform that nobody can operate.
+
+Use four stages:
+
+1. replay historical data into the target;
+2. run detections and enrichments in shadow;
+3. operate selected workflows in parallel;
+4. cut over with explicit success and rollback criteria.
+
+## Compare outcomes, not counts.
+
+Alert counts will differ because parsing, suppression, correlation, and timing
+differ. Compare matched cases for evidence coverage, disposition, latency,
+false-positive burden, and missed behavior.
+
+Record why results diverge. Some differences are defects; others reveal
+long-standing weaknesses in the old platform.
+
+## Bring analysts into the design.
+
+Analysts should review workflow prototypes, naming, evidence views, keyboard
+paths, bulk actions, and failure states. Protect time for training and
+dual-running. Do not ask them to absorb migration work on top of an unchanged
+queue.
+
+The lesson from [triage as a UX problem](/notes/triage-ux-problem) applies:
+friction changes security decisions.
+
+## Retire deliberately.
+
+Decommission only after retention, legal hold, search, reporting, integrations,
+and incident-response dependencies are verified. Keep a read path for historical
+cases for the required period.
+
+A successful migration is not the day the old contract ends. It is the point
+where analysts can make at least the same quality of decision, with less
+avoidable work, and the organization can prove what changed.
+
+## Sources and further reading.
+
+- [MITRE ATT&CK data components](https://attack.mitre.org/datacomponents/)
+- [MITRE ATT&CK analytics](https://attack.mitre.org/analytics/)
+- [NIST Cyber AI Profile overview](https://www.nist.gov/news-events/news/2025/12/draft-nist-guidelines-rethink-cybersecurity-ai-era)
+- [Rethinking SecOps as an AI-native platform](/notes/ai-native-secops-platform)
+

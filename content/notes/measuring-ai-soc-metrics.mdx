@@ -1,0 +1,220 @@
+---
+number: "034"
+title: "Measuring whether an AI SOC is actually working"
+titleHtml: "Measuring whether an <em>AI SOC</em> is actually working."
+headingHtml: "Measuring whether an <span class=\"red\">AI SOC</span><br/>is actually working."
+description: "A practical metric tree for AI security operations: analyst outcomes, investigation quality, safe automation, latency, cost, trust, and business impact."
+ogDescription: "How to measure an AI SOC without hiding behind alert counts, demo accuracy, or model benchmarks."
+date: "2026-07-07"
+displayDate: "2026 · 07 · 07"
+readTime: "9 min"
+quirk: "-- measure the workflow, not the theatre"
+excerptHtml: "An AI SOC should be measured by better security decisions and calmer operations, not by how many model calls it makes."
+dekHtml: "A metric tree for leaders who need to separate useful AI-assisted security operations from faster, more expensive noise."
+tags: ["ai", "security", "secops", "leadership", "platform"]
+featured: true
+tableOfContents: true
+nextSlug: "ai-security-reference-architecture"
+---
+
+<Lede>
+  An AI SOC should be measured by better security decisions and calmer
+  operations, not by how many model calls it makes.
+</Lede>
+
+The easiest AI security metric to collect is activity.
+
+How many alerts were summarized? How many investigations did the agent open?
+How many tool calls did it make? How many tokens did it consume?
+
+Those numbers describe movement. They do not prove progress.
+
+A useful measurement system has to connect model behavior to analyst decisions,
+operational reliability, security outcomes, and cost. NIST's AI Risk Management
+Framework organizes AI risk work around **Govern, Map, Measure, and Manage**.
+That is a useful reminder that measurement is part of an operating loop, not a
+leaderboard attached after launch.
+
+## Start with the outcome hierarchy.
+
+I would measure an AI SOC at five levels:
+
+1. **security outcome**: did the system improve the quality or speed of a
+   defensible security decision?
+2. **workflow outcome**: did it remove waiting, duplication, or context hunting
+   from an analyst's work?
+3. **decision quality**: was the investigation supported by relevant evidence,
+   calibrated confidence, and a sensible recommendation?
+4. **control quality**: did the agent stay inside identity, permission, approval,
+   and data-handling boundaries?
+5. **system efficiency**: did it deliver the outcome at acceptable latency,
+   reliability, and cost?
+
+The ordering matters. Optimizing cost per investigation is useful only after the
+investigation itself is useful.
+
+## Measure the completed unit of work.
+
+An alert summary is not a completed unit of work.
+
+For a triage workflow, the unit might be:
+
+> an alert reviewed with evidence, disposition, rationale, and any approved
+> follow-up action recorded.
+
+For threat-intelligence research, it might be:
+
+> a question answered with sources, entity resolution, confidence, and a note
+> that another analyst can audit.
+
+For incident response, it might be:
+
+> a bounded playbook step completed or proposed, with preconditions checked and
+> evidence preserved.
+
+Once the unit is explicit, useful metrics become possible:
+
+- median and p90 time to complete it;
+- analyst touches per completed unit;
+- percentage returned for missing context;
+- percentage reopened after disposition;
+- evidence coverage;
+- recommendation acceptance, modification, and rejection rates;
+- downstream action success and rollback rates.
+
+## Build a quality scorecard, not one accuracy number.
+
+Security investigations do not have one universal notion of accuracy.
+
+I would score each completed investigation across separate dimensions:
+
+| Dimension | Question |
+| --- | --- |
+| evidence | Are the important claims linked to retrievable evidence? |
+| coverage | Were the relevant entities, time window, and data sources examined? |
+| correctness | Do claims and relationships survive analyst review? |
+| calibration | Does confidence reflect uncertainty and missing telemetry? |
+| actionability | Is the next step specific, permitted, and proportionate? |
+| reproducibility | Can another analyst understand how the result was produced? |
+
+Keeping the dimensions separate makes failures diagnosable. Weak evidence
+coverage needs a retrieval fix. Incorrect entity relationships need a data or
+reasoning fix. Unsafe actions need policy and permission fixes.
+
+This complements the deeper evaluation approach in
+[How to evaluate AI SOC agents before production](/notes/evaluating-ai-soc-agents).
+
+## Treat analyst corrections as product data.
+
+Acceptance rate by itself is ambiguous. Analysts may accept weak output because
+they are rushed, or reject strong output because the interface makes evidence
+hard to inspect.
+
+Capture the kind of correction:
+
+- wrong disposition;
+- missing source;
+- stale intelligence;
+- incorrect entity match;
+- unsupported claim;
+- recommendation too aggressive;
+- required action unavailable;
+- explanation unclear;
+- correct result, poor presentation.
+
+The taxonomy turns disagreement into a backlog. It also lets the team distinguish
+model problems from platform, data, workflow, and UX problems.
+
+## Measure safe automation explicitly.
+
+OWASP's agentic guidance identifies risks around tool misuse, identity,
+privilege, memory, and cascading behavior. An AI SOC metric tree therefore needs
+control metrics alongside productivity metrics.
+
+I would watch:
+
+- action attempts blocked by policy;
+- approval requests by risk tier;
+- approvals, edits, denials, and timeouts;
+- actions executed outside the expected sequence;
+- credential-scope violations;
+- cross-tenant or cross-case access attempts;
+- rollback success;
+- incomplete audit records;
+- prompt-injection and tool-poisoning test failures.
+
+A high block rate is not automatically good. It may indicate that the policy is
+working, or that the agent is repeatedly planning invalid actions. The useful
+question is why.
+
+## Add service-level objectives.
+
+AI workflows are distributed systems. They fail through slow retrieval, provider
+limits, tool timeouts, malformed responses, stale indexes, and retry storms.
+
+OpenTelemetry's generative AI conventions are useful because they standardize
+signals such as model identity, token usage, duration, and agent or tool
+operations. I would combine them with normal service telemetry:
+
+- workflow completion rate;
+- end-to-end p50, p90, and p99 latency;
+- tool-call error rate by integration;
+- retry and fallback rate;
+- queue age;
+- evidence retrieval latency;
+- model-provider dependency concentration;
+- tokens and cost per completed unit;
+- sensitive-content capture rate in traces.
+
+The last metric matters because observability can become a data leak when prompts,
+tool results, or security evidence are recorded indiscriminately.
+
+## Use a baseline and a holdout.
+
+Before launch, record the current workflow:
+
+- completion time;
+- analyst touches;
+- escalation rate;
+- reopen rate;
+- evidence quality;
+- cost;
+- analyst experience.
+
+Then compare assisted and unassisted work over representative cases. A phased
+rollout or holdout group is stronger than comparing this month's new system with
+last year's different team and alert mix.
+
+Do not force every result into a percentage improvement. Rare, high-impact
+failures need narrative review. A single cross-tenant evidence leak outweighs a
+week of faster summaries.
+
+## The leadership dashboard I would use.
+
+The executive view can stay small:
+
+1. completed investigations and coverage;
+2. time to defensible disposition;
+3. evidence-quality trend;
+4. analyst correction and reopen rate;
+5. safe-action rate by risk tier;
+6. reliability SLO;
+7. cost per completed investigation;
+8. analyst trust pulse, with written feedback.
+
+Each number should drill into cases. If a dashboard cannot reach the evidence
+behind a metric, it is repeating the same trust mistake as an uncited AI answer.
+
+The point of AI in the SOC is not maximum autonomy.
+
+It is better security work, completed with less avoidable friction, under
+controls the organization can explain.
+
+## Sources and further reading.
+
+- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
+- [NIST AI RMF 1.0](https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-ai-rmf-10)
+- [OWASP: Agentic AI threats and mitigations](https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/)
+- [OpenTelemetry generative AI observability](https://opentelemetry.io/blog/2026/genai-observability/)
+- [The control plane for SecOps agents](/notes/secops-agent-control-plane)
+

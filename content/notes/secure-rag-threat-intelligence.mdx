@@ -1,0 +1,110 @@
+---
+number: "043"
+title: "Secure RAG for threat intelligence systems"
+titleHtml: "Secure RAG for <em>threat intelligence systems.</em>"
+headingHtml: "Secure RAG for<br/><span class=\"red\">threat intelligence systems</span>."
+description: "A secure retrieval-augmented generation architecture for threat intelligence covering provenance, permissions, prompt injection, freshness, entity resolution, citations, and evaluation."
+ogDescription: "How to build RAG for threat intelligence without turning untrusted sources into trusted instructions."
+date: "2026-07-25"
+displayDate: "2026 · 07 · 25"
+readTime: "9 min"
+quirk: "-- retrieved text is evidence, never authority"
+excerptHtml: "Threat-intelligence RAG has to retrieve hostile content without allowing that content to control the system."
+dekHtml: "A retrieval and security design for evidence-backed cyber research, investigation, and analyst assistance."
+tags: ["ai", "security", "data", "secops", "building"]
+featured: true
+tableOfContents: true
+---
+
+<Lede>
+  Threat-intelligence RAG has to retrieve hostile content without allowing that
+  content to control the system.
+</Lede>
+
+Threat intelligence is a difficult retrieval domain. Sources are duplicated,
+contradictory, time-sensitive, adversarial, and full of identifiers that change
+meaning by context.
+
+NIST defines RAG as pairing a model with a separate retrieval system that
+supplies relevant knowledge in context. In cyber intelligence, that context must
+remain evidence, not instruction.
+
+## Build an ingestion trust boundary.
+
+Store the original source and derive normalized records. Capture URL or provider,
+collection time, publication time, author, license, language, hash, sensitivity,
+and parser version.
+
+Scan content, but assume malicious instructions can remain. Preserve raw data
+outside the prompt path and mark all extracted text as untrusted.
+
+## Retrieve through permissions first.
+
+Resolve tenant, principal, case, region, and data entitlements before search.
+Apply filters inside each lexical, vector, graph, and structured query. Never
+retrieve globally and filter the final list.
+
+Use hybrid retrieval:
+
+- lexical search for exact indicators and names;
+- semantic search for concepts and campaigns;
+- graph traversal for entities and relationships;
+- structured queries for time, confidence, and source.
+
+## Separate evidence from instructions.
+
+Package retrieved passages in a typed envelope with source IDs and explicit
+delimiters. The system prompt should state that source content cannot change
+policy or tool permissions, but prompts are not the primary defense.
+
+Enforce controls outside the model:
+
+- tools use validated schemas;
+- credentials are scoped;
+- actions pass policy;
+- high-risk effects require approval;
+- retrieved text cannot select tools or tenants directly.
+
+OWASP identifies indirect prompt injection as malicious instructions embedded in
+external content later processed by a model. Threat-intelligence systems should
+expect this condition, not treat it as an edge case.
+
+## Model time and contradiction.
+
+An IOC can expire. A domain can change ownership. Two vendors can disagree.
+Store validity windows, confidence, source independence, and contradiction
+links.
+
+Require generated claims to cite evidence. Show conflicting sources rather than
+forcing false consensus. The [evidence-layer architecture](/notes/evidence-layer-ai-security-platforms)
+describes the broader provenance model.
+
+## Evaluate retrieval and generation separately.
+
+For retrieval, measure relevant evidence found, irrelevant evidence included,
+freshness, permission correctness, and source diversity.
+
+For generation, measure claim support, citation accuracy, entity consistency,
+calibration, abstention, and action safety.
+
+Add adversarial cases with poisoned pages, hidden instructions, identifier
+collisions, stale reports, and cross-tenant near-neighbors.
+
+## Keep a reproducible research record.
+
+Store the query plan, retrieved evidence IDs and versions, model and prompt
+version, claims, citations, analyst edits, and final disposition. Another analyst
+should be able to reconstruct why the system reached a conclusion.
+
+Secure threat-intelligence RAG is not "chat with a vector database." It is a
+permissioned evidence pipeline designed to reason over contested information
+without surrendering control to it.
+
+## Sources and further reading.
+
+- [NIST definition of retrieval-augmented generation](https://csrc.nist.gov/glossary/term/retrieval_augmented_generation)
+- [NIST adversarial machine learning taxonomy](https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-2e2025.pdf)
+- [OWASP prompt injection](https://owasp.org/www-community/attacks/PromptInjection)
+- [OWASP MCP Top 10](https://owasp.org/www-project-mcp-top-10/)
+- [Designing an AI threat intelligence pipeline](/notes/ai-threat-intelligence-pipeline)
+

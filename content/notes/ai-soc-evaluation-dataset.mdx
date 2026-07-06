@@ -1,0 +1,154 @@
+---
+number: "038"
+title: "Building an evaluation dataset for AI SOC agents"
+titleHtml: "Building an <em>evaluation dataset</em> for AI SOC agents."
+headingHtml: "Building an evaluation dataset<br/>for <span class=\"red\">AI SOC agents</span>."
+description: "How to build, label, version, secure, and operate an evaluation dataset for AI SOC investigations and security agents."
+ogDescription: "A practical dataset design for testing AI SOC agents against representative, adversarial, incomplete, and changing security cases."
+date: "2026-07-15"
+displayDate: "2026 · 07 · 15"
+readTime: "9 min"
+quirk: "-- production failures deserve permanent test cases"
+excerptHtml: "An AI SOC evaluation set should represent the decisions analysts face, not merely the questions models answer well."
+dekHtml: "A data and governance blueprint for turning incidents, corrections, and adversarial cases into durable evaluation assets."
+tags: ["ai", "security", "secops", "data", "building"]
+featured: true
+tableOfContents: true
+nextSlug: "build-vs-buy-agentic-soc"
+---
+
+<Lede>
+  An AI SOC evaluation set should represent the decisions analysts face, not
+  merely the questions models answer well.
+</Lede>
+
+A demo set usually contains clean questions and known answers. Production
+security work contains missing telemetry, ambiguous entities, stale
+intelligence, contradictory sources, and actions whose safety depends on
+context.
+
+The evaluation dataset must preserve that difficulty.
+
+## Define the unit being evaluated.
+
+Do not mix summarization, triage, investigation, detection drafting, and response
+into one score.
+
+For each task, define:
+
+- inputs available at decision time;
+- permitted tools;
+- expected evidence;
+- acceptable conclusions;
+- uncertainty that should remain;
+- actions allowed;
+- reasons to abstain or escalate.
+
+NIST emphasizes test, evaluation, validation, and verification as part of
+trustworthy AI. The practical implication is that the dataset must test the
+whole configured system, not only a base model.
+
+## Build six case families.
+
+1. **representative cases** from normal analyst work;
+2. **edge cases** with sparse, noisy, or conflicting data;
+3. **adversarial cases** with prompt injection, poisoned context, and tool traps;
+4. **high-impact cases** where a wrong action has serious consequences;
+5. **abstention cases** where the correct behavior is to ask or stop;
+6. **regression cases** created from every meaningful production failure.
+
+Sample across alert sources, platforms, tenants, severity, entity types, and
+analyst experience. A dataset dominated by one EDR or phishing workflow will
+create misleading confidence.
+
+## Store a case as a replayable package.
+
+A useful case contains:
+
+- immutable case ID and version;
+- sanitized input records;
+- event and collection times;
+- environment and policy configuration;
+- available tool fixtures;
+- expected evidence set;
+- allowed conclusion range;
+- forbidden claims or actions;
+- scoring rubric;
+- reviewer notes;
+- provenance and usage restrictions.
+
+Avoid one "golden paragraph." Analysts can reach different valid explanations
+from the same evidence. Score factual claims, evidence coverage, calibration,
+and action safety separately.
+
+## Use expert review carefully.
+
+Two reviewers should independently label high-risk cases, then resolve
+disagreement. Keep the disagreement; it reveals ambiguous policy or telemetry.
+
+Track:
+
+- reviewer role and domain;
+- label version;
+- adjudication notes;
+- confidence;
+- known blind spots.
+
+Analyst corrections from production are valuable, but not automatically ground
+truth. Time pressure and interface friction affect human decisions too.
+
+## Prevent leakage and overfitting.
+
+Maintain development, validation, and hidden holdout sets. Do not expose every
+expected answer to prompt authors. Rotate portions of the holdout set.
+
+Deduplicate by incident lineage, evidence fingerprint, and semantic similarity.
+Otherwise, near-identical cases can appear in training and evaluation.
+
+Security data also needs strict handling. Remove customer identifiers and
+secrets, preserve only the structure required for the test, document consent and
+retention, and control who can inspect raw cases.
+
+## Score the system in layers.
+
+Use separate measures for:
+
+- evidence retrieval;
+- claim correctness;
+- entity and timeline consistency;
+- confidence calibration;
+- tool selection and arguments;
+- policy compliance;
+- action reversibility;
+- explanation usefulness;
+- latency and cost.
+
+Report slices, not only averages. A strong overall score can hide failure on
+identity alerts, a specific tenant policy, or critical actions.
+
+## Make evaluation part of delivery.
+
+Run a fast deterministic subset on every change. Run the broader set before
+model, prompt, retrieval, policy, or tool releases. Use shadow traffic for
+production-shaped validation, then sample online outcomes.
+
+The operating loop is:
+
+> failure → reviewed case → regression test → mitigation → monitored release.
+
+That loop turns production learning into a platform asset. It also supports the
+release discipline described in
+[From AI security demo to production](/notes/ai-security-demo-to-production-checklist).
+
+An evaluation dataset is not a static benchmark. It is the organization's
+versioned memory of what good security judgment should look like under real
+constraints.
+
+## Sources and further reading.
+
+- [NIST AI research and evaluation](https://www.nist.gov/artificial-intelligence)
+- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
+- [NIST AI security and resilience research](https://www.nist.gov/artificial-intelligence/ai-research-security-and-resilience)
+- [MITRE ATLAS](https://atlas.mitre.org/)
+- [How to evaluate AI SOC agents before production](/notes/evaluating-ai-soc-agents)
+

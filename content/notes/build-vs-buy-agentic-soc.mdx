@@ -1,0 +1,144 @@
+---
+number: "039"
+title: "Build versus buy for agentic SOC capabilities"
+titleHtml: "Build versus buy for <em>agentic SOC capabilities.</em>"
+headingHtml: "Build versus buy for<br/><span class=\"red\">agentic SOC capabilities</span>."
+description: "A decision framework for building, buying, or composing agentic SOC capabilities across data, workflows, models, integrations, controls, and operations."
+ogDescription: "How security leaders can decide what to build, buy, or keep portable in an agentic SOC program."
+date: "2026-07-17"
+displayDate: "2026 · 07 · 17"
+readTime: "8 min"
+quirk: "-- own the differentiation, rent the undifferentiated"
+excerptHtml: "The useful build-versus-buy question is not whether to buy an AI SOC. It is which layers create advantage and which create maintenance."
+dekHtml: "A product and architecture framework for leaders evaluating agentic security platforms and internal development."
+tags: ["ai", "security", "secops", "leadership", "opinions"]
+featured: true
+tableOfContents: true
+nextSlug: "soc-platform-migration"
+---
+
+<Lede>
+  The useful build-versus-buy question is not whether to buy an AI SOC. It is
+  which layers create advantage and which create maintenance.
+</Lede>
+
+"Build or buy?" is too coarse for an agentic SOC.
+
+The system contains data connectors, normalization, retrieval, workflow state,
+models, tools, policy, evaluation, observability, and analyst experience. A team
+can buy some layers, build others, and keep critical contracts portable.
+
+## Begin with the workflow.
+
+Choose one expensive, frequent, bounded workflow. Document:
+
+- current completion time and analyst touches;
+- required data and tools;
+- decision and action risk;
+- customer or business-specific logic;
+- integration depth;
+- quality baseline;
+- failure and rollback path.
+
+If the workflow is unclear, vendor selection will optimize the demo rather than
+the operating problem.
+
+## Score each layer.
+
+For each capability, assess:
+
+| Factor | Build signal | Buy signal |
+| --- | --- | --- |
+| differentiation | unique data or workflow | common platform need |
+| change rate | tightly coupled to product | stable commodity |
+| security control | bespoke authority model | mature certified control |
+| integration | deep internal coupling | standard connector |
+| talent | strong ownership available | scarce specialist skill |
+| economics | usage rewards ownership | scale favors provider |
+| portability | strategic lock-in risk | easy exit or export |
+
+The evidence model, customer-specific workflow, and action policy often contain
+more differentiation than the base model API.
+
+## What I would usually buy.
+
+Strong candidates include:
+
+- foundation-model inference;
+- commodity identity and secret management;
+- durable workflow infrastructure;
+- standard telemetry;
+- common security connectors;
+- baseline content safety and scanning.
+
+Buying does not remove engineering. It changes the work to integration,
+configuration, assurance, and vendor operations.
+
+## What I would consider owning.
+
+Ownership becomes valuable around:
+
+- normalized evidence and provenance;
+- domain entity resolution;
+- investigation state;
+- customer policy;
+- evaluation datasets;
+- analyst correction loops;
+- differentiated detection or research workflows;
+- trust and explanation UX.
+
+These are the layers where product learning accumulates.
+
+## Evaluate vendors with real cases.
+
+Use sanitized representative and adversarial cases. Measure evidence quality,
+corrections, latency, cost, policy behavior, and recovery. Test prompt injection,
+tenant isolation, tool permissions, export, deletion, and model-provider failure.
+
+Ask:
+
+- Can we inspect and export evidence and traces?
+- Can policy be enforced outside the model?
+- How are tenant boundaries tested?
+- Can we bring our own model or change providers?
+- Who owns derived data and feedback?
+- What happens when a connector changes?
+- How are high-risk actions approved and audited?
+
+The [agentic SOC architecture scorecard](/notes/agentic-soc-architecture-scorecard)
+is a useful deeper diligence tool.
+
+## Price the operating model.
+
+Compare more than license and token costs.
+
+Include integration work, on-call ownership, evaluation, security review,
+support, data movement, observability, migrations, and exit cost. For internal
+builds, include the opportunity cost of the engineers who will maintain it.
+
+## Preserve strategic options.
+
+Use versioned contracts around model access, tools, evidence, workflows, and
+telemetry. Keep canonical evidence outside proprietary conversation storage.
+Export evaluation cases and analyst feedback. Avoid embedding vendor-specific
+identifiers throughout product logic.
+
+## Make one accountable decision.
+
+A composed platform still needs one owner for the end-to-end outcome. Vendors
+own components; the security organization owns whether the workflow is useful
+and safe.
+
+The best answer is often:
+
+> buy the reliable primitives, build the domain learning, and keep the boundaries
+> between them explicit.
+
+## Sources and further reading.
+
+- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
+- [CISA and NCSC guidelines for secure AI system development](https://www.cisa.gov/news-events/alerts/2023/11/26/cisa-and-uk-ncsc-unveil-joint-guidelines-secure-ai-system-development)
+- [OWASP: Agentic AI threats and mitigations](https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/)
+- [Agentic SOC product strategy for founders](/notes/agentic-soc-product-strategy-founders)
+- [A reference architecture for an AI-native security platform](/notes/ai-security-reference-architecture)
+

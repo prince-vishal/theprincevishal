@@ -1,0 +1,101 @@
+---
+number: "042"
+title: "Cost engineering for AI security agents"
+titleHtml: "Cost engineering for <em>AI security agents.</em>"
+headingHtml: "Cost engineering for<br/><span class=\"red\">AI security agents</span>."
+description: "How to model, attribute, control, and optimize AI security agent cost across retrieval, models, tools, retries, storage, and analyst outcomes."
+ogDescription: "A practical cost model for AI security agents that connects infrastructure spend to completed security work."
+date: "2026-07-23"
+displayDate: "2026 · 07 · 23"
+readTime: "8 min"
+quirk: "-- tokens are a line item, loops are a design flaw"
+excerptHtml: "The useful cost metric for an AI security agent is not cost per token. It is cost per defensible security outcome."
+dekHtml: "A FinOps-minded architecture note for keeping agentic security workflows useful, observable, and economically bounded."
+tags: ["ai", "security", "infrastructure", "platform", "leadership"]
+featured: true
+tableOfContents: true
+nextSlug: "secure-rag-threat-intelligence"
+---
+
+<Lede>
+  The useful cost metric for an AI security agent is not cost per token. It is
+  cost per defensible security outcome.
+</Lede>
+
+An agent can spend money through model calls, retrieval, reranking, tool APIs,
+workflow compute, traces, storage, retries, and human review. Optimizing only the
+model price hides the architecture.
+
+## Define the cost unit.
+
+Choose a completed unit such as a triaged alert, evidence-backed investigation,
+or approved response step. Attribute all workflow cost to it:
+
+`total = model + retrieval + tools + compute + telemetry + storage + human review`
+
+Report median and tail cost. Averages hide loops and pathological cases.
+
+## Instrument the full path.
+
+OpenTelemetry's generative AI conventions standardize model, token, duration,
+agent, and tool signals. Add workflow and business attributes:
+
+- tenant and use case;
+- case and step ID;
+- model route;
+- input and output tokens;
+- retrieved documents;
+- tool calls and retries;
+- cache hits;
+- total latency;
+- completion and quality outcome.
+
+Keep sensitive prompt content disabled or separately controlled.
+
+## Set budgets at three levels.
+
+Use a per-step token and time budget, a per-workflow cost ceiling, and a
+tenant-level daily or monthly budget. When a limit is reached, degrade
+deliberately: use a smaller model, narrow retrieval, request human input, or
+stop. Do not silently return lower-quality certainty.
+
+## Optimize architecture before prompts.
+
+High-value changes include:
+
+- deterministic parsing before model reasoning;
+- smaller models for classification and extraction;
+- retrieval that narrows context early;
+- cached stable enrichments;
+- parallel independent tool calls;
+- bounded retries with typed errors;
+- stopping rules when evidence is sufficient;
+- batching offline work;
+- explicit prevention of recursive loops.
+
+## Connect cost to quality.
+
+Plot quality, latency, and cost together by workflow slice. A cheaper model that
+increases analyst corrections may cost more overall. An expensive model may be
+worthwhile for rare critical cases and wasteful for routine enrichment.
+
+The metric tree in
+[Measuring whether an AI SOC is actually working](/notes/measuring-ai-soc-metrics)
+provides the outcome side of this equation.
+
+## Make cost visible to product decisions.
+
+Review cost by tenant, workflow, model, integration, and failure reason. Alert on
+step-count inflation, retry storms, context growth, provider-price changes, and
+unexpected high-cost routes.
+
+Cost engineering is not a late optimization. A bounded agent is easier to
+operate, safer against resource exhaustion, and easier to price as a product.
+
+## Sources and further reading.
+
+- [OpenTelemetry generative AI observability](https://opentelemetry.io/blog/2026/genai-observability/)
+- [OpenTelemetry semantic conventions](https://opentelemetry.io/docs/specs/semconv/)
+- [FinOps Framework 2025](https://www.finops.org/wp-content/uploads/2025/05/English-FinOps-Framework-2025.pdf)
+- [OWASP agentic AI threats and mitigations](https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/)
+

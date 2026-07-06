@@ -1,0 +1,155 @@
+---
+number: "036"
+title: "Red teaming autonomous security agents"
+titleHtml: "Red teaming <em>autonomous security agents.</em>"
+headingHtml: "Red teaming<br/><span class=\"red\">autonomous security agents</span>."
+description: "A practical red-team program for autonomous security agents covering goal hijack, prompt injection, tool abuse, identity, memory, evidence, and recovery."
+ogDescription: "How to red team an autonomous security agent as a complete workflow, not merely test its base model."
+date: "2026-07-11"
+displayDate: "2026 · 07 · 11"
+readTime: "9 min"
+quirk: "-- test the authority, not only the answer"
+excerptHtml: "A security agent becomes dangerous through the combination of untrusted context, trusted tools, and borrowed authority."
+dekHtml: "A threat-led testing program for teams deploying agents into real security operations."
+tags: ["ai", "security", "agents", "secops", "building"]
+featured: true
+tableOfContents: true
+nextSlug: "multi-tenant-ai-security-platform"
+---
+
+<Lede>
+  A security agent becomes dangerous through the combination of untrusted
+  context, trusted tools, and borrowed authority.
+</Lede>
+
+Red teaming an autonomous security agent is not the same as jailbreaking a chat
+model.
+
+The system includes retrieval, memory, tools, credentials, workflow state,
+policy, and human approvals. A harmlessly strange answer and an unauthorized
+endpoint isolation are not the same class of failure.
+
+## Define the protected outcome.
+
+Start with the workflow and its authority:
+
+- what evidence can the agent read?
+- which tools can it invoke?
+- which actions change production state?
+- whose identity authorizes the action?
+- what requires approval?
+- what must be recoverable?
+
+Then write abuse cases around business impact. Examples include suppressing a
+real alert, exfiltrating another tenant's evidence, revoking the wrong identity,
+poisoning investigation memory, or exhausting an expensive tool.
+
+MITRE ATLAS provides tactics and techniques for adversarial AI systems. OWASP's
+agentic guidance adds risks around goal hijack, tools, memory, identity, and
+multi-agent behavior. I would use both as coverage maps, then add domain-specific
+SOC abuse cases.
+
+## Test six surfaces.
+
+### 1. Goal and instruction integrity.
+
+Can user text, alert fields, tickets, websites, threat reports, OCR output, or
+tool responses redirect the agent's goal?
+
+Test direct and indirect prompt injection, conflicting instructions, encoded
+payloads, multilingual payloads, and instructions split across sources.
+
+### 2. Evidence integrity.
+
+Feed the agent stale, duplicated, contradictory, or forged evidence. Attempt
+entity collisions and time-window confusion. Verify that unsupported claims are
+not converted into confident findings.
+
+### 3. Tool and permission boundaries.
+
+Attempt parameter injection, target substitution, scope expansion, replay, and
+confused-deputy behavior. Replace a read tool with a similarly named write tool.
+Return poisoned tool descriptions or malformed schemas.
+
+### 4. Identity and tenancy.
+
+Test cross-tenant object identifiers, cached context, shared vector results,
+trace access, and approval reuse. Authentication is not enough; every resource
+operation must remain tenant-scoped.
+
+### 5. Memory and multi-agent state.
+
+Plant durable false facts, malicious instructions, and sensitive data in memory.
+Test whether one agent can poison another through shared summaries or messages.
+Verify expiry, correction, provenance, and deletion.
+
+### 6. Availability and economics.
+
+Create loops, fan-out storms, oversized retrieval, repeated retries, and
+expensive model routing. A financially unbounded agent is an availability risk.
+
+## Run attacks at three stages.
+
+**Pre-release testing** uses deterministic fixtures and a sandbox with fake
+credentials. Every fixed issue becomes a regression case.
+
+**Shadow testing** uses representative production inputs while disabling
+effects. This finds real context and integration failures without granting
+action authority.
+
+**Controlled production exercises** use narrow scopes, explicit incident
+ownership, rollback plans, and complete telemetry. Never surprise the SOC with a
+test that looks indistinguishable from a real incident.
+
+Microsoft's red-team guidance makes an important distinction: manual red
+teaming discovers failure modes, but it does not replace systematic measurement.
+Convert discoveries into repeatable evaluations.
+
+## Use a severity model built for agents.
+
+Score findings across:
+
+- reachable authority;
+- affected tenants and assets;
+- data sensitivity;
+- action reversibility;
+- detectability;
+- human approval bypass;
+- repeatability;
+- cost or availability impact.
+
+A prompt leak with no secret or control boundary may be low severity. A subtle
+retrieval injection that causes an approved destructive action may be critical.
+
+## Require evidence for closure.
+
+A mitigation is not "we improved the system prompt."
+
+Closure should identify the enforcing layer:
+
+- policy decision;
+- scoped credential;
+- schema validation;
+- isolation control;
+- context boundary;
+- workflow invariant;
+- approval requirement;
+- regression test;
+- runtime detection.
+
+The [production checklist](/notes/ai-security-demo-to-production-checklist) and
+[agent evaluation guide](/notes/evaluating-ai-soc-agents) provide the adjacent
+release gates.
+
+Red teaming is successful when the team can explain not only how the agent was
+attacked, but which independent control prevented the attack from becoming an
+unsafe security outcome.
+
+## Sources and further reading.
+
+- [MITRE ATLAS](https://atlas.mitre.org/)
+- [OWASP: Agentic AI threats and mitigations](https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/)
+- [OWASP prompt injection](https://owasp.org/www-community/attacks/PromptInjection)
+- [Microsoft AI Red Team](https://learn.microsoft.com/en-gb/security/ai-red-team/)
+- [Microsoft guidance for planning LLM red teaming](https://learn.microsoft.com/en-us/azure/foundry/openai/concepts/red-teaming)
+
