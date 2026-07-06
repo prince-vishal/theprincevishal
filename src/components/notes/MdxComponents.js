@@ -49,6 +49,19 @@ export function Lede({ children }) {
   return <p className="lede">{children}</p>;
 }
 
+export function ResponsiveTable({ children, ...props }) {
+  return (
+    <div
+      className="table-wrap"
+      role="region"
+      aria-label="Scrollable data table"
+      tabIndex={0}
+    >
+      <table {...props}>{children}</table>
+    </div>
+  );
+}
+
 export function mdxComponents() {
   return {
     MarginNote,
@@ -58,5 +71,6 @@ export function mdxComponents() {
     Footnotes,
     FnRef,
     Lede,
+    table: ResponsiveTable,
   };
 }

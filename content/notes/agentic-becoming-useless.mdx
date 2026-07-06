@@ -2,22 +2,178 @@
 number: "005"
 title: "Why agentic is quietly becoming useless"
 titleHtml: "Why <em>\"agentic\"</em> is quietly becoming useless."
-description: "A useful word is losing its meaning. A small attempt to put it back together, with verbs."
+headingHtml: "Why <span class=\"red\">agentic</span> is quietly<br/>becoming useless."
+description: "A practical vocabulary for describing AI agents through goals, planning, tools, state, authority, feedback, and stopping conditions."
+ogDescription: "The word agentic is losing precision. Here is a more useful way to describe what an AI system actually does."
 date: "2026-03-15"
 displayDate: "2026 · 03 · 15"
-readTime: "4 min"
+readTime: "7 min"
 quirk: " -  or one elevator argument"
-excerptHtml: "A useful word is losing its meaning  -  not because of anyone in particular, but because everyone is using it for everything. A small attempt to put it back together, with verbs."
-tags: ["ai", "opinions"]
+excerptHtml: "A useful word is losing its meaning because it is being used for everything. The repair starts with verbs and authority."
+dekHtml: "A small vocabulary for replacing agentic theatre with an inspectable description of system behavior."
+tags: ["ai", "opinions", "agents"]
+featured: true
+tableOfContents: true
+nextSlug: "ai-native-secops-platform"
 ---
 
 <Lede>
-  A useful word is losing its meaning, not because of anyone in particular,
-  but because everyone is using it for everything.
+  A useful word is losing its meaning, not because of anyone in particular, but
+  because everyone is using it for everything.
 </Lede>
 
-I am still polishing this note. For now, the thesis is simple: if a system
-cannot choose a tool, plan a next step, inspect the result, and decide whether
-to continue, I probably would not call it agentic.
+An autocomplete is agentic. A chatbot is agentic. A fixed workflow with one
+model call is agentic. A system that creates accounts and deploys code is also
+agentic.
 
-<EndMark />
+When one word covers all four, it stops helping engineers, buyers, and users
+understand risk.
+
+## The problem is not the word.
+
+"Agentic" names a real shift: software can increasingly interpret goals,
+choose intermediate steps, use tools, observe results, and continue without
+every transition being specified in advance.
+
+The problem is using the label where a behavioral description is needed.
+
+In a product review, architecture document, or sales conversation, I would
+replace "agentic" with answers to seven questions.
+
+## 1. What goal can the system pursue?
+
+Is the goal a narrow task such as enriching one alert, or an open-ended outcome
+such as investigating suspicious identity activity?
+
+Who supplies the goal? Can the system rewrite it? What prevents retrieved text
+or a tool response from changing it?
+
+Goal scope determines both capability and attack surface.
+
+## 2. What can it decide?
+
+Some systems select among fixed branches. Others generate a plan, add steps,
+delegate to another agent, or decide that more evidence is needed.
+
+Describe the decision:
+
+- choose a source;
+- rank hypotheses;
+- select a tool;
+- request approval;
+- stop or continue;
+- propose an action.
+
+This is more informative than an autonomy label.
+
+## 3. Which tools can it use?
+
+Tools turn language into effects.
+
+List whether they read data, write state, execute code, spend money, or affect a
+person. Explain how arguments are validated, credentials are scoped, and risky
+actions are approved.
+
+OWASP's guidance on agentic threats focuses heavily on tool misuse, identity,
+memory, and cascading behavior because authority changes the consequence of a
+model error.
+
+## 4. What state does it retain?
+
+Does the system remember only the current request, maintain workflow state, or
+write durable memory that affects future decisions?
+
+State needs provenance, ownership, correction, expiry, and deletion. "The agent
+learns" is not a sufficient data model.
+
+## 5. What feedback can it observe?
+
+Can it inspect a tool result, test whether an action succeeded, compare evidence,
+or see a human correction?
+
+Without observation, a sequence of model calls may look autonomous while being
+unable to detect its own failure.
+
+## 6. What authority does it borrow?
+
+An agent rarely has authority of its own. It borrows authority from a user,
+service account, integration, or organization.
+
+The architecture should bind that authority to:
+
+- principal;
+- tenant;
+- task;
+- tool;
+- target;
+- duration;
+- approval.
+
+This is where product language becomes security architecture.
+
+## 7. How does it stop?
+
+Every system needs stopping conditions:
+
+- goal completed;
+- evidence insufficient;
+- budget reached;
+- policy denied;
+- approval expired;
+- repeated failure;
+- human intervention;
+- risk threshold exceeded.
+
+An agent that can continue but cannot explain when to stop is an unbounded loop
+with branding.
+
+## A more useful description.
+
+Instead of:
+
+> We built an agentic SOC analyst.
+
+Try:
+
+> The system investigates one alert at a time. It can retrieve evidence from
+> three approved sources, form and test hypotheses, and draft a disposition. It
+> cannot execute response actions. It stops when evidence is insufficient, its
+> step budget is reached, or an analyst intervenes.
+
+That description is less exciting and much easier to evaluate.
+
+## Autonomy is multidimensional.
+
+A system can have high planning freedom but read-only tools. It can have fixed
+planning but highly privileged actions. It can have durable memory but no tools.
+
+For each workflow, map:
+
+| Dimension | Low | High |
+| --- | --- | --- |
+| goal scope | fixed task | open-ended outcome |
+| planning | fixed path | generated and revised plan |
+| tools | read-only | privileged effects |
+| memory | request only | durable shared memory |
+| supervision | every step | exception only |
+| reversibility | easy rollback | irreversible consequence |
+
+This makes architecture and governance discussions concrete.
+
+## Keep the word, add the verbs.
+
+I still use "agentic" as shorthand. It is useful for naming a family of systems.
+
+But the word should begin the conversation, not finish it.
+
+Tell me what the system observes, decides, retrieves, remembers, changes, and
+refuses to do. Then tell me who gave it permission.
+
+That is the product.
+
+## Sources and further reading.
+
+- [NIST AI Agent Standards Initiative](https://www.nist.gov/artificial-intelligence/ai-agent-standards-initiative)
+- [OWASP agentic AI threats and mitigations](https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/)
+- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
+- [The control plane for SecOps agents](/notes/secops-agent-control-plane)

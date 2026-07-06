@@ -3,102 +3,182 @@ number: "008"
 title: "Designing enterprise AI integrations for operational systems"
 titleHtml: "Designing <em>enterprise AI integrations</em> for operational systems."
 headingHtml: "Designing enterprise AI integrations<br/>for <span class=\"red\">operational</span> systems."
-description: "Enterprise AI is only useful when it connects to the systems where work actually happens."
-ogDescription: "A note on integration architecture for enterprise AI systems: identity, messaging, workflow, search, and operational context."
+description: "A production architecture for enterprise AI integrations across identity, events, APIs, workflows, search, tools, approvals, reliability, and audit."
+ogDescription: "How to build enterprise AI integrations that preserve identity, workflow state, permissions, reliability, and operational context."
 date: "2026-05-20"
 displayDate: "2026 · 05 · 20"
-readTime: "3 min"
+readTime: "9 min"
 quirk: " -  or one SSO callback too many"
-excerptHtml: "Standalone AI interfaces are not enough for real operations. Enterprise AI becomes valuable when it integrates deeply into the systems where work actually happens."
-dekHtml: "Messaging, identity, ticketing, search, security tooling, internal APIs: integration architecture is what turns an AI interface into an operational platform."
+excerptHtml: "Enterprise AI becomes useful when it enters existing work without losing identity, context, reliability, or control."
+dekHtml: "Messaging, identity, ticketing, search, security tools, and internal APIs are the architecture around the model."
 tags: ["ai", "infrastructure", "enterprise", "workflow"]
+featured: true
+tableOfContents: true
 nextSlug: "boundary-around-the-model"
 ---
 
 <Lede>
-  Enterprise AI systems become valuable only when they integrate deeply into
-  operational workflows.
+  Enterprise AI becomes useful when it enters existing work without losing
+  identity, context, reliability, or control.
 </Lede>
 
-Standalone AI interfaces are insufficient for real-world enterprise operations.
+A standalone AI interface can answer questions. Operational systems must also
+know who is asking, which records they may access, what workflow is in progress,
+and whether a proposed action is allowed.
 
-Modern platforms must integrate with:
+Integration architecture is what turns a model feature into part of the
+enterprise.
 
-- messaging systems;
-- identity providers;
-- ticketing platforms;
-- search infrastructure;
-- security tooling;
-- internal APIs;
-- workflow systems.
+## Start with the unit of work.
 
-Integration architecture becomes a core engineering discipline.
+Do not begin with a list of connectors.
 
-## Why integrations matter.
+Begin with a workflow such as:
 
-Operational systems depend on context.
+- investigate an alert;
+- prepare a customer-risk review;
+- summarize a production incident;
+- resolve an access request;
+- draft a change with evidence.
 
-Without integrations, AI systems lack visibility into the enterprise
-environment.
+Map its actors, systems of record, events, decisions, actions, approvals, and
+completion criteria. Integrate only what the workflow needs.
 
-Strong integration layers enable:
+## Preserve identity end to end.
 
-- context enrichment;
-- workflow automation;
-- operational continuity;
-- cross-system intelligence;
-- human collaboration.
+The user authenticated in Slack, a web app, or a ticketing system must not become
+an anonymous model request with a shared service credential.
 
-Integrations transform isolated AI systems into operational platforms.
+Carry:
 
-## Identity and access systems.
+- principal;
+- tenant;
+- role;
+- delegated authority;
+- case or request scope;
+- data entitlements;
+- approval state.
 
-Identity infrastructure is foundational for enterprise systems.
+Use short-lived credentials and server-side policy checks. The model should not
+choose the tenant or expand its own scope.
 
-Modern operational platforms often integrate with:
+## Separate events, queries, and commands.
 
-- federated authentication systems;
-- enterprise identity providers;
-- role-based access systems;
-- trust enforcement layers.
+These integration shapes have different contracts.
 
-Identity systems help maintain operational security and governance.
+**Events** announce that something happened. They need stable IDs,
+deduplication, ordering assumptions, versioned schemas, and replay handling.
 
-## Messaging and workflow integrations.
+**Queries** retrieve current or historical information. They need authorization,
+pagination, freshness, source metadata, and bounded results.
 
-Operational workflows increasingly happen inside collaboration platforms.
+**Commands** change state. They need validation, idempotency, policy, approval,
+audit, and a clear result.
 
-Integrations with messaging systems enable:
+Hiding all three behind one generic tool makes recovery and governance harder.
 
-- alert delivery;
-- investigation collaboration;
-- workflow approvals;
-- incident escalation;
-- real-time notifications.
+## Build adapters around canonical contracts.
 
-This reduces operational friction for security teams.
+Vendor payloads change. Internal workflows should not.
 
-## Search and intelligence integrations.
+Translate external records into stable domain objects such as:
 
-Search infrastructure plays a massive role in operational AI systems.
+- evidence;
+- entity;
+- alert;
+- case;
+- finding;
+- action proposal;
+- approval;
+- execution result.
 
-Integrated search systems enable:
+Preserve the raw source and provenance. Avoid a universal schema that erases
+details; use a stable common envelope plus source-specific attributes.
 
-- fast retrieval;
-- context generation;
-- historical analysis;
-- correlation workflows;
-- timeline reconstruction.
+## Design for asynchronous work.
 
-The integration layer becomes the intelligence backbone.
+Enterprise actions often take longer than one request. They wait for rate
+limits, approvals, background jobs, or human responses.
 
-## Final thoughts.
+Use durable workflow state with correlation IDs, deadlines, cancellation,
+bounded retries, and compensating actions. Publish state transitions so the user
+can see progress.
 
-The future of enterprise AI platforms depends heavily on integration
-architecture.
+A chat transcript is not a workflow database.
 
-The most successful systems will not operate independently.
+## Treat retrieved content as untrusted.
 
-They will function as deeply connected operational ecosystems.
+Tickets, documents, messages, and web pages can contain malicious instructions.
+OWASP describes indirect prompt injection as attacker-controlled content that
+later enters a model's context.
 
-<EndMark />
+Mark sources, delimit retrieved data, validate model outputs, and enforce tool
+permissions outside the prompt. Retrieved text can supply evidence; it cannot
+grant authority.
+
+## Make failures explicit.
+
+Normalize integration failures:
+
+- authentication expired;
+- permission denied;
+- object missing;
+- rate limited;
+- upstream unavailable;
+- conflict;
+- partial result;
+- validation failed;
+- approval required.
+
+The workflow should know which errors are retryable and which require a person.
+Blind retries can duplicate tickets, actions, and cost.
+
+## Observe the full operation.
+
+Trace the journey from user request through retrieval, model calls, tools,
+policy, approval, and final system-of-record update.
+
+Record versions and identifiers without copying sensitive payloads into every
+telemetry system. Measure completion, latency, correction, reliability, and cost
+for the whole unit of work.
+
+## Operate connectors as products.
+
+Each integration needs:
+
+- an owner;
+- supported API versions;
+- permission documentation;
+- health and rate-limit monitoring;
+- contract tests;
+- sandbox fixtures;
+- deprecation policy;
+- customer-visible failure behavior.
+
+Connector count is a weak platform metric. Reliable workflow coverage is much
+stronger.
+
+## The design review questions.
+
+Before releasing an integration, ask:
+
+1. Which identity and tenant reach every operation?
+2. What is the system of record?
+3. How are duplicates and retries handled?
+4. Can untrusted content influence a command?
+5. What does partial failure look like?
+6. Which actions require approval?
+7. Can the workflow be resumed and audited?
+8. How will API changes be detected?
+9. What data enters prompts, logs, and traces?
+10. How can the integration be disabled safely?
+
+Enterprise integration is not glamorous. It is where an AI product proves that
+it can participate in real operations rather than sit beside them.
+
+## Sources and further reading.
+
+- [CISA and NCSC secure AI system development guidance](https://www.cisa.gov/news-events/alerts/2023/11/26/cisa-and-uk-ncsc-unveil-joint-guidelines-secure-ai-system-development)
+- [OWASP prompt injection](https://owasp.org/www-community/attacks/PromptInjection)
+- [OWASP agentic AI threats and mitigations](https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/)
+- [The interesting boundary around the model](/notes/boundary-around-the-model)

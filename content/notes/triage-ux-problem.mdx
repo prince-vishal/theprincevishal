@@ -2,22 +2,178 @@
 number: "004"
 title: "Triage is a UX problem, mostly"
 titleHtml: "Triage is a <em>UX problem,</em> mostly."
-description: "After six months of watching analysts work, I am convinced SOC triage starts with workflow design."
+headingHtml: "Triage is a <span class=\"red\">UX problem</span>,<br/>mostly."
+description: "A practical UX model for SOC triage: grouping, evidence hierarchy, uncertainty, actions, feedback, and AI assistance."
+ogDescription: "Why alert triage improves when security teams redesign the decision surface before adding more AI."
 date: "2026-02-22"
 displayDate: "2026 · 02 · 22"
-readTime: "7 min"
+readTime: "8 min"
 quirk: " -  or the time for an Argo rollout"
-excerptHtml: "After six months of watching analysts work, I'm convinced that what SOC teams need is less AI and more reorganization. The <em>good</em> AI helps with that, too  -  but only if you start there."
+excerptHtml: "SOC triage starts with the decision surface: what gets grouped, what gets hidden, what needs evidence, and when a human should be asked."
+dekHtml: "A workflow and interface design note for reducing analyst effort without hiding security judgment behind automation."
 tags: ["ai", "security", "soc", "opinions"]
+featured: true
+tableOfContents: true
+nextSlug: "agentic-becoming-useless"
 ---
 
 <Lede>
-  After six months of watching analysts work, I am convinced that what SOC
-  teams need is less AI and more reorganization.
+  After watching analysts work, I am convinced that SOC triage needs less
+  interface archaeology and more deliberate workflow design.
 </Lede>
 
-The good AI helps with that too, but only if it starts from the workflow:
-what gets grouped, what gets hidden, what needs evidence, and where a human
-should be asked before the system gets clever.
+The good AI helps. But it helps only after the product understands the decision
+an analyst is trying to make.
 
-<EndMark />
+Triage is not reading an alert and clicking true positive or false positive. It
+is reconstructing enough context to decide what deserves attention, what can be
+closed, what should be escalated, and what action is proportionate.
+
+## The analyst is assembling a case.
+
+For one alert, an analyst may need:
+
+- the affected identity and asset;
+- recent related alerts;
+- process, network, or authentication history;
+- asset criticality;
+- threat-intelligence context;
+- previous investigations;
+- detection logic;
+- response options;
+- confidence in each source.
+
+If this context lives across six tabs, the interface has made assembly the
+analyst's job.
+
+## Group before summarizing.
+
+Many products add an AI summary to every alert. That can make a fragmented queue
+more readable without making it less fragmented.
+
+First ask:
+
+- Which alerts describe the same behavior?
+- Which share an entity, session, process tree, campaign, or time window?
+- Which are duplicates?
+- Which should remain separate because combining them would hide risk?
+
+The unit of work should be an investigation-shaped group, not necessarily the
+vendor's alert object.
+
+## Design an evidence hierarchy.
+
+The first screen should answer:
+
+1. What happened?
+2. Why is it suspicious?
+3. Which evidence supports that view?
+4. What is missing or contradictory?
+5. What can I safely do next?
+
+Use progressive disclosure. Show decisive evidence first, then let the analyst
+inspect raw records. Preserve provenance and timestamps. Distinguish observed
+facts from inferred relationships and generated explanations.
+
+The [evidence layer](/notes/evidence-layer-ai-security-platforms) is therefore a
+UX dependency, not only a backend concern.
+
+## Make uncertainty visible.
+
+Security interfaces often hide uncertainty behind severity colors.
+
+An alert can be severe but poorly supported. A low-severity alert can be one
+piece of a strong campaign pattern.
+
+Show uncertainty as specific missing information:
+
+- endpoint telemetry unavailable;
+- identity not resolved;
+- source older than the incident;
+- entity match ambiguous;
+- expected baseline absent;
+- recommendation depends on an unverified assumption.
+
+"Confidence: 72%" is less useful than knowing why confidence is limited.
+
+## Put actions beside consequences.
+
+Actions should display:
+
+- target;
+- scope;
+- expected effect;
+- required approval;
+- reversibility;
+- evidence supporting the action.
+
+The primary button should not always be "close." Sometimes the correct next step
+is collect evidence, ask the asset owner, escalate, or wait for another source.
+
+## Let AI remove search, not judgment.
+
+Useful assistance includes:
+
+- collecting related evidence;
+- resolving entities;
+- building a timeline;
+- explaining detection logic;
+- identifying missing checks;
+- drafting a disposition with citations;
+- proposing bounded next actions.
+
+The analyst should be able to edit the conclusion, inspect sources, and reject
+the recommendation. Corrections should be captured by type so the team can
+improve retrieval, logic, policy, and UX separately.
+
+## Design for interruption.
+
+SOC work is interrupt-driven. An analyst may leave an investigation for a
+critical incident and return later.
+
+Persist:
+
+- what has been reviewed;
+- hypotheses considered;
+- evidence collected;
+- pending actions;
+- approvals;
+- unresolved questions;
+- a concise handoff note.
+
+Do not make the analyst reconstruct the system's state from a chat transcript.
+
+## Measure the redesigned workflow.
+
+Useful measures include:
+
+- time to defensible disposition;
+- analyst touches;
+- tabs or systems visited;
+- reopened cases;
+- evidence missing at decision time;
+- recommendation edits and rejections;
+- escalation quality;
+- analyst-reported effort.
+
+The goal is not fewer clicks in isolation. It is less avoidable cognitive work
+per sound decision.
+
+## The product principle.
+
+Before adding another model call, redraw the decision surface.
+
+Group the right signals. Put evidence in order. Name uncertainty. Make actions
+and consequences explicit. Preserve state.
+
+Then use AI to gather, connect, and explain.
+
+Triage is a UX problem mostly because the security decision is already hard. The
+interface should not make it harder.
+
+## Sources and further reading.
+
+- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
+- [MITRE ATT&CK analytics](https://attack.mitre.org/analytics/)
+- [CISA Secure by Design](https://www.cisa.gov/securebydesign)
+- [Measuring whether an AI SOC is working](/notes/measuring-ai-soc-metrics)

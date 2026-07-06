@@ -1414,8 +1414,16 @@ footer.bottom b {
     inset 0 1px 0 color-mix(in oklab, #fff 32%, transparent);
   margin: 1.5em 0 1.7em;
   overflow-x: auto;
+  overscroll-behavior-inline: contain;
   position: relative;
+  scrollbar-color: var(--ink-faint) transparent;
+  scrollbar-width: thin;
   transform: rotate(-0.15deg);
+}
+
+.article .table-wrap:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
 }
 
 .article .table-wrap::before {
@@ -1440,7 +1448,7 @@ footer.bottom b {
   border-collapse: collapse;
   font-size: 15px;
   line-height: 1.45;
-  min-width: 680px;
+  min-width: 100%;
   width: 100%;
 }
 
@@ -2115,6 +2123,24 @@ footer.bottom b {
 }
 
 @media (max-width: 720px) {
+  .article .table-wrap {
+    margin-inline: -4px;
+  }
+
+  .article table {
+    font-size: 14px;
+    min-width: 620px;
+  }
+
+  .article th,
+  .article td {
+    padding: 12px 13px;
+  }
+
+  .article td:first-child {
+    font-size: 18px;
+  }
+
   .hiring-path {
     margin-bottom: 28px;
     padding: 30px 18px 26px;

@@ -2,20 +2,198 @@
 number: "001"
 title: "Demos are easy. Tuesdays are hard"
 titleHtml: "Demos are easy. Tuesdays are <em>hard.</em>"
-description: "On the gap between a thing that works in the room and a thing that works in a customer's hands."
+headingHtml: "Demos are easy.<br/><span class=\"red\">Tuesdays are hard.</span>"
+description: "A production-readiness guide for turning an AI or security demo into a reliable product customers can use on an ordinary Tuesday."
+ogDescription: "The engineering gap between a convincing demo and a reliable AI product: failure modes, controls, observability, cost, and operations."
 date: "2025-10-09"
 displayDate: "2025 · 10 · 09"
-readTime: "6 min"
+readTime: "8 min"
 quirk: " -  or a slow K8s pod restart"
-excerptHtml: "On the gap between a thing that works in the room and a thing that works in a customer's hands on a Tuesday morning. The first half of a long-running argument I keep having with myself."
+excerptHtml: "The gap between a thing that works in the room and a thing that works in a customer's hands on Tuesday morning is where most engineering taste lives."
+dekHtml: "A practical production-readiness test for AI, security, and infrastructure products after the applause stops."
 tags: ["infrastructure", "building", "opinions"]
+featured: true
+tableOfContents: true
+nextSlug: "cap-table-offer-letter"
 ---
 
 <Lede>
   Demos are easy. Tuesdays are hard.
 </Lede>
 
-The gap between a thing that works in the room and a thing that works in a
-customer's hands on Tuesday morning is where most engineering taste lives.
+A demo gets a clean input, a prepared environment, a patient audience, and an
+engineer standing close enough to intervene.
 
-<EndMark />
+A customer on Tuesday morning brings stale credentials, partial data, a slow
+integration, two browser tabs, a production incident, and no interest in how
+promising the architecture looked last week.
+
+The distance between those two moments is production engineering.
+
+## A demo proves possibility.
+
+A good demo answers an important question:
+
+> Can this idea create useful behavior at all?
+
+That is real progress. Teams should celebrate it.
+
+But a demo normally avoids the harder questions:
+
+- What happens when an upstream API times out?
+- Can the work be retried without duplicating an action?
+- What does the user see when evidence is incomplete?
+- Which identity is used for a tool call?
+- Can one customer's data enter another customer's context?
+- How much does the workflow cost at the 95th percentile?
+- Can support explain yesterday's failure?
+- Can the system be rolled back?
+
+Production readiness begins when those questions become part of the product,
+not a list for later.
+
+## The first hard thing is input reality.
+
+Demo inputs are selected. Production inputs arrive.
+
+They are malformed, duplicated, delayed, contradictory, oversized, multilingual,
+and occasionally malicious. Security products also ingest attacker-controlled
+text from alerts, tickets, files, websites, and threat reports.
+
+Every boundary needs:
+
+- schema validation;
+- size and rate limits;
+- tenant and sensitivity labels;
+- idempotency;
+- provenance;
+- an explicit failure path.
+
+If the system silently drops fields or invents defaults, the demo's fluency
+becomes an operational liability.
+
+## The second hard thing is durable state.
+
+An AI workflow is usually a distributed workflow.
+
+It retrieves context, calls a model, invokes tools, waits for approvals, stores
+evidence, and publishes a result. Any step can fail after another step has
+already succeeded.
+
+The production design needs:
+
+- durable workflow state;
+- bounded retries;
+- idempotency keys;
+- timeouts;
+- compensating actions;
+- cancellation;
+- human-visible progress;
+- safe resumption after deployment.
+
+A recursive agent loop can be useful for exploration. It is not automatically a
+reliable execution model.
+
+## The third hard thing is authority.
+
+The moment an AI system can change a ticket, disable a user, isolate an endpoint,
+or update a firewall, quality is no longer the only concern.
+
+The platform must know:
+
+- who requested the action;
+- which tenant and case authorize it;
+- which policy applies;
+- what evidence is required;
+- whether approval is needed;
+- how the action can be reversed;
+- what audit record must remain.
+
+CISA's secure AI guidance emphasizes secure design across development,
+deployment, and operation. OWASP's agentic guidance similarly treats tools,
+identity, memory, and unintended actions as system risks.
+
+A prompt asking the model to "be careful" is not an authorization layer.
+
+## The fourth hard thing is failure UX.
+
+Production systems should fail legibly.
+
+"Something went wrong" is not enough. The user needs to know whether:
+
+- no evidence was found;
+- a source was unavailable;
+- an action was denied by policy;
+- approval expired;
+- the model output failed validation;
+- the workflow stopped safely;
+- manual work is required.
+
+Failure states are part of the product contract. They shape whether users trust
+the system and whether support can recover it.
+
+## The fifth hard thing is observation.
+
+CPU and memory are necessary but insufficient.
+
+An AI workflow also needs telemetry for:
+
+- end-to-end completion;
+- each retrieval, model, and tool step;
+- model and prompt version;
+- token usage and cost;
+- evidence IDs;
+- policy decisions;
+- approvals;
+- retries and fallbacks;
+- final outcome and correction.
+
+OpenTelemetry's generative AI conventions help standardize model and agent
+signals. Sensitive prompts and evidence still need deliberate redaction and
+access control.
+
+## The sixth hard thing is change.
+
+Models change. Prompts change. Search indexes change. Tools change. Customer data
+changes.
+
+Every significant change should pass:
+
+1. a deterministic regression suite;
+2. representative offline evaluations;
+3. adversarial tests;
+4. shadow or limited rollout;
+5. monitored production release;
+6. rollback criteria.
+
+The evaluation set should preserve real failures. Otherwise the team pays for
+the same lesson twice.
+
+## My Tuesday test.
+
+Before I call a system production-ready, I want clear answers to ten questions:
+
+1. What is the completed unit of work?
+2. What can fail, and how does each failure appear?
+3. What state survives a restart?
+4. Which actions are reversible?
+5. Where is authorization enforced?
+6. How are tenant and data boundaries tested?
+7. Can a result be traced to evidence?
+8. What are the latency, reliability, and cost budgets?
+9. How does a human correct or stop the system?
+10. What happens during provider or integration failure?
+
+The [AI security production checklist](/notes/ai-security-demo-to-production-checklist)
+goes deeper on release gates.
+
+The demo is not dishonest. It is simply answering the first question.
+
+The product begins with all the questions that arrive on Tuesday.
+
+## Sources and further reading.
+
+- [CISA and NCSC guidelines for secure AI system development](https://www.cisa.gov/news-events/alerts/2023/11/26/cisa-and-uk-ncsc-unveil-joint-guidelines-secure-ai-system-development)
+- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
+- [OWASP agentic AI threats and mitigations](https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/)
+- [OpenTelemetry generative AI observability](https://opentelemetry.io/blog/2026/genai-observability/)

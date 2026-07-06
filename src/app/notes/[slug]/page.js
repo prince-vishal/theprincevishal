@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { compileMDX } from 'next-mdx-remote/rsc';
+import remarkGfm from 'remark-gfm';
 import NotesTop from '@/components/notes/NotesTop';
 import { mdxComponents } from '@/components/notes/MdxComponents';
 import { getNoteBySlug, getPublishedNotes } from '@/lib/notes';
@@ -257,7 +258,12 @@ export default async function NotePage({ params }) {
   const { content } = await compileMDX({
     source: mdxSource,
     components: mdxComponents(),
-    options: { parseFrontmatter: false },
+    options: {
+      parseFrontmatter: false,
+      mdxOptions: {
+        remarkPlugins: [remarkGfm],
+      },
+    },
   });
   const structuredData = buildNoteJsonLd(note);
 

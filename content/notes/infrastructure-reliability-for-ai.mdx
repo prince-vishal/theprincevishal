@@ -3,116 +3,190 @@ number: "009"
 title: "Engineering reliable AI systems: why infrastructure discipline matters"
 titleHtml: "Engineering reliable AI systems: why <em>infrastructure discipline</em> matters."
 headingHtml: "Engineering reliable AI systems:<br/>why <span class=\"red\">infrastructure</span> discipline matters."
-description: "Production AI systems are distributed systems. Reliability, observability, cost, and orchestration matter as much as model quality."
-ogDescription: "A note on reliability, observability, automation, and cost engineering for operational AI systems."
+description: "A reliability architecture for production AI systems covering SLOs, durable workflows, fallbacks, observability, cost, data quality, and change management."
+ogDescription: "Production AI is a distributed-systems problem. Reliability depends on workflows, retrieval, tools, telemetry, fallbacks, and disciplined releases."
 date: "2026-05-21"
 displayDate: "2026 · 05 · 21"
-readTime: "3 min"
+readTime: "9 min"
 quirk: " -  or one p99 before lunch"
-excerptHtml: "AI systems are often evaluated only on model quality. In production, infrastructure reliability matters just as much as intelligence."
-dekHtml: "Operational AI depends on retrieval systems, workflow engines, APIs, search infrastructure, queues, monitoring, and orchestration. That makes it a distributed systems problem."
+excerptHtml: "Model quality matters, but users experience the reliability of the complete workflow."
+dekHtml: "A practical guide to SLOs, failure containment, observability, and controlled change for operational AI."
 tags: ["ai", "infrastructure", "reliability", "building"]
+featured: true
+tableOfContents: true
 nextSlug: "enterprise-ai-integrations"
 ---
 
 <Lede>
-  AI systems are often evaluated only on model quality.
+  Model quality matters, but users experience the reliability of the complete
+  workflow.
 </Lede>
 
-But in production environments, infrastructure reliability matters just as much
-as intelligence.
+An AI product may depend on an API gateway, identity provider, retrieval system,
+vector index, model provider, workflow engine, tool integrations, policy
+service, queue, database, and observability stack.
 
-Operational AI systems depend on:
+That is a distributed system, even when the interface is one text box.
 
-- retrieval systems;
-- workflow engines;
-- APIs;
-- search infrastructure;
-- queues;
-- monitoring systems;
-- orchestration layers.
+## Define reliability around user work.
 
-Without infrastructure discipline, AI systems become unreliable.
+Service uptime alone is insufficient. A model endpoint can return 200 while the
+workflow retrieves stale evidence or produces an unusable result.
 
-## AI systems are distributed systems.
+Define a successful unit such as:
 
-Modern AI platforms are not just models.
+> an investigation completed with required evidence, a valid disposition, and
+> no policy violation within the latency objective.
 
-They are distributed operational systems.
+Then set service-level indicators for:
 
-This introduces challenges involving:
+- workflow completion;
+- evidence availability;
+- valid structured output;
+- tool success;
+- end-to-end latency;
+- safe action execution;
+- freshness;
+- cost per completed unit.
 
-- scalability;
-- reliability;
-- observability;
-- cost optimization;
-- failure handling;
-- workflow tracing.
+## Map the dependency budget.
 
-Engineering discipline becomes critical.
+If a workflow makes several sequential remote calls, its reliability and
+latency inherit every dependency.
 
-## Observability for AI workflows.
+Document:
 
-Traditional monitoring focuses on:
+- timeout;
+- retry policy;
+- rate limit;
+- concurrency limit;
+- regional dependency;
+- data freshness;
+- fallback;
+- circuit breaker;
+- owner.
 
-- CPU;
-- memory;
-- network usage.
+Do not give every service the full end-to-end timeout. Allocate a budget by
+step, and preserve time for recovery or a useful failure response.
 
-Operational AI systems require deeper telemetry:
+## Make workflows durable.
 
-- prompt execution;
-- workflow latency;
-- retrieval quality;
-- API reliability;
-- cost patterns;
-- failure tracing;
-- tool execution health.
+Production workflows need state that survives restarts and deployments.
 
-Observability becomes foundational infrastructure.
+Use:
 
-## Infrastructure automation.
+- durable step state;
+- idempotency keys;
+- bounded exponential backoff;
+- retry classifications;
+- dead-letter handling;
+- cancellation;
+- compensating actions;
+- resumable approvals.
 
-Reliable AI systems depend heavily on automation.
+Never retry a state-changing tool automatically unless the operation is
+idempotent or its result can be checked.
 
-Examples include:
+## Degrade deliberately.
 
-- automated scaling;
-- dynamic provisioning;
-- workflow recovery systems;
-- secret management;
-- resource optimization;
-- intelligent scheduling.
+A fallback should preserve the user's ability to make a safe decision.
 
-Automation reduces operational complexity and improves resilience.
+Examples:
 
-## Cost engineering.
+- switch to lexical retrieval when embeddings are unavailable;
+- use a smaller approved model for extraction;
+- return evidence without a generated summary;
+- queue nonurgent enrichment;
+- require manual review;
+- disable actions while retaining read-only investigation.
 
-One of the biggest challenges in AI systems is operational cost.
+Do not silently lower quality and preserve the same confidence language.
 
-AI pipelines can become expensive without optimization.
+## Observe AI-specific failure.
 
-Cost-aware architectures require:
+OpenTelemetry's generative AI conventions support model, token, agent, and tool
+signals. Combine them with normal traces, logs, and metrics.
 
-- efficient retrieval;
-- smart caching;
-- workflow optimization;
-- token minimization;
-- resource scheduling.
+Record:
 
-Cost engineering becomes part of system architecture.
+- workflow and step IDs;
+- model and prompt version;
+- retrieval query and result IDs;
+- token usage;
+- tool arguments in redacted form;
+- policy and approval decisions;
+- retries and fallback;
+- output validation;
+- analyst correction;
+- final outcome.
 
-## Final thoughts.
+Sensitive prompts and evidence require stricter access and retention than normal
+service metadata.
 
-The future of AI platforms will be defined not only by intelligence but by:
+## Treat data quality as reliability.
 
-- reliability;
-- scalability;
-- operational resilience;
-- integration quality;
-- observability;
-- infrastructure maturity.
+Stale indexes, missing telemetry, parser regressions, and entity collisions can
+produce fast but wrong output.
 
-Operational AI requires operational engineering discipline.
+Monitor:
 
-<EndMark />
+- ingestion lag;
+- source coverage;
+- schema rejection;
+- duplication;
+- freshness by source;
+- entity-resolution confidence;
+- retrieval empty-result rate;
+- citation integrity.
+
+For AI security systems, evidence health belongs on the reliability dashboard.
+
+## Control cost and resource exhaustion.
+
+Set limits for steps, tokens, retrieved context, tool calls, wall-clock time,
+and concurrent workflows. Detect recursive loops and retry storms.
+
+Measure tail cost. A small percentage of pathological cases can dominate spend
+and capacity.
+
+Cost controls should degrade explicitly rather than truncate work invisibly.
+
+## Release the system, not only the prompt.
+
+A prompt update, model change, embedding change, parser deployment, or policy
+edit can all change behavior.
+
+Use:
+
+1. versioned artifacts;
+2. offline regression;
+3. adversarial tests;
+4. shadow traffic;
+5. canary rollout;
+6. outcome monitoring;
+7. rollback.
+
+Preserve replayable cases so the team can compare versions against the same
+evidence.
+
+## Write runbooks before incidents.
+
+Operators need to know:
+
+- how to disable actions;
+- how to pin a model version;
+- how to drain workflows;
+- how to replay failed work;
+- how to rotate credentials;
+- how to inspect provider and retrieval health;
+- how to communicate degraded quality.
+
+The system is not reliable because it rarely fails. It is reliable because
+failure is bounded, visible, and recoverable.
+
+## Sources and further reading.
+
+- [OpenTelemetry generative AI observability](https://opentelemetry.io/blog/2026/genai-observability/)
+- [OpenTelemetry semantic conventions](https://opentelemetry.io/docs/specs/semconv/)
+- [NIST AI security and resilience](https://www.nist.gov/artificial-intelligence/ai-research-security-and-resilience)
+- [Demos are easy. Tuesdays are hard](/notes/demos-tuesdays-hard)

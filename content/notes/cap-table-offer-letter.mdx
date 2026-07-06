@@ -2,13 +2,19 @@
 number: "002"
 title: "Reading the cap table like an offer letter"
 titleHtml: "Reading the cap table like an <em>offer letter.</em>"
-description: "A short, opinionated field guide to the part of an offer most engineers try not to read."
+headingHtml: "Reading the cap table<br/>like an <span class=\"red\">offer letter</span>."
+description: "A practical guide for engineers evaluating startup equity: ownership, dilution, vesting, strike price, preferences, exercise windows, and questions to ask."
+ogDescription: "How engineers can evaluate startup equity as part of the complete offer without pretending the headline option count is enough."
 date: "2025-12-03"
 displayDate: "2025 · 12 · 03"
-readTime: "5 min"
+readTime: "8 min"
 quirk: " -  or one careful tea"
-excerptHtml: "Vesting, cliff, refresh, RSU vs ISO, strike price, dilution  -  a short, opinionated field guide to the part of an offer most engineers (including me, once) try not to read."
+excerptHtml: "Vesting, strike price, dilution, preferences, and exercise terms change what the equity number on an offer actually means."
+dekHtml: "A candidate's field guide to asking better questions about startup equity, without treating uncertain private shares like cash."
 tags: ["opinions", "career"]
+featured: true
+tableOfContents: true
+nextSlug: "first-mcp-server"
 ---
 
 <Lede>
@@ -16,8 +22,151 @@ tags: ["opinions", "career"]
   explains the real offer.
 </Lede>
 
-Vesting, cliff, refresh, RSU vs ISO, strike price, dilution: none of this is
-romantic, but all of it changes what the number on the first page actually
-means.
+An offer might include 50,000 options. That number sounds concrete and tells you
+almost nothing by itself.
 
-<EndMark />
+You need the fully diluted share count, strike price, vesting terms, exercise
+window, current valuation context, and the economic rights attached to other
+shares before you can understand what was offered.
+
+This is a candidate's reading framework, not tax, legal, or investment advice.
+Equity treatment depends heavily on the plan, company, and jurisdiction. Ask a
+qualified adviser before making a material exercise or tax decision.
+
+## Start with percentage ownership.
+
+Ask:
+
+- How many shares or options are in my grant?
+- What is the fully diluted share count?
+- What percentage would the grant represent today?
+- Is the percentage calculated before or after the current financing?
+
+The basic estimate is:
+
+`grant shares / fully diluted shares = current ownership percentage`
+
+"Fully diluted" should account for issued shares, the employee option pool,
+outstanding options and warrants, and other securities that can become shares.
+Ask the company to define what it included.
+
+## Understand what you are receiving.
+
+Common instruments include stock options, restricted stock, and restricted
+stock units. They differ in ownership, exercise, settlement, and taxation.
+
+For US plans, the IRS distinguishes statutory options, including incentive stock
+options, from nonstatutory options. RSUs generally represent a right to receive
+stock or cash after vesting conditions are met. Other jurisdictions use
+different categories and tax rules.
+
+The label is not enough. Read the plan and grant agreement.
+
+## Read vesting as a retention design.
+
+A common schedule is four years with a one-year cliff, followed by monthly or
+quarterly vesting. Confirm:
+
+- vesting start date;
+- cliff;
+- vesting frequency;
+- treatment during leave;
+- what happens at termination;
+- whether acceleration exists after an acquisition;
+- whether refresh grants are part of normal compensation review.
+
+Ask about both single-trigger and double-trigger acceleration. Do not assume
+either is included.
+
+## Price the option, not only the upside.
+
+An option is the right to buy a share at the strike price. Exercising can require
+meaningful cash:
+
+`vested options × strike price = exercise cost`
+
+Tax may also arise at exercise, vesting, sale, or another event depending on the
+instrument and jurisdiction. The IRS notes, for example, that ISO exercise can
+have alternative minimum tax consequences.
+
+Questions to ask:
+
+- What is the current strike price?
+- When was the latest common-share valuation?
+- What is the post-termination exercise window?
+- Is early exercise allowed?
+- Can exercise be cashless in a liquidity event?
+- Does the company support tender offers or secondary sales?
+
+A 90-day exercise window after leaving can turn vested options into a rushed
+cash decision.
+
+## Model dilution honestly.
+
+Future fundraising, option-pool increases, conversions, and acquisitions can
+reduce your percentage.
+
+Dilution is not automatically bad. Owning a smaller percentage of a much more
+valuable company can be a good outcome. The mistake is treating today's
+percentage as permanent.
+
+Model a few scenarios:
+
+| Scenario | Company value | Your diluted ownership | Gross paper value |
+| --- | ---: | ---: | ---: |
+| downside | lower or zero | reduced | possibly zero |
+| base | plausible next stage | reduced | value before tax and exercise |
+| upside | strong outcome | further reduced | still not cash until liquidity |
+
+Subtract exercise cost and consider tax. Do not assign a public-market liquidity
+discount to a private security that cannot be sold.
+
+## Ask about preference and liquidation structure.
+
+Preferred investors may receive their investment back before common
+shareholders participate, depending on the terms. Participation rights, senior
+preferences, debt, and acquisition structure can change common-share proceeds.
+
+A company may not share the full cap table with a candidate. It should still be
+able to explain:
+
+- the latest preferred financing price and date;
+- the common-share valuation used for options;
+- total funding;
+- whether preferences are broadly standard or unusual;
+- whether there is meaningful debt;
+- the current option-pool size.
+
+## Separate value from certainty.
+
+I treat startup equity as a high-variance component, not deferred cash.
+
+The role, team, learning, scope, base compensation, company runway, and personal
+risk tolerance still matter. A precise spreadsheet does not make the outcome
+predictable; it makes assumptions visible.
+
+## My candidate checklist.
+
+Before accepting, I want:
+
+1. instrument and grant size;
+2. fully diluted ownership percentage;
+3. strike price and valuation date;
+4. vesting and acceleration terms;
+5. exercise window;
+6. option-pool and dilution context;
+7. latest financing and runway context;
+8. liquidity history or policy;
+9. copies of the plan and grant documents;
+10. jurisdiction-specific professional advice where needed.
+
+The point is not to interrogate a founder over every hypothetical.
+
+It is to evaluate the same offer the company believes it is making.
+
+## Sources and further reading.
+
+- [IRS Topic 427: Stock options](https://www.irs.gov/taxtopics/tc427)
+- [IRS Publication 525: Taxable and Nontaxable Income](https://www.irs.gov/publications/p525)
+- [IRS Publication 5992: Equity-based compensation](https://www.irs.gov/pub/irs-pdf/p5992.pdf)
+- [A short letter to recruiters](/for-recruiters)

@@ -1,15 +1,164 @@
 ---
-number: ""
+number: "044"
 title: "The boring case for boring infrastructure"
 titleHtml: "The boring case for <em>boring infrastructure.</em>"
-description: "The reasons I keep choosing the unsexy option in cloud architecture arguments."
-displayDate: " -  ·  -  ·  - "
-readTime: "draft"
-quirk: " -  stewing on this one"
-excerptHtml: "The reasons I keep choosing the \"unsexy\" option in cloud architecture arguments  -  and why I think the next ten years will reward that choice more than the previous ten did."
-tags: ["infrastructure", "opinions"]
-draft: true
-draftLabel: "still cooking"
+headingHtml: "The boring case for<br/><span class=\"red\">boring infrastructure</span>."
+description: "A decision framework for choosing simple, mature infrastructure without confusing familiarity with stagnation."
+ogDescription: "Why simple, well-understood infrastructure often creates more room for product innovation, reliability, and secure operations."
+date: "2026-07-27"
+displayDate: "2026 · 07 · 27"
+readTime: "8 min"
+quirk: " -  less exciting, easier to page"
+excerptHtml: "Boring infrastructure is not old technology. It is technology whose failure modes your team can afford to understand."
+dekHtml: "A practical argument for spending novelty where it creates product advantage, not where it creates another pager."
+tags: ["infrastructure", "opinions", "reliability", "building"]
+featured: true
+tableOfContents: true
+nextSlug: "token-maxxing"
 ---
 
-Draft.
+<Lede>
+  Boring infrastructure is not old technology. It is technology whose failure
+  modes your team can afford to understand.
+</Lede>
+
+I am not against new tools. I am against paying novelty tax in parts of the
+system where novelty creates no product advantage.
+
+The boring choice is often a database, queue, deployment pattern, or runtime
+that the team knows how to operate. Its limits are documented. Its metrics make
+sense. Someone has seen its worst day.
+
+## Boring is contextual.
+
+Postgres may be boring to one team and a dangerous new dependency to another.
+Kubernetes may be routine at a platform company and needless machinery for a
+small product.
+
+A technology becomes boring when:
+
+- the team understands its operating model;
+- failure modes are known;
+- recovery is practiced;
+- hiring and support are realistic;
+- observability is mature;
+- the upgrade path is credible;
+- its limits fit the workload.
+
+Popularity alone does not satisfy those conditions.
+
+## Complexity charges interest.
+
+The engineer who introduces a component experiences its local benefit. The
+organization inherits its long-term cost:
+
+- deployment and upgrades;
+- authentication and secrets;
+- backups and disaster recovery;
+- monitoring and alerts;
+- capacity planning;
+- incident diagnosis;
+- data migration;
+- on-call knowledge.
+
+Google's SRE guidance describes complexity as an externality: the person adding
+it does not always bear the future operational cost.
+
+## Spend novelty on differentiation.
+
+Novelty is justified when it unlocks something the product cannot reasonably do
+otherwise:
+
+- a required latency or scale boundary;
+- a security or isolation property;
+- a unique data capability;
+- a major developer-productivity improvement;
+- a strategic platform capability.
+
+The burden of proof should rise with operational blast radius.
+
+Using a new retrieval technique inside a bounded service is different from
+replacing the company's primary database and queue in the same quarter.
+
+## Prefer reversible adoption.
+
+Before introducing a new infrastructure dependency, define:
+
+1. the specific problem;
+2. the current baseline;
+3. measurable success;
+4. the smallest production slice;
+5. operational ownership;
+6. failure and rollback;
+7. an exit path.
+
+Use stable interfaces and keep canonical data portable. Avoid spreading
+vendor-specific concepts through every service before the choice is proven.
+
+## Standardize the paved road.
+
+Boring infrastructure becomes powerful when the safe path is also the easy
+path.
+
+A platform team can provide:
+
+- service templates;
+- default observability;
+- identity and secret patterns;
+- deployment and rollback;
+- backup policy;
+- capacity guidance;
+- security controls;
+- runbooks.
+
+CISA's Secure by Design principles similarly push manufacturers to take
+ownership of customer security outcomes and provide secure defaults. Defaults
+shape behavior more reliably than documentation alone.
+
+## Know when boring has become neglect.
+
+Simplicity is not permission to freeze.
+
+Replace a familiar system when:
+
+- it no longer meets reliability or security requirements;
+- support or patching is ending;
+- operating cost dominates alternatives;
+- scaling requires repeated dangerous workarounds;
+- it blocks product capability;
+- the team can migrate with evidence and rollback.
+
+"We have always used it" is not architecture.
+
+## My design-review questions.
+
+For every new component, I ask:
+
+- Which existing component could solve this?
+- What product outcome requires the new one?
+- Who owns it at 3 a.m.?
+- How will we observe and restore it?
+- What is its security update model?
+- How many engineers must understand it?
+- What is the migration path in and out?
+- Which complexity can we remove in exchange?
+
+The last question matters. Healthy systems do not only add.
+
+## The real benefit.
+
+Google's SRE material argues that simplicity supports both reliability and
+agility. That matches my experience: when infrastructure is understandable,
+teams spend less time recovering context and more time changing the product.
+
+Boring is not the absence of ambition.
+
+It is a decision to keep the foundation legible so the interesting parts have
+room to move.
+
+## Sources and further reading.
+
+- [Google SRE: The virtue of boring](https://sre.google/sre-book/simplicity/)
+- [Google SRE Workbook: Simplicity](https://sre.google/workbook/simplicity/)
+- [CISA Secure by Design](https://www.cisa.gov/securebydesign)
+- [Engineering reliable AI systems](/notes/infrastructure-reliability-for-ai)

@@ -2,21 +2,177 @@
 number: "003"
 title: "What I learned writing my first MCP server"
 titleHtml: "What I learned writing my first <em>MCP server.</em>"
-description: "The protocol is small. The interesting design decisions are not."
+headingHtml: "What I learned writing<br/>my first <span class=\"red\">MCP server</span>."
+description: "A practical field report on MCP tool design: schemas, descriptions, errors, authorization, credentials, observability, and safe agent affordances."
+ogDescription: "The MCP protocol is small. The important engineering decisions live in tool contracts, permissions, errors, and operations."
 date: "2026-01-18"
 displayDate: "2026 · 01 · 18"
-readTime: "8 min"
+readTime: "9 min"
 quirk: " -  or a long ssh reconnect"
-excerptHtml: "The protocol is small. The interesting design decisions are not. A field report from building, breaking, and re-building a tool server  -  and what I'd actually do differently next time."
+excerptHtml: "The protocol is small. The interesting design decisions are not: descriptions, schemas, permissions, errors, and when an agent should not use a tool."
+dekHtml: "A builder's field report from turning an internal capability into a tool an AI client can discover and use safely."
 tags: ["ai", "agents", "infrastructure", "building"]
+featured: true
+tableOfContents: true
+nextSlug: "triage-ux-problem"
 ---
 
 <Lede>
   The protocol is small. The interesting design decisions are not.
 </Lede>
 
-The shape that surprised me most was not the transport or schema. It was the
-human layer around the tool: descriptions, affordances, permissions, and the
-tiny contracts that teach an agent when not to touch something.
+My first MCP server became useful quickly. It also made a deeper problem obvious:
+exposing a function is easy; exposing the right capability with a contract an
+agent can use safely is product and security work.
 
-<EndMark />
+## The tool description is an interface.
+
+Humans can infer intent from a button, screen, and surrounding workflow. An
+agent often sees a name, description, and schema.
+
+A useful description explains:
+
+- what the tool does;
+- when to use it;
+- when not to use it;
+- required preconditions;
+- whether it reads or changes state;
+- important cost or latency;
+- what the result means.
+
+`search` is a weak tool name. `search_security_cases` with tenant, time-window,
+and query semantics gives the model a better decision surface.
+
+## Narrow tools beat generic power.
+
+My first instinct was to expose flexible primitives. Flexibility reduces server
+code and transfers complexity and risk to the client.
+
+Prefer:
+
+- `get_case_evidence` over arbitrary SQL;
+- `add_case_note` over generic HTTP;
+- `propose_endpoint_isolation` over shell execution;
+- explicit enums over free-form action names.
+
+Narrow tools are easier to authorize, test, observe, and explain.
+
+## Schema design changes behavior.
+
+Good schemas encode domain constraints:
+
+- required tenant and case context supplied by the server where possible;
+- bounded strings and arrays;
+- enums for known choices;
+- explicit time ranges;
+- separate dry-run and execute operations;
+- structured outputs;
+- no hidden defaults for dangerous fields.
+
+Validate on the server. The model producing valid-looking JSON is not a security
+control.
+
+## Errors are part of the protocol contract.
+
+An agent needs to distinguish:
+
+- invalid arguments;
+- not found;
+- unauthorized;
+- policy denied;
+- approval required;
+- rate limited;
+- upstream unavailable;
+- partial result;
+- retryable failure.
+
+If every failure becomes one text message, the client may retry an unsafe
+operation, hallucinate success, or hide a useful recovery path.
+
+## Authorization needs resource semantics.
+
+The MCP authorization specification for HTTP transports requires protected
+servers to validate access tokens and ensure they were issued for that server.
+That is the transport foundation, not the complete authorization model.
+
+The server must still enforce:
+
+- principal and tenant;
+- tool permission;
+- resource ownership;
+- action scope;
+- policy;
+- approval;
+- credential expiry.
+
+For local stdio servers, the specification recommends retrieving credentials
+from the environment rather than applying the HTTP authorization flow. Those
+credentials still need least privilege.
+
+## Tool output is untrusted context too.
+
+A tool may return text from a webpage, ticket, repository, or threat feed. That
+text can contain prompt injection or misleading instructions.
+
+Return structured data with provenance. Separate data from instructions. Never
+allow tool output to expand permissions. Keep sensitive fields out of responses
+unless the task requires them.
+
+OWASP's MCP Top 10 calls out token exposure, scope creep, tool poisoning,
+supply-chain compromise, command injection, and contextual prompt injection.
+These risks belong in the server design and test plan.
+
+## Observability should follow the capability.
+
+For each request, record:
+
+- principal and tenant;
+- client and server version;
+- tool and schema version;
+- sanitized arguments;
+- policy decision;
+- duration and outcome;
+- affected resource IDs;
+- approval reference;
+- error class.
+
+Do not log secrets or unrestricted tool content by default.
+
+## The test suite I wish I started with.
+
+I now want tests for:
+
+1. schema boundaries and malformed inputs;
+2. unauthorized and cross-tenant resource access;
+3. tool description clarity across representative prompts;
+4. idempotency and replay;
+5. timeout and upstream failure;
+6. poisoned tool output;
+7. secret redaction;
+8. cancellation;
+9. version compatibility;
+10. audit completeness.
+
+Add an evaluation set for tool selection too. A technically correct tool is
+still badly designed if agents consistently choose it in the wrong situation.
+
+## What I would do differently.
+
+I would begin with the smallest domain capability, write the authorization and
+error model before the handler, and test the tool through more than one client.
+
+I would treat descriptions and schemas as versioned product interfaces.
+
+And I would ask one question before adding every tool:
+
+> Does this capability make the agent more useful, or merely more powerful?
+
+The first MCP server taught me that interoperability is the beginning. The
+quality of the boundary determines whether the connection deserves trust.
+
+## Sources and further reading.
+
+- [Model Context Protocol authorization specification](https://modelcontextprotocol.io/specification/2025-06-18/basic/authorization)
+- [OWASP MCP Top 10](https://owasp.org/www-project-mcp-top-10/)
+- [OWASP prompt injection](https://owasp.org/www-community/attacks/PromptInjection)
+- [Securing agentic AI tools for the SOC](/notes/securing-agentic-ai-tools-for-soc)

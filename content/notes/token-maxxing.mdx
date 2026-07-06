@@ -1,15 +1,189 @@
 ---
-number: ""
-title: "Notes on token-maxxing"
-titleHtml: "Notes on <em>token-maxxing.</em>"
-description: "The fun meme; the boring truth."
-displayDate: " -  ·  -  ·  - "
-readTime: "draft"
-quirk: " -  probably worth finishing?"
-excerptHtml: "The fun meme; the boring truth. Context engineering vs prompt engineering vs the actual eval that gets you off the demo treadmill."
-tags: ["ai", "opinions"]
-draft: true
-draftLabel: "about to give up"
+number: "045"
+title: "Token-maxxing is not context engineering"
+titleHtml: "<em>Token-maxxing</em> is not context engineering."
+headingHtml: "<span class=\"red\">Token-maxxing</span> is not<br/>context engineering."
+description: "A practical guide to context engineering: selecting, ordering, compressing, caching, securing, and evaluating the information given to AI systems."
+ogDescription: "Why filling the context window is not a substitute for retrieval quality, evidence design, memory policy, and evaluation."
+date: "2026-07-29"
+displayDate: "2026 · 07 · 29"
+readTime: "8 min"
+quirk: " -  more context, more ways to be wrong"
+excerptHtml: "A larger context window increases capacity. Context engineering decides which information deserves that capacity."
+dekHtml: "The fun meme and the useful engineering discipline behind retrieval, memory, ordering, compression, caching, and evaluation."
+tags: ["ai", "opinions", "building", "data"]
+featured: true
+tableOfContents: true
 ---
 
-Draft.
+<Lede>
+  A larger context window increases capacity. Context engineering decides which
+  information deserves that capacity.
+</Lede>
+
+Token-maxxing is the instinct to put everything into the prompt because the
+window allows it.
+
+Sometimes that works. It is also an expensive way to postpone decisions about
+relevance, authority, freshness, and trust.
+
+## Capacity is not attention.
+
+A model can accept a long input without using every part equally well for every
+task.
+
+More context can introduce:
+
+- irrelevant facts;
+- contradictory versions;
+- stale policy;
+- duplicated evidence;
+- prompt injection;
+- sensitive data;
+- higher latency and cost;
+- harder evaluation.
+
+The question is not "Will it fit?" It is "What decision will this information
+improve?"
+
+## Context has layers.
+
+I separate at least six:
+
+1. **instructions**: stable behavior and constraints;
+2. **identity and policy**: who is asking and what is allowed;
+3. **task state**: the current goal, plan, and completed steps;
+4. **retrieved evidence**: source-linked facts relevant now;
+5. **memory**: durable information from earlier interactions;
+6. **tool results**: fresh observations from external systems.
+
+These layers need different ownership, trust, retention, and ordering.
+
+## Retrieve before you stuff.
+
+Good retrieval begins with the information need, tenant, time range, entities,
+and permissions.
+
+Use the right method:
+
+- lexical search for exact identifiers;
+- semantic search for conceptual similarity;
+- structured queries for filters and aggregates;
+- graph traversal for relationships;
+- direct tools for current state.
+
+Rerank, deduplicate, and preserve citations. An embedding result is a candidate,
+not automatically evidence.
+
+## Compress without deleting uncertainty.
+
+Summaries save tokens and can erase provenance, disagreement, and missing data.
+
+A useful compression artifact retains:
+
+- source IDs;
+- observed facts;
+- inferred relationships;
+- conflicting evidence;
+- confidence;
+- unresolved questions;
+- time boundaries.
+
+For security work, "three sources agree" is different from three articles
+repeating one original report.
+
+## Order for reuse and control.
+
+Put stable, reusable context in consistent blocks and keep task-specific data
+separate. Provider caching can reduce repeated processing cost and latency;
+Google Cloud's context-caching documentation, for example, describes explicit
+and implicit reuse of common prompt content.
+
+Caching is also data storage. Apply region, access, sensitivity, and expiry
+policy. Do not cache secrets or customer evidence simply because it is
+economically convenient.
+
+## Treat external context as hostile.
+
+Retrieved pages, tickets, files, and tool results may contain instructions
+written for the model.
+
+OWASP describes this as indirect prompt injection. Delimit sources and tell the
+model they are data, but enforce safety outside the prompt:
+
+- tenant-aware retrieval;
+- scoped tools;
+- validated arguments;
+- policy gates;
+- approvals;
+- output validation.
+
+No amount of context ordering turns untrusted text into authorization.
+
+## Set a context budget.
+
+Allocate context by purpose rather than allowing each component to append
+freely.
+
+Track:
+
+- instruction tokens;
+- retrieved evidence;
+- conversation history;
+- tool results;
+- generated output;
+- cache hits;
+- truncation;
+- cost and latency.
+
+When the budget is reached, choose explicitly: retrieve less, compress, ask a
+clarifying question, split the task, or stop.
+
+## Evaluate context changes.
+
+Test retrieval and generation separately.
+
+For retrieval:
+
+- relevant evidence found;
+- irrelevant evidence included;
+- freshness;
+- source diversity;
+- permission correctness.
+
+For generation:
+
+- claim support;
+- citation accuracy;
+- instruction following;
+- calibration;
+- resistance to poisoned context;
+- task success;
+- cost and latency.
+
+More tokens are justified when they improve the completed outcome, not when they
+make the trace look industrious.
+
+## The useful definition.
+
+Context engineering is the design of what information reaches the model, in
+what form, under whose authority, for how long, and with what evidence that it
+helped.
+
+Prompt engineering shapes instructions.
+
+Retrieval engineering finds information.
+
+Memory engineering governs retained state.
+
+Evaluation tells us whether the combination works.
+
+Token-maxxing is a good joke. The production discipline is choosing less, more
+carefully.
+
+## Sources and further reading.
+
+- [NIST definition of retrieval-augmented generation](https://csrc.nist.gov/glossary/term/retrieval_augmented_generation)
+- [OWASP prompt injection](https://owasp.org/www-community/attacks/PromptInjection)
+- [Google Cloud context caching overview](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/context-cache/context-cache-overview)
+- [Secure RAG for threat intelligence](/notes/secure-rag-threat-intelligence)
