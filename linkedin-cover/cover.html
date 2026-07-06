@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="fonts/embedded-fonts.css" />
+<style>
+  :root{
+    --paper:#fbf3e6; --paper-2:#f5ead4; --paper-3:#ede0c6;
+    --ink:#1d1612; --ink-soft:#3a2e25; --ink-mute:#7a6a5a; --ink-faint:#b0a190;
+    --rule:#d2c2a3; --line:#2a1f17;
+    --red:oklch(0.55 0.19 28); --red-light:oklch(0.72 0.16 28);
+    --hl:oklch(0.93 0.14 92); --pen:oklch(0.40 0.13 256);
+    --tape:#f3e4b0; --tape-2:#e9d58a;
+    --serif:"Instrument Serif","Times New Roman",serif;
+    --hand:"Caveat","Comic Sans MS",cursive;
+    --sans:"Geist",-apple-system,sans-serif;
+    --mono:"Geist Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{background:#cdbf9f;}
+
+  .cover{
+    position:relative; width:1584px; height:396px; overflow:hidden;
+    color:var(--ink); font-family:var(--serif);
+    background:
+      radial-gradient(ellipse at 24% 16%, rgba(255,250,232,0.55) 0%, transparent 52%),
+      radial-gradient(ellipse at 82% 86%, rgba(180,145,90,0.06) 0%, transparent 58%),
+      linear-gradient(135deg,
+        color-mix(in oklab, var(--paper) 96%, #fff8e6 4%) 0%,
+        var(--paper) 52%,
+        color-mix(in oklab, var(--paper) 92%, #c9a560 8%) 100%);
+  }
+  /* paper grain */
+  .cover::before{
+    content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+    opacity:0.55; mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+  }
+  /* faint engineering dot-grid, lower-right */
+  .cover::after{
+    content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+    background-image:radial-gradient(var(--ink-faint) 0.8px, transparent 0.8px);
+    background-size:26px 26px; background-position:0 0;
+    -webkit-mask-image:linear-gradient(105deg, transparent 58%, black 100%);
+            mask-image:linear-gradient(105deg, transparent 58%, black 100%);
+    opacity:0.22;
+  }
+  .layer{position:absolute; z-index:3;}
+
+  /* ── washi tape strips ── */
+  .tape{
+    position:absolute; z-index:4; height:30px; width:150px;
+    background:
+      repeating-linear-gradient(90deg, transparent 0 5px, rgba(255,255,255,0.07) 5px 6px),
+      linear-gradient(180deg, rgba(245,220,130,0.55) 0%, rgba(232,207,115,0.82) 50%, rgba(245,220,130,0.55) 100%);
+    box-shadow:0 2px 5px rgba(60,40,20,0.16), inset 0 1px 0 rgba(255,255,255,0.3);
+    -webkit-mask-image:linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+            mask-image:linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+  }
+  .tape.t1{ top:-12px; left:300px; transform:rotate(-4deg); }
+  .tape.t2{ top:-13px; right:330px; width:130px; transform:rotate(5deg); }
+
+  /* ── left sticky note: "right now" ── */
+  .sticky{
+    position:absolute; z-index:5; top:40px; left:54px; width:236px;
+    background:linear-gradient(180deg,#fffdf3,#fff4d2);
+    padding:18px 20px 20px; transform:rotate(-3.2deg);
+    box-shadow:1px 3px 0 rgba(60,40,20,0.05), 6px 16px 30px rgba(60,40,20,0.16);
+    border-radius:3px;
+  }
+  .sticky .tab{
+    position:absolute; top:-13px; left:50%; transform:translateX(-50%) rotate(1.5deg);
+    width:96px; height:26px;
+    background:linear-gradient(180deg, rgba(244,200,212,0.85), rgba(244,200,212,0.62));
+    -webkit-mask-image:linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+            mask-image:linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+    box-shadow:0 2px 3px rgba(60,40,20,0.12);
+  }
+  .sticky h4{
+    font-family:var(--hand); font-weight:700; font-size:26px; line-height:1;
+    color:var(--red); margin-bottom:10px; transform:rotate(-1deg);
+  }
+  .sticky dl{ font-family:var(--mono); font-size:11.5px; line-height:1.55; color:var(--ink-soft); }
+  .sticky dl b{ color:var(--ink-mute); font-weight:500; letter-spacing:0.02em; }
+  .sticky .ok{ color:var(--red); font-weight:500; }
+
+  /* ── center hero ── */
+  .hero{
+    position:absolute; z-index:5; top:50%; left:330px; right:120px;
+    transform:translateY(-50%);
+  }
+  .eyebrow{
+    font-family:var(--mono); font-size:13px; letter-spacing:0.22em; text-transform:uppercase;
+    color:var(--ink-mute); margin-bottom:14px; display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow .dot{ width:6px; height:6px; border-radius:50%; background:var(--red); display:inline-block; }
+  .eyebrow .sep{ color:var(--ink-faint); }
+  h1{
+    font-family:var(--serif); font-weight:400; font-size:62px; line-height:1.04;
+    letter-spacing:-0.01em; color:var(--ink);
+  }
+  h1 .hl{
+    background:linear-gradient(180deg, transparent 58%, var(--hl) 58%, var(--hl) 92%, transparent 92%);
+    padding:0 2px;
+  }
+  h1 .red{ color:var(--red); font-style:italic; }
+  h1 .soft{ color:var(--ink-soft); font-style:italic; }
+
+  .chips{ display:flex; flex-wrap:wrap; gap:9px 10px; margin-top:22px; align-items:center; }
+  .chip{
+    font-family:var(--mono); font-size:12.5px; letter-spacing:0.02em; color:var(--ink-soft);
+    background:var(--paper-2); border:1px solid var(--rule);
+    padding:6px 13px; border-radius:999px;
+    box-shadow:0 1px 0 rgba(255,250,232,0.6) inset, 1px 2px 5px rgba(60,40,20,0.07);
+  }
+  .chip.r{ transform:rotate(-2deg); }
+  .chip.l{ transform:rotate(1.6deg); }
+  .chip.dark{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .chip.dark .k{ color:var(--red-light); }
+
+  /* ── right: wax-seal monogram + signature ── */
+  .seal{
+    position:absolute; z-index:5; top:46px; right:60px;
+    width:96px; height:96px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--red-light), var(--red) 70%);
+    box-shadow:0 6px 18px rgba(140,40,20,0.30), inset 0 2px 6px rgba(255,255,255,0.25), inset 0 -6px 12px rgba(80,10,0,0.35);
+    display:flex; align-items:center; justify-content:center;
+    transform:rotate(-7deg);
+  }
+  .seal span{
+    font-family:var(--serif); font-style:italic; font-size:42px; color:#fff5ee;
+    text-shadow:0 1px 2px rgba(80,10,0,0.4); letter-spacing:-0.02em;
+  }
+  .seal::before{
+    content:""; position:absolute; inset:9px; border-radius:50%;
+    border:1.5px dashed rgba(255,240,230,0.45);
+  }
+  .signature{
+    position:absolute; z-index:5; right:62px; bottom:30px; text-align:right;
+  }
+  .signature .name{
+    font-family:var(--hand); font-weight:700; font-size:38px; line-height:0.9; color:var(--ink);
+    transform:rotate(-3deg); display:inline-block;
+  }
+  .signature .url{
+    font-family:var(--mono); font-size:11.5px; letter-spacing:0.16em; text-transform:uppercase;
+    color:var(--ink-mute); margin-top:8px;
+  }
+
+  /* baseline hairline + right-aligned color-coded editorial accent */
+  .rule-bottom{
+    position:absolute; z-index:2; left:0; right:0; bottom:0; height:3px;
+    background:var(--rule); opacity:0.7;
+  }
+  .rule-accent{
+    position:absolute; z-index:3; right:0; bottom:0; height:5px; width:240px;
+    background:linear-gradient(90deg, transparent 0%, var(--ink) 0%, var(--ink) 12%, transparent 12%, transparent 16%, var(--red) 16%, var(--red) 100%);
+  }
+  /* handwritten tag near seal */
+  .accent{
+    position:absolute; z-index:6; font-family:var(--hand); font-weight:600;
+    font-size:24px; color:var(--pen); transform:rotate(-6deg);
+    top:64px; right:172px; opacity:0.95; white-space:nowrap;
+  }
+  .star{ position:absolute; z-index:4; font-family:var(--serif); color:var(--red); opacity:0.8; }
+</style>
+</head>
+<body>
+  <div class="cover" id="cover">
+    <div class="tape t1"></div>
+    <div class="tape t2"></div>
+
+    <!-- left sticky -->
+    <div class="sticky">
+      <div class="tab"></div>
+      <h4>right now &rarr;</h4>
+      <dl>
+        <div><b>in</b> &nbsp;Bengaluru, IN &middot; IST</div>
+        <div><b>building</b> &nbsp;AI-native SecOps</div>
+        <div><b>status</b> &nbsp;<span class="ok">open to selective work</span></div>
+      </dl>
+    </div>
+
+    <!-- center hero -->
+    <div class="hero">
+      <div class="eyebrow">
+        <span class="dot"></span>
+        PRINCE SINHA
+        <span class="sep">/</span>
+        SR. DIRECTOR, INNOVATIONS &middot; CYBLE
+      </div>
+      <h1>
+        I build <span class="hl">AI-native systems</span> for<br>
+        security, automation, and <span class="red">trust</span>.
+      </h1>
+      <div class="chips">
+        <span class="chip r"><span class="k"></span>agentic&nbsp;workflows</span>
+        <span class="chip">RAG</span>
+        <span class="chip l">HITL</span>
+        <span class="chip dark r"><span class="k">+&nbsp;</span>threat&nbsp;intel</span>
+        <span class="chip">SOC&nbsp;copilots</span>
+        <span class="chip l">Kubernetes</span>
+        <span class="chip">platform&nbsp;eng</span>
+      </div>
+    </div>
+
+    <span class="star" style="top:150px; right:300px; font-size:22px;">&#10022;</span>
+
+    <!-- right seal + signature -->
+    <div class="seal"><span>PS</span></div>
+    <div class="accent">built for Tuesday &rarr;</div>
+    <div class="signature">
+      <div class="name">Prince Sinha</div>
+      <div class="url">theprincevishal.in</div>
+    </div>
+
+    <div class="rule-bottom"></div>
+    <div class="rule-accent"></div>
+  </div>
+</body>
+</html>

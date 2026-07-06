@@ -1,0 +1,517 @@
+---
+number: "028"
+title: "The agentic SOC architecture scorecard"
+titleHtml: "The <em>agentic SOC</em> architecture scorecard."
+headingHtml: "The <em>agentic SOC</em><br/>architecture <span class=\"red\">scorecard</span>."
+description: "A technical scorecard for agentic SOC architecture: evidence, identity context, tool permissions, approvals, evals, observability, reliability, and analyst trust."
+ogDescription: "A practical agentic SOC architecture scorecard for CISOs, founders, and security engineering leaders evaluating AI-native SecOps platforms."
+date: "2026-06-25"
+displayDate: "2026 · 06 · 25"
+readTime: "13 min"
+quirk: "-- or twelve questions before the demo gets dangerous"
+excerptHtml: "An agentic SOC platform should be judged by the control system around the model, not by the confidence of the demo."
+dekHtml: "A CISO- and founder-friendly architecture scorecard for evaluating AI-native SOC platforms, security agents, evidence layers, control planes, and analyst trust."
+tags: ["ai", "security", "secops", "agents", "platform", "building"]
+featured: true
+tableOfContents: true
+nextSlug: "hiring-ai-security-engineering-leader"
+---
+
+<Lede>
+  An agentic SOC platform should be judged by the control system around the
+  model, not by the confidence of the demo.
+</Lede>
+
+Security demos are often too clean.
+
+The alert is tidy.
+
+The logs are available.
+
+The identity graph is complete.
+
+The model cites the right source.
+
+The agent chooses the right tool.
+
+The containment action is obviously safe.
+
+Nobody is tired. Nobody is on call. Nobody is missing context. Nobody is
+responding to three other incidents. Nobody is worried about breaking
+production.
+
+Real SecOps does not look like that.
+
+That is why agentic SOC architecture needs a scorecard.
+
+Not a vibes check.
+
+Not "does the demo look smart?"
+
+A scorecard.
+
+## Why agentic SOC architecture is different.
+
+Traditional SOC tooling mostly helps analysts see, search, enrich, correlate,
+and respond.
+
+Agentic SOC systems add a new dimension: the system can plan, call tools,
+compose evidence, recommend next actions, and sometimes initiate changes.
+
+That means the architecture has to answer questions older SOC products could
+often avoid:
+
+- What can the agent do?
+- Who authorized it?
+- Which evidence did it use?
+- Which source was trusted?
+- What changed because of the agent?
+- Could an attacker influence the agent through data?
+- Which actions require human approval?
+- How do we evaluate the behavior?
+- How do we investigate the agent itself after an incident?
+
+The model matters.
+
+The surrounding system matters more.
+
+## Score 1: evidence before eloquence.
+
+The first thing I would score is evidence.
+
+Can every important AI-generated claim point back to source material?
+
+For a SOC, "this looks suspicious" is not enough.
+
+The product should preserve:
+
+- source system;
+- timestamp;
+- entity;
+- event identifier;
+- query or retrieval path;
+- enrichment source;
+- confidence;
+- freshness;
+- transformation history;
+- analyst edits.
+
+This is the difference between a summary and an investigation object.
+
+If the platform cannot explain why it believes something, the analyst cannot
+trust it under pressure.
+
+Good architecture has an evidence layer.
+
+Weak architecture has a prompt with a long context window.
+
+Those are not the same thing.
+
+## Score 2: identity context.
+
+Most serious investigations eventually become identity investigations.
+
+Who did this?
+
+Was the identity legitimate?
+
+Was the session legitimate?
+
+Was the device expected?
+
+Was the location unusual?
+
+Was MFA used?
+
+Was the OAuth grant normal?
+
+Was the privilege level appropriate?
+
+An agentic SOC without identity context will overfit to alerts and miss the
+story.
+
+The architecture should unify:
+
+- users;
+- service accounts;
+- groups;
+- roles;
+- devices;
+- sessions;
+- tokens;
+- OAuth apps;
+- cloud principals;
+- privilege changes;
+- historical behavior.
+
+This does not mean building a perfect graph before shipping anything.
+
+It means the system should have a clear identity model early, because identity
+is how many security events become explainable.
+
+## Score 3: tool permissions.
+
+Tool permissions are architecture.
+
+They are not an implementation detail.
+
+An agent that can only read evidence has one risk profile.
+
+An agent that can disable accounts, revoke sessions, update detections, block
+IPs, quarantine endpoints, or open firewall changes has another.
+
+OWASP's Excessive Agency guidance is useful because it names the root causes
+clearly: too much functionality, too much permission, or too much autonomy.
+
+For agentic SOC systems, I would score:
+
+- read-only tools separated from write tools;
+- scoped credentials;
+- customer-specific authorization;
+- per-action permission checks;
+- least privilege;
+- rate limits;
+- dry-run modes;
+- approval gates;
+- rollback paths;
+- audit logs;
+- tool output validation.
+
+The best agent architecture treats tools like production APIs with security
+contracts.
+
+The weakest architecture treats tools like plugins.
+
+Plugins are where the trouble starts.
+
+## Score 4: approval design.
+
+Human-in-the-loop is not a strategy by itself.
+
+It is a design problem.
+
+Approval quality depends on what the human sees when they approve.
+
+A useful approval screen should show:
+
+- proposed action;
+- target entity;
+- blast radius;
+- source evidence;
+- confidence;
+- reason for recommendation;
+- expected effect;
+- rollback option;
+- related incidents;
+- policy that requires approval.
+
+"Approve / reject" is not enough.
+
+The analyst needs enough context to make a real decision quickly.
+
+This is especially important for containment actions. Revoking a token,
+disabling an account, isolating an endpoint, or blocking an IP can be exactly
+right.
+
+It can also interrupt production.
+
+Approval design is where product taste and security judgment meet.
+
+## Score 5: prompt injection resistance.
+
+SOC agents read hostile data.
+
+That is the job.
+
+Emails, web pages, ticket comments, malware notes, threat reports, chat
+messages, logs, endpoint command lines, cloud object names, and user-provided
+text can all contain instructions the agent should not obey.
+
+OWASP describes prompt injection as inputs altering model behavior or output in
+unintended ways. In a SOC, indirect prompt injection is especially relevant
+because the malicious instruction may be embedded in evidence the analyst asked
+the system to inspect.
+
+I would score architecture on whether it separates:
+
+- developer instructions;
+- user intent;
+- retrieved evidence;
+- tool output;
+- untrusted external content;
+- generated reasoning;
+- action proposals.
+
+The platform should not rely on one heroic system prompt.
+
+It should use boundaries outside the model:
+
+- typed tool schemas;
+- allowlisted actions;
+- deterministic policy checks;
+- output parsers;
+- source labeling;
+- retrieval isolation;
+- explicit evidence handling;
+- approval gates for high-impact steps.
+
+Prompt injection is not a prompt problem.
+
+It is an application architecture problem with a language interface.
+
+## Score 6: evaluations.
+
+If the team cannot evaluate the agent, the team cannot improve the agent.
+
+For an agentic SOC, evaluations should include:
+
+- golden investigations;
+- benign false-positive cases;
+- adversarial prompt-injection cases;
+- missing-data cases;
+- noisy telemetry cases;
+- tool failure cases;
+- ambiguous-severity cases;
+- customer-specific policy cases;
+- action approval cases;
+- regression tests for previous failures.
+
+The point is not to create a fake benchmark theater.
+
+The point is to know whether the product is becoming more useful.
+
+I would want to see metrics like:
+
+- evidence citation accuracy;
+- correct entity resolution;
+- useful enrichment rate;
+- analyst edit distance;
+- time to useful first summary;
+- unsafe action proposal rate;
+- hallucinated claim rate;
+- tool failure recovery;
+- analyst acceptance rate;
+- regression pass rate.
+
+Model quality is only one input.
+
+Workflow quality is the target.
+
+## Score 7: observability.
+
+Agent runs need traces.
+
+A SOC team should be able to answer:
+
+- What did the agent receive?
+- What evidence did it retrieve?
+- What tools did it call?
+- What did each tool return?
+- What policy checks ran?
+- What action did it propose?
+- Who approved it?
+- What changed downstream?
+- What failed?
+- What was retried?
+- What was hidden from the model?
+
+Without this, debugging becomes archaeology.
+
+Observability should cover:
+
+- prompts and structured inputs;
+- retrieval queries;
+- tool-call latency;
+- tool-call errors;
+- token and model cost;
+- policy decisions;
+- approval decisions;
+- generated outputs;
+- analyst edits;
+- downstream action status.
+
+This is how agentic SOC systems become operable.
+
+## Score 8: incident response for the agent itself.
+
+Every AI security platform needs an incident response plan for the AI system.
+
+What happens if:
+
+- the agent proposes unsafe actions;
+- an integration leaks sensitive data;
+- a prompt-injection technique works;
+- a customer-specific policy is bypassed;
+- a model version regresses;
+- a tool receives malformed input;
+- evidence is incorrectly attributed;
+- a containment action is wrongly executed;
+- a tenant boundary is violated?
+
+NIST's Cyber AI Profile work is useful because it separates the problem space:
+cybersecurity of AI systems, AI-enabled cyber attacks, and AI-enabled cyber
+defense.
+
+Agentic SOC products live in all three.
+
+They must secure the AI system.
+
+They must account for attackers using AI.
+
+They must use AI to improve defense.
+
+That means the platform itself needs incident playbooks.
+
+## Score 9: tenant and data boundaries.
+
+Security platforms often handle sensitive customer data.
+
+Agentic platforms add extra risk because context is assembled dynamically.
+
+I would score:
+
+- tenant isolation;
+- customer-specific memory boundaries;
+- data retention controls;
+- PII and secret handling;
+- prompt and trace redaction;
+- retrieval permission checks;
+- least-privilege connectors;
+- training-data exclusions where appropriate;
+- export controls;
+- auditability.
+
+This is not paperwork.
+
+It is architecture.
+
+If a platform cannot explain where customer data goes, it is not ready for
+serious security buyers.
+
+## Score 10: analyst experience.
+
+The analyst is not a passive consumer.
+
+The analyst is part of the control system.
+
+The product should let analysts:
+
+- inspect evidence;
+- correct entity resolution;
+- edit investigation notes;
+- accept or reject recommendations;
+- ask follow-up questions;
+- see uncertainty;
+- compare related incidents;
+- escalate with context;
+- convert findings into detection improvements.
+
+The best AI-native SOC UX does not make the analyst feel replaced.
+
+It makes the analyst feel faster and more in control.
+
+That is a different design goal.
+
+## Score 11: secure-by-design posture.
+
+Secure-by-design is not a sticker for the footer.
+
+For agentic SOC, it means the default product shape reduces risky behavior.
+
+Examples:
+
+- read-only by default;
+- scoped tools by default;
+- evidence attached by default;
+- approvals for impact by default;
+- audit logs by default;
+- customer isolation by default;
+- evaluation before rollout by default;
+- rollback paths by default.
+
+This is the leadership bar I would expect from a serious AI security platform.
+
+Security should not arrive as an afterthought after the demo works.
+
+The demo is the beginning of the risk conversation.
+
+## Score 12: executive clarity.
+
+Finally, the architecture should be explainable to leadership.
+
+A CISO, founder, VP Engineering, or board member should be able to understand:
+
+- what the agent can do;
+- what it cannot do;
+- what requires approval;
+- what evidence is stored;
+- how risk is measured;
+- how failures are handled;
+- what is improving over time.
+
+If the system can only be explained by a prompt engineer, the system is not
+ready.
+
+Agentic SOC architecture needs executive clarity because trust is part of the
+product.
+
+## The scorecard in one page.
+
+Before buying or building an agentic SOC platform, I would ask:
+
+1. Does every claim have evidence?
+2. Is identity context first-class?
+3. Are tool permissions scoped?
+4. Are approvals designed with useful context?
+5. Is prompt injection handled outside the prompt?
+6. Are there golden-case and adversarial evaluations?
+7. Are agent runs observable?
+8. Is there an incident plan for the AI system?
+9. Are tenant and data boundaries explicit?
+10. Does the UX preserve analyst control?
+11. Are secure defaults built in?
+12. Can executives understand the risk posture?
+
+If the answer to most of these is vague, the product is early.
+
+That may be fine.
+
+Early products can be good.
+
+But the team should know exactly which risks are still open.
+
+## What this says about the builder-leader role.
+
+This scorecard is why AI security engineering leadership cannot be only
+people-management.
+
+Someone has to connect:
+
+- threat model;
+- product experience;
+- architecture;
+- platform reliability;
+- SecOps workflow;
+- customer trust;
+- delivery rhythm;
+- team design.
+
+That is the work.
+
+The agentic SOC market does not need more demos that sound confident.
+
+It needs systems that earn confidence.
+
+That is the kind of system I want to build.
+
+## References.
+
+Useful starting points:
+
+- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
+- [NIST NCCoE Cyber AI Profile](https://www.nccoe.nist.gov/projects/cyber-ai-profile)
+- [MITRE ATLAS and AI incident sharing](https://www.mitre.org/news-insights/news-release/mitre-launches-ai-incident-sharing-initiative)
+- [OWASP LLM01: Prompt Injection](https://genai.owasp.org/llmrisk/llm01-prompt-injection/)
+- [OWASP LLM06: Excessive Agency](https://genai.owasp.org/llmrisk/llm062025-excessive-agency/)
+- [OWASP Top 10 for LLM Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications/)
+

@@ -4,10 +4,10 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>A short letter to recruiters  -  Prince Sinha</title>
-<meta name="description" content="Open to engineering leadership, principal IC, and CTO / founding-CTO roles at funded AI-native, security, and infrastructure companies. Read this before reaching out." />
+<meta name="description" content="A practical note for recruiters and founders considering Prince Sinha for engineering leadership, principal IC, or early-stage CTO roles in AI, security, and infrastructure." />
 <meta name="theme-color" content="#fbf3e6" />
 <meta property="og:title" content="A short letter to recruiters  -  Prince Sinha" />
-<meta property="og:description" content="Six questions every cold email asks, answered up front." />
+<meta property="og:description" content="A practical introduction to the work, roles, and teams that may be a good mutual fit." />
 <meta property="og:type" content="website" />
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -401,6 +401,287 @@
     padding: 1px 5px; border-radius: 2px;
   }
 
+  /* ───────── Proof notes board ───────── */
+  .proof-board {
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    padding: 34px clamp(22px, 4vw, 38px) 32px;
+    margin: -28px 0 80px 0;
+    position: relative;
+    border-radius: 3px 2px 4px 2px;
+    transform: rotate(-0.35deg);
+    box-shadow:
+      0 18px 36px rgba(60, 40, 20, 0.08),
+      0 1px 0 rgba(255, 255, 255, 0.34) inset;
+  }
+  .proof-board::before {
+    content: "";
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    width: 96px;
+    height: 22px;
+    background: linear-gradient(90deg,
+      color-mix(in oklab, var(--tape) calc(var(--tape-a) * 78%), transparent),
+      color-mix(in oklab, var(--tape-2) calc(var(--tape-b) * 100%), transparent),
+      color-mix(in oklab, var(--tape) calc(var(--tape-a) * 78%), transparent));
+    transform: translateX(-50%) rotate(2deg);
+    box-shadow: 0 1px 2px rgba(60, 40, 20, 0.12);
+  }
+  .proof-board::after {
+    content: "";
+    position: absolute;
+    right: -1px;
+    bottom: -1px;
+    width: 38px;
+    height: 38px;
+    background: linear-gradient(135deg,
+      color-mix(in oklab, var(--paper-2) 60%, #fff8e6 40%) 0%,
+      color-mix(in oklab, var(--paper-2) 80%, #c9a560 20%) 70%,
+      color-mix(in oklab, var(--paper-2) 88%, #8b6a3d 12%) 100%);
+    clip-path: polygon(100% 0, 0 100%, 100% 100%);
+    opacity: 0.9;
+  }
+  .proof-pin {
+    position: absolute;
+    top: -16px;
+    right: 28px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--red);
+    padding: 4px 10px;
+    border: 1px solid var(--red);
+    background: var(--paper);
+    transform: rotate(2deg);
+  }
+  .proof-head {
+    transform: rotate(0.35deg);
+    margin-bottom: 22px;
+  }
+  .proof-head .scribble {
+    font-family: var(--hand);
+    font-size: 26px;
+    line-height: 1;
+    color: var(--red);
+    display: inline-block;
+    transform: rotate(-2deg);
+    margin-bottom: 8px;
+  }
+  .proof-head h2 {
+    font-family: var(--serif);
+    font-size: clamp(34px, 4.8vw, 52px);
+    line-height: 1;
+    letter-spacing: -0.015em;
+    margin-bottom: 12px;
+  }
+  .proof-head p {
+    max-width: 58ch;
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.45;
+    color: var(--ink-soft);
+  }
+  .proof-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    transform: rotate(0.35deg);
+  }
+  .proof-card {
+    display: grid;
+    gap: 8px;
+    min-height: 148px;
+    padding: 18px 18px 16px;
+    background:
+      radial-gradient(circle at 12% 8%, rgba(255, 255, 255, 0.16), transparent 26%),
+      linear-gradient(180deg,
+        color-mix(in oklab, var(--paper-3) 82%, #fff4cf 18%),
+        color-mix(in oklab, var(--paper-3) 96%, #8b6a3d 4%));
+    border: 1px solid color-mix(in oklab, var(--rule) 84%, var(--ink) 16%);
+    border-radius: 2px 4px 3px 2px;
+    box-shadow:
+      0 8px 18px rgba(60, 40, 20, 0.07),
+      0 1px 0 rgba(255, 255, 255, 0.28) inset;
+    transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+  }
+  .proof-card:nth-child(2n) { transform: rotate(0.8deg); }
+  .proof-card:nth-child(2n + 1) { transform: rotate(-0.6deg); }
+  .proof-card:hover {
+    transform: rotate(0deg) translateY(-2px);
+    border-color: var(--red-light);
+    box-shadow:
+      0 12px 24px rgba(60, 40, 20, 0.11),
+      0 1px 0 rgba(255, 255, 255, 0.28) inset;
+  }
+  .proof-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+  .proof-card strong {
+    font-family: var(--serif);
+    font-size: 24px;
+    line-height: 1.08;
+    font-weight: 400;
+    color: var(--ink);
+  }
+  .proof-card small {
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1.45;
+    color: var(--ink-mute);
+  }
+  .proof-cta {
+    margin-top: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+    align-items: center;
+    transform: rotate(0.35deg);
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .proof-cta a {
+    color: var(--red);
+    border-bottom: 1px solid var(--red);
+    padding-bottom: 2px;
+  }
+  [data-theme="dark"] .proof-board {
+    box-shadow:
+      0 18px 40px rgba(0,0,0,0.46),
+      0 1px 0 rgba(255,230,180,0.04) inset;
+  }
+  [data-theme="dark"] .proof-card {
+    background:
+      radial-gradient(circle at 12% 8%, rgba(255, 220, 160, 0.05), transparent 26%),
+      linear-gradient(180deg,
+        color-mix(in oklab, var(--paper-3) 86%, #6e5a30 14%),
+        color-mix(in oklab, var(--paper-3) 96%, #0a0805 4%));
+    box-shadow:
+      0 10px 24px rgba(0,0,0,0.34),
+      0 1px 0 rgba(255,230,180,0.04) inset;
+  }
+  [data-theme="dark"] .proof-board::before {
+    background:
+      linear-gradient(90deg,
+        color-mix(in oklab, var(--tape) calc(var(--tape-a) * 78%), transparent),
+        color-mix(in oklab, var(--tape-2) calc(var(--tape-b) * 100%), transparent),
+        color-mix(in oklab, var(--tape) calc(var(--tape-a) * 78%), transparent));
+    box-shadow: 0 2px 4px rgba(0,0,0,0.42);
+  }
+  [data-theme="dark"] .proof-board::after {
+    background: linear-gradient(135deg,
+      color-mix(in oklab, var(--paper-2) 55%, #5e4a2e 45%) 0%,
+      color-mix(in oklab, var(--paper-2) 78%, #2b1f12 22%) 70%,
+      color-mix(in oklab, var(--paper-2) 88%, #0a0805 12%) 100%);
+  }
+  @media (max-width: 700px) {
+    .proof-board {
+      margin: -36px 0 64px 0;
+      padding: 30px 18px 26px;
+      transform: none;
+    }
+    .proof-head,
+    .proof-grid,
+    .proof-cta { transform: none; }
+    .proof-grid { grid-template-columns: 1fr; }
+    .proof-card { min-height: 0; }
+    .proof-card:nth-child(n) { transform: none; }
+    .proof-pin {
+      right: 18px;
+      max-width: calc(100% - 36px);
+      white-space: nowrap;
+    }
+  }
+
+  /* ───────── Recruiter FAQ ───────── */
+  .recruiter-faq {
+    margin: -36px 0 82px;
+    position: relative;
+  }
+  .recruiter-faq .faq-kicker {
+    color: var(--red);
+    display: inline-block;
+    font-family: var(--hand);
+    font-size: 27px;
+    margin-bottom: 16px;
+    transform: rotate(-2deg);
+  }
+  .recruiter-faq h2 {
+    font-family: var(--serif);
+    font-size: clamp(36px, 5vw, 56px);
+    letter-spacing: -0.015em;
+    line-height: 0.98;
+    margin-bottom: 22px;
+  }
+  .faq-list {
+    display: grid;
+    gap: 14px;
+  }
+  .faq-item {
+    background:
+      radial-gradient(circle at 10% 0%, color-mix(in oklab, var(--paper) 42%, transparent), transparent 32%),
+      color-mix(in oklab, var(--paper-2) 92%, transparent);
+    border: 1px solid color-mix(in oklab, var(--rule) 88%, transparent);
+    border-radius: 3px 4px 2px 3px;
+    box-shadow:
+      0 10px 24px rgba(60, 40, 20, 0.07),
+      inset 0 1px 0 rgba(255, 255, 255, 0.28);
+    padding: 20px 22px;
+    position: relative;
+  }
+  .faq-item:nth-child(odd) { transform: rotate(-0.28deg); }
+  .faq-item:nth-child(even) { transform: rotate(0.22deg); }
+  .faq-item::before {
+    color: var(--red);
+    content: "q";
+    font-family: var(--hand);
+    font-size: 26px;
+    left: -6px;
+    line-height: 1;
+    position: absolute;
+    top: -8px;
+    transform: rotate(-8deg);
+  }
+  .faq-item h3 {
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 1.12;
+    margin-bottom: 8px;
+  }
+  .faq-item p {
+    color: var(--ink-soft);
+    font-size: 17px;
+    line-height: 1.5;
+  }
+  .faq-item a {
+    color: var(--red);
+    border-bottom: 1px solid color-mix(in oklab, var(--red) 75%, transparent);
+  }
+  [data-theme="dark"] .faq-item {
+    background:
+      radial-gradient(circle at 10% 0%, rgba(255, 230, 180, 0.04), transparent 32%),
+      color-mix(in oklab, var(--paper-2) 92%, transparent);
+    box-shadow:
+      0 12px 30px rgba(0,0,0,0.34),
+      inset 0 1px 0 rgba(255,230,180,0.04);
+  }
+  @media (max-width: 700px) {
+    .recruiter-faq {
+      margin: -32px 0 64px;
+    }
+    .faq-item:nth-child(n) {
+      transform: none;
+    }
+  }
+
   /* ───────── Signoff / signature ───────── */
   .signoff {
     margin: 80px 0 24px 0;
@@ -732,8 +1013,9 @@
     <span class="hello">to whom it concerns  - </span>
     <h1>Hello, <em>recruiters.</em></h1>
     <p class="lead">
-      The rest of this site is for the curious. <em>This one's for you.</em>
-      A short letter, because I think we'll both save time.
+      The rest of this site tells the longer story. <em>This page is the practical version.</em>
+      It covers the work I enjoy, the roles where I may be useful, and the context that helps
+      us have a thoughtful first conversation.
     </p>
   </section>
 
@@ -743,35 +1025,140 @@
 
     <header class="memo-head">
       <span class="label">memo</span>
-      <h2>The thirty-second version &mdash; <em>so you can decide quickly.</em></h2>
+      <h2>The thirty-second version &mdash; <em>to see if there may be a fit.</em></h2>
     </header>
 
     <dl class="memo-body">
       <div class="memo-row good"><span class="mk">✓</span><span class="k">open to</span><span class="v"><b>Engineering leadership</b> (Head of Eng / VP / Principal-level IC), <b>CTO / founding CTO</b> at funded early-stage startups, and <b>strategic advisory</b> at AI-native, cybersecurity, or infrastructure companies.</span></div>
       <div class="memo-row good"><span class="mk">✓</span><span class="k">location</span><span class="v">Bengaluru, IN &mdash; <em>remote-first ideal · hybrid in BLR works · distributed teams welcome.</em></span></div>
-      <div class="memo-row good"><span class="mk">✓</span><span class="k">timing</span><span class="v">Substantive conversations only. <em>Not in a rush.</em> If there's a real role with substance behind it, I'll make time.</span></div>
+      <div class="memo-row good"><span class="mk">✓</span><span class="k">timing</span><span class="v">Open to thoughtful conversations. <em>I am being deliberate, not unavailable.</em> If the role and team sound aligned, I will make time.</span></div>
       <div class="memo-row good"><span class="mk">✓</span><span class="k">type</span><span class="v">Full-time preferred. Open to short-term advisory and 0&rarr;1 founding-engineer arrangements with the right team.</span></div>
-      <div class="memo-row good"><span class="mk">✓</span><span class="k">comp</span><span class="v">Senior+ band for the role and region. <em>Equity matters &mdash; I read the cap table.</em> Comp tracks the role's geography, not a single global number.</span></div>
-      <div class="memo-row bad"><span class="mk">✕</span><span class="k">please skip</span><span class="v">Pure people-management roles with no architecture · "AI" wrappers without a real product · generic full-stack · stealth-with-no-funding · web3/crypto pivots · "we'll discuss numbers later."</span></div>
+      <div class="memo-row good"><span class="mk">✓</span><span class="k">comp</span><span class="v">Appropriate for the role, stage, and region. <em>Equity and its terms matter too.</em> I value an open conversation about the complete offer.</span></div>
+      <div class="memo-row bad"><span class="mk">~</span><span class="k">less aligned</span><span class="v">Pure people management with no technical ownership · generic full-stack work · AI added without a clear user problem · unfunded ideas presented as established roles · web3 or crypto pivots.</span></div>
     </dl>
   </article>
+
+  <!-- PROOF NOTES -->
+  <section class="proof-board" aria-labelledby="proof-heading">
+    <div class="proof-pin">a sample of my thinking</div>
+    <header class="proof-head">
+      <span class="scribble">some working notes -</span>
+      <h2 id="proof-heading">how I think about the work.</h2>
+      <p>
+        These essays are not a substitute for shipped work or references. They are a useful
+        window into how I approach architecture, product trade-offs, security risk, and teams.
+      </p>
+    </header>
+
+    <div class="proof-grid">
+      <a class="proof-card" href="/notes/agentic-soc-product-strategy-founders">
+        <span class="proof-tag">founder memo</span>
+        <strong>Agentic SOC product strategy for founders.</strong>
+        <small>Wedge selection, trust ladders, workflow proof, safe automation, and what compounds beyond the demo.</small>
+      </a>
+      <a class="proof-card" href="/notes/founding-cto-ai-cybersecurity-startup">
+        <span class="proof-tag">founding CTO</span>
+        <strong>The AI cybersecurity founding CTO memo.</strong>
+        <small>How the early technical leader builds product trust, architecture, hiring, and delivery discipline.</small>
+      </a>
+      <a class="proof-card" href="/notes/head-of-ai-security-platform-brief">
+        <span class="proof-tag">platform brief</span>
+        <strong>What I would build as Head of AI Security Platform.</strong>
+        <small>Evidence layers, agent controls, trust UX, customer controls, team design, and execution rhythm.</small>
+      </a>
+      <a class="proof-card" href="/notes/ai-security-demo-to-production-checklist">
+        <span class="proof-tag">production ready</span>
+        <strong>From AI security demo to production.</strong>
+        <small>A checklist for evidence, permissions, evals, observability, rollout gates, and analyst trust.</small>
+      </a>
+      <a class="proof-card" href="/notes/ai-security-leadership-interview-questions">
+        <span class="proof-tag">interview loop</span>
+        <strong>AI security leadership interview questions.</strong>
+        <small>A practical hiring loop for architecture, agent control, SecOps workflow, product trust, delivery, and team leadership.</small>
+      </a>
+      <a class="proof-card" href="/notes/agentic-soc-architecture-scorecard">
+        <span class="proof-tag">CISO scorecard</span>
+        <strong>The agentic SOC architecture scorecard.</strong>
+        <small>Twelve questions for evaluating evidence, identity, tools, approvals, evals, observability, and trust.</small>
+      </a>
+      <a class="proof-card" href="/notes/hiring-ai-security-engineering-leader">
+        <span class="proof-tag">hiring signal</span>
+        <strong>How to evaluate an AI security engineering leader.</strong>
+        <small>The interview loop I would use for architecture judgment, SecOps depth, delivery rhythm, and leadership.</small>
+      </a>
+      <a class="proof-card" href="/notes/builder-leader-cybersecurity-engineering">
+        <span class="proof-tag">builder + leader</span>
+        <strong>Why cybersecurity needs builder-leaders now.</strong>
+        <small>For teams that need architecture, hiring judgement, product taste, and execution in the same person.</small>
+      </a>
+      <a class="proof-card" href="/notes/ai-security-engineering-90-day-plan">
+        <span class="proof-tag">first 90 days</span>
+        <strong>A 90-day plan for AI security engineering.</strong>
+        <small>How I would reduce noise, ship useful agents, and make the SOC measurably calmer.</small>
+      </a>
+      <a class="proof-card" href="/notes/evidence-layer-ai-security-platforms">
+        <span class="proof-tag">platform depth</span>
+        <strong>The evidence layer for AI security platforms.</strong>
+        <small>Retrieval, provenance, citations, analyst trust, and why security agents need evidence discipline.</small>
+      </a>
+      <a class="proof-card" href="/notes/secops-agent-control-plane">
+        <span class="proof-tag">agentic SOC</span>
+        <strong>The SecOps agent control plane.</strong>
+        <small>Human approvals, policy gates, action logs, evals, and the operating system for safe security agents.</small>
+      </a>
+    </div>
+
+    <div class="proof-cta">
+      <span>If the work feels relevant,</span>
+      <a href="https://cal.com/prince-vishal-30/15min" target="_blank" rel="noopener">find 15 minutes</a>
+      <a href="/resume.pdf">open resume</a>
+    </div>
+  </section>
+
+  <!-- RECRUITER FAQ -->
+  <section class="recruiter-faq" aria-labelledby="faq-heading">
+    <span class="faq-kicker">a few practical questions -</span>
+    <h2 id="faq-heading">recruiter FAQ.</h2>
+    <div class="faq-list">
+      <article class="faq-item">
+        <h3>What roles should I reach out for?</h3>
+        <p>Engineering leadership, Head of Engineering, VP Engineering, Principal-level IC, CTO or founding CTO roles at funded early-stage startups, and advisory roles in AI-native cybersecurity, SecOps, infrastructure, or security platform companies.</p>
+      </article>
+      <article class="faq-item">
+        <h3>Are you still hands-on?</h3>
+        <p>Yes. I try to remain close enough to architecture, product judgment, security risk, and delivery to contribute directly. I also care about building teams that can make good decisions without depending on one person.</p>
+      </article>
+      <article class="faq-item">
+        <h3>What domains fit best?</h3>
+        <p>AI-native cybersecurity, agentic SOC, SecOps platforms, threat intelligence automation, AI security engineering, cloud infrastructure, internal developer platforms, and reliable AI systems.</p>
+      </article>
+      <article class="faq-item">
+        <h3>What is less likely to fit?</h3>
+        <p>Generic full-stack roles, pure people-management roles with no technical ownership, AI work without a clear user problem, unfunded ideas presented as established roles, and web3 or crypto pivots are less likely to fit my experience and interests.</p>
+      </article>
+      <article class="faq-item">
+        <h3>What should I include in the first message?</h3>
+        <p>The role, company stage, location model, compensation range, and a little context on why the work maps to AI security, SecOps, infrastructure, or engineering leadership. Email is welcome, or use the <a href="https://cal.com/prince-vishal-30/15min" target="_blank" rel="noopener">15-minute call link</a>.</p>
+      </article>
+    </div>
+  </section>
 
 
   <!-- CHAPTER 1 -->
   <section>
     <div class="chapter">
       <div class="stamp">§ one</div>
-      <h2>what <em>actually</em> gets me excited.</h2>
+      <h2>work I tend to <em>care about.</em></h2>
     </div>
     <div class="chap-body">
       <ul class="list">
         <li>A product where <em>AI, security, and infrastructure all meet</em> &mdash; and the technical bar is real.</li>
-        <li>A team that ships and reviews each other's code, and doesn't apologize for caring about how things work.</li>
-        <li>A founder or leader who has done this before &mdash; or is humbly figuring it out, with the receipts to back it up.</li>
-        <li>0&rarr;1 or 1&rarr;10 problems where I can actually shape architecture, hiring, and direction.</li>
+        <li>A team that ships, reviews each other's code, and cares about how things work in production.</li>
+        <li>A founder or leader who has done this before &mdash; or is learning openly, asking good questions, and building with discipline.</li>
+        <li>0&rarr;1 or 1&rarr;10 problems where I can help shape architecture, hiring, and direction.</li>
         <li>Companies that respect the boundary between an <em>"AI demo"</em> and an <em>"AI product."</em></li>
         <li>Roles that combine hands-on architecture with team leadership &mdash; not just one or the other.</li>
-        <li>A <em>CTO</em> or <em>founding-CTO</em> seat at an early-stage company with real funding, a named lead investor, and a founder who has done the homework &mdash; where the first 5&ndash;15 hires and the technical direction are mine to set.</li>
+        <li>A <em>CTO</em> or <em>founding-CTO</em> role at an early-stage company with committed funding and a thoughtful founder &mdash; where I can help build the first team and shape the technical direction together.</li>
       </ul>
     </div>
   </section>
@@ -780,17 +1167,17 @@
   <section>
     <div class="chapter">
       <div class="stamp">§ two</div>
-      <h2>things I'd <em>politely pass on.</em></h2>
+      <h2>where I may be <em>less useful.</em></h2>
     </div>
     <div class="chap-body">
-      <p class="lede">No hard feelings on these &mdash; just patterns I've learned to recognize:</p>
+      <p class="lede">These can all be good opportunities; they simply make less use of my particular experience:</p>
       <ul class="list strike">
         <li>Pure people-management roles where I never see code, architecture, or a real customer again.</li>
-        <li>Roles where "AI" is being bolted on to please the board, not to solve a real problem.</li>
-        <li>"Stealth" companies with no team, no funding, and no concrete product to point at &mdash; including the <em>"looking for a technical co-founder"</em> outreach with no cash budget on the table.</li>
+        <li>Roles where AI does not yet have a clear customer problem or measurable purpose.</li>
+        <li>Very early ideas without a team, committed funding, or a concrete problem definition.</li>
         <li>Generic full-stack roles where the AI / security / infrastructure parts are decorative.</li>
-        <li>Web3, crypto, or "agentic-everything" pivots without an actual problem to solve.</li>
-        <li>Compensation conversations that begin with <em>"we'll get to numbers later."</em></li>
+        <li>Web3, crypto, or broad "agentic-everything" pivots without a specific operational problem.</li>
+        <li>Searches where the role, level, or compensation range is still too undefined for either side to assess fit.</li>
       </ul>
     </div>
   </section>
@@ -806,12 +1193,13 @@
     <div class="chap-body">
       <p>
         I read offers carefully. <em>Equity, vesting, cliff, refresh, RSU vs stock options,
-        strike price, dilution</em> &mdash; I know the difference and I'll ask about all of them.
-        Bring the spreadsheet; I won't be the one who pretends it doesn't matter.
+        strike price, and dilution</em> all affect the real offer. I appreciate teams that
+        can explain those terms clearly, and I am happy to work through the details together.
       </p>
       <p>
-        Counter-offers don't insult me. Lowball numbers do. If your range is tight,
-        please share it up front. It saves both of us a discovery call we don't need.
+        If the range is fixed, sharing it early makes the conversation easier and more
+        respectful for both sides. I do not expect every role to optimize for the same mix
+        of cash, equity, scope, and risk.
       </p>
       <p>
         I'm based in <em>India</em>, but I've worked alongside US, UK, and SG teams.
@@ -820,7 +1208,7 @@
       </p>
 
       <div class="aside">
-        <em>p.s.</em> "Competitive with market" is not a number. Neither is "DOE."
+        <em>p.s.</em> A bracket is more helpful than "competitive with market," even if it is still being refined.
       </div>
     </div>
   </section>
@@ -838,17 +1226,17 @@
       </p>
       <ol class="list ordered">
         <li><b>Subject line</b> &mdash; company, role title, one-line about the team. <em>("Acme · Founding AI Engineer · ex-Google team of 4")</em></li>
-        <li><b>The "what"</b> &mdash; one paragraph on what the company is solving. Pretend I've never heard of it, even if I have.</li>
-        <li><b>The range</b> &mdash; base + equity, or at least the bracket. Yes, really.</li>
-        <li><b>The hook</b> &mdash; one specific thing about my work, writing, or projects that made you reach out. <em>(This is how I tell apart hand-written outreach from a sequence.)</em></li>
+        <li><b>The "what"</b> &mdash; one paragraph on what the company is solving and why the role exists now.</li>
+        <li><b>The range</b> &mdash; base + equity, or the bracket available at this stage.</li>
+        <li><b>The connection</b> &mdash; what in my work, writing, or experience seemed relevant to the search.</li>
       </ol>
 
       <div class="copy-block">
-        <h4>If you do this well, <em>you'll get a reply within a day.</em></h4>
+        <h4>Useful context makes it <em>much easier to reply thoughtfully.</em></h4>
         <p>
           I try to respond to every thoughtful, specific message &mdash; even if the answer is
-          "not right now." If you do <em>not</em> hear back within a week, please feel free
-          to follow up once. After that, take it as a polite no.
+          "not right now." I usually reply within a few days. If you do <em>not</em> hear
+          back within a week, a single follow-up is completely reasonable.
         </p>
       </div>
     </div>
@@ -858,16 +1246,15 @@
   <section>
     <div class="chapter">
       <div class="stamp">§ five</div>
-      <h2>things you can <em>skip</em>.</h2>
+      <h2>details that help <em>earlier.</em></h2>
     </div>
     <div class="chap-body">
       <ul class="list strike">
-        <li><em>"Quick 30-min chat to align."</em> &mdash; please send details first; <em>then</em> we'll align.</li>
-        <li><em>"We can talk numbers later."</em> &mdash; please share the bracket up front.</li>
-        <li><em>"Tell me about yourself."</em> &mdash; the rest of the site covers it in detail.</li>
-        <li><em>"This is a once-in-a-lifetime opportunity."</em> &mdash; they rarely are. The good ones speak for themselves.</li>
-        <li><em>"Are you actively looking?"</em> &mdash; the site says <b>open to selective work</b>. That's the answer.</li>
-        <li><em>"What's your notice period?"</em> &mdash; we'll get there if we get there. It's not the first question.</li>
+        <li>Before a quick introductory call, a few lines about the company, team, and role are genuinely helpful.</li>
+        <li>A compensation bracket can be approximate; knowing the intended level is already useful.</li>
+        <li>The portfolio and resume cover my background, so our call can spend more time on the role and its problems.</li>
+        <li>I am open to the right move and happy to say so directly; there is no need to oversell the opportunity.</li>
+        <li>Notice period and logistics matter, but they are easier to discuss once there is basic mutual interest.</li>
       </ul>
     </div>
   </section>
@@ -901,37 +1288,37 @@ be warm. be specific. assume good intent.
 never combative. always read the offer carefully.
 
 <span class="cm"># priors</span>
-good recruiters exist.         <span class="cm">// many of them, actually.</span>
-lowball numbers do not.        <span class="cm">// share the bracket up front.</span>
-"quick chat" is not context.   <span class="cm">// send details first.</span>
+good recruiters add context.   <span class="cm">// and make complex searches easier.</span>
+clear brackets build trust.    <span class="cm">// approximate is still useful.</span>
+"quick chat" needs a subject.  <span class="cm">// a few lines are enough.</span>
 
-<span class="cm"># required context (else: politely decline)</span>
+<span class="cm"># useful context</span>
 - compensation range
 - one paragraph on what the company is solving
 - one specific reference to <span class="str">/work</span>, <span class="str">/lately</span>, or <span class="str">/credo</span>
 
 <span class="cm"># output</span>
-reply within ~24h. max 3 paragraphs.
-if input is a template, output is a template.
-if input is hand-written, output is hand-written.
+reply thoughtfully. keep it concise.
+ask when context is missing.
+assume the person on the other side is doing their best.
 <span class="cm"># end of prompt</span><span class="blink"></span></pre>
         <span class="hint">↑ the joke is that this is also <em>not</em> the real system prompt.</span>
       </div>
 
       <ul class="list appendix">
-        <li>I've used most of what's on the toolkit board. Some of it I've <em>broken in production.</em> Happy to talk about both halves.</li>
-        <li>"<b>GPT wrapper</b>" isn't a slur to me. Some of the best products are a thin wrapper around a good model and a <em>brilliant boundary.</em> The boundary is the interesting part.</li>
-        <li>"<b>Agentic</b>" is a useful word that's quietly becoming useless. Tell me what the system <em>does</em> &mdash; in verbs, not adjectives.</li>
-        <li><b>Token-maxxing</b> is a fun meme. <em>Context engineering, retrieval design, and evals</em> are real disciplines. We can talk about either &mdash; please don't conflate them.</li>
-        <li>If you're competing with a frontier lab, please be specific about the <em>5% of the surface area</em> you're winning. Vagueness here is the tell.</li>
-        <li>I'll ask: <em>what's your eval story? what's the cost per query at scale? who owns the safety boundary?</em> Not testing you &mdash; just checking if there's a real product under the demo.</li>
-        <li>Yes, I know about <b>MCP</b>. No, you don't need to explain it. And no, shipping an MCP server is not, on its own, a product.</li>
-        <li>If the role description has more <em>buzzwords than verbs,</em> I'll politely pass and assume the product has a similar ratio.</li>
-        <li>If the answer to "why are you hiring for this?" is <em>"because we raised"</em> &mdash; I'll genuinely wish you well, and pass.</li>
+        <li>I've used much of what's on the toolkit board, including learning from systems that did not behave as expected in production.</li>
+        <li>A product can be a thin layer around a strong model and still be valuable. The boundary, workflow, and user problem are what make it interesting.</li>
+        <li>"<b>Agentic</b>" is broad, so concrete verbs help: what does the system observe, decide, retrieve, recommend, or change?</li>
+        <li><em>Context engineering, retrieval design, and evals</em> are distinct disciplines. I enjoy roles that take each of them seriously.</li>
+        <li>If the company overlaps with frontier labs, I will be curious about the focused surface area where the team can build an enduring advantage.</li>
+        <li>I tend to ask about evaluation, cost at scale, permissions, and ownership of the safety boundary. Those questions help me understand the product, not grade the pitch.</li>
+        <li>I am familiar with <b>MCP</b> and interested in the product and operating model around it, not only the protocol implementation.</li>
+        <li>Role descriptions with concrete responsibilities, users, and outcomes help me understand where I could contribute.</li>
+        <li>A recent fundraise is useful context; the product milestones and team needs it enables are even more useful.</li>
       </ul>
 
       <div class="aside">
-        <em>p.s.</em> think of your outreach as prompt engineering &mdash; the better the context, the better the response. <em>Templates that fit any candidate fit none of them.</em>
+        <em>p.s.</em> think of outreach as context setting &mdash; a little specificity usually leads to a better conversation.
       </div>
     </div>
   </section>
@@ -943,9 +1330,8 @@ if input is hand-written, output is hand-written.
   <!-- SIGNOFF -->
   <section class="signoff">
     <p class="letter">
-      Good recruiters are <em>genuinely valuable.</em> The good ones know they're matching
-      humans, not requisitions, and they take the time to send a real message rather than
-      a template.
+      Good recruiters are <em>genuinely valuable.</em> They often carry context that neither
+      the job description nor the resume can hold, and they help both sides ask better questions.
     </p>
     <p class="letter">
       I appreciate the ones who read this far. If that's you &mdash; thank you. I'd love
@@ -958,8 +1344,8 @@ if input is hand-written, output is hand-written.
     </div>
 
     <p class="ps">
-      <em>P.S.</em> If you got something useful out of this page, feel free to send it to
-      other engineers who keep getting the same emails you sent me. We'll all save time.
+      <em>P.S.</em> If you found this format useful, feel free to share it with another
+      candidate or hiring team. Clearer first conversations are good for everyone.
     </p>
 
     <div class="contact-strip">

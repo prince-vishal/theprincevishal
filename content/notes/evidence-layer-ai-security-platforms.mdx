@@ -1,0 +1,288 @@
+---
+number: "024"
+title: "The evidence layer in AI security platforms"
+titleHtml: "The <em>evidence layer</em> in AI security platforms."
+headingHtml: "The <em>evidence layer</em><br/>in <span class=\"red\">AI security platforms</span>."
+description: "A technical architecture note on evidence layers for AI security platforms: provenance, citations, confidence, source handling, agent memory, analyst trust, and auditability."
+ogDescription: "Why AI security platforms need an evidence layer: provenance, citations, confidence, source handling, analyst trust, auditability, and agent-safe workflows."
+date: "2026-06-25"
+displayDate: "2026 · 06 · 25"
+readTime: "10 min"
+quirk: "-- or one summary that can defend itself"
+excerptHtml: "AI security platforms will not earn analyst trust by sounding fluent. They will earn trust by showing evidence."
+dekHtml: "A builder's guide to the platform primitive that makes AI-native SOC systems inspectable, auditable, and safe enough to use."
+tags: ["ai", "security", "secops", "platform", "building"]
+featured: true
+tableOfContents: true
+nextSlug: "ai-security-engineering-90-day-plan"
+---
+
+<Lede>
+  AI security platforms will not earn analyst trust by sounding fluent. They
+  will earn trust by showing evidence.
+</Lede>
+
+The most important primitive in an AI security platform is not the chat box.
+
+It is not the model picker.
+
+It is not the prompt library.
+
+It is the evidence layer.
+
+Without an evidence layer, every AI output becomes a soft claim. A summary says
+an alert is suspicious, but the analyst cannot see why. A recommendation says to
+revoke a session, but the approver cannot inspect the supporting facts. A
+detection draft maps to ATT&CK, but nobody knows whether the telemetry exists. A
+threat intelligence note references a campaign, but the source confidence is
+missing.
+
+That is not AI-native security operations.
+
+That is fluent uncertainty.
+
+## What the evidence layer does.
+
+The evidence layer is the part of the platform that stores, structures, and
+exposes the facts behind security decisions.
+
+It should answer:
+
+- what was observed?
+- where did it come from?
+- when was it collected?
+- which entity does it involve?
+- what source produced it?
+- how sensitive is it?
+- how confident is the relationship?
+- which model output used it?
+- which analyst approved or corrected it?
+
+This layer sits between raw systems and AI reasoning.
+
+Raw systems include:
+
+- SIEM;
+- EDR;
+- identity provider;
+- cloud logs;
+- vulnerability scanner;
+- threat intelligence platform;
+- asset inventory;
+- code scanner;
+- ticketing system.
+
+The AI layer should not be free-floating above these systems.
+
+It should reason over evidence objects.
+
+## Evidence is not just logs.
+
+Security teams often think of evidence as logs.
+
+Logs matter, but evidence is broader.
+
+Evidence can include:
+
+- alert payloads;
+- sign-in records;
+- endpoint process trees;
+- network flows;
+- cloud audit events;
+- threat intelligence reports;
+- vulnerability findings;
+- source-code scan results;
+- screenshots;
+- analyst notes;
+- ticket comments;
+- approval decisions;
+- user statements;
+- external exposure hits;
+- detection test results.
+
+The evidence layer should normalize enough metadata to make these useful
+together.
+
+It does not need to flatten every source into one schema.
+
+It needs a common envelope.
+
+## The evidence envelope.
+
+A useful evidence object should include:
+
+```
+evidence_id
+case_id
+source_system
+source_type
+collected_at
+observed_at
+entities
+sensitivity
+handling_label
+confidence
+raw_pointer
+summary
+hash_or_fingerprint
+retention_policy
+```
+
+The `raw_pointer` matters.
+
+The platform should avoid copying raw sensitive data everywhere. It can store a
+pointer, fingerprint, excerpt, or redacted summary depending on data handling
+rules.
+
+FIRST's Traffic Light Protocol is useful here because it gives teams a shared
+language for handling sensitive information. A restricted source should not
+become an unrestricted AI summary by accident.
+
+## Citations are a product feature.
+
+In AI security platforms, citations are not academic decoration.
+
+They are workflow controls.
+
+An analyst should be able to click from a claim to the evidence that supports
+it.
+
+Example:
+
+<PullQuote>
+  This login is suspicious because it came from a new ASN, followed five failed
+  attempts, used a device not seen before, and accessed the admin console.
+</PullQuote>
+
+Each clause should map to evidence:
+
+- new ASN: sign-in enrichment;
+- failed attempts: identity log;
+- new device: device history;
+- admin console access: SaaS audit log.
+
+This lets the analyst inspect the conclusion quickly.
+
+It also makes the model safer. If the model cannot support a claim with
+evidence, the platform can downgrade confidence or force the claim into an
+uncertainty section.
+
+## Confidence belongs next to claims.
+
+Security decisions rarely have perfect certainty.
+
+The evidence layer should preserve confidence at multiple levels:
+
+- source confidence;
+- entity match confidence;
+- relationship confidence;
+- model interpretation confidence;
+- analyst decision confidence.
+
+This prevents over-flattening.
+
+A domain might be high-confidence as an observed DNS query but low-confidence
+as part of a named campaign. A user match might be high-confidence by account ID
+but low-confidence by personal email. A vulnerability might be high severity but
+low internal relevance.
+
+The evidence layer should let the product express that difference.
+
+## How agents use the evidence layer.
+
+Agentic workflows should read and write evidence.
+
+During triage, the agent:
+
+- retrieves required evidence;
+- notes missing evidence;
+- cites each claim;
+- creates a summary;
+- recommends next steps;
+- stages actions;
+- records tool calls.
+
+During review, the analyst:
+
+- accepts or rejects claims;
+- adds notes;
+- corrects entity matches;
+- approves actions;
+- marks false positives;
+- closes the case.
+
+Those analyst decisions become evidence too.
+
+This is how the system improves without pretending the model is always right.
+
+## For hiring teams.
+
+If you are evaluating someone for AI security platform leadership, ask them
+about the evidence layer.
+
+Strong builder-leaders will talk about:
+
+- provenance;
+- source handling;
+- citations;
+- confidence;
+- retention;
+- analyst correction;
+- action approvals;
+- audit trails;
+- product UX.
+
+Weak answers will jump straight to model choice.
+
+Model choice matters.
+
+But in security operations, evidence is the trust boundary.
+
+## Final thoughts.
+
+AI security platforms need an evidence layer because security work is
+accountable.
+
+Analysts need to know why.
+
+Approvers need to know risk.
+
+Leaders need to know whether the system is improving.
+
+Customers need to trust the output.
+
+The model can help interpret.
+
+The evidence layer helps defend the interpretation.
+
+That is the platform primitive I would build early.
+
+## FAQ.
+
+### What is an evidence layer in an AI security platform?
+
+An evidence layer is the platform component that stores and exposes the facts,
+sources, timestamps, entities, confidence, and handling rules behind security
+claims and AI-generated recommendations.
+
+### Why do AI SOC platforms need evidence citations?
+
+Evidence citations let analysts inspect claims quickly. They reduce blind trust
+in model output, improve auditability, support incident review, and make
+approval decisions safer.
+
+### What should evidence objects contain?
+
+Evidence objects should contain source system, source type, collected time,
+observed time, related entities, sensitivity, handling label, confidence, raw
+pointer, summary, retention policy, and case linkage.
+
+## Sources.
+
+- [NIST SP 800-61 Rev. 3](https://csrc.nist.gov/pubs/sp/800/61/r3/final)
+- [FIRST Traffic Light Protocol](https://www.first.org/tlp/)
+- [MITRE ATT&CK Data Sources](https://attack.mitre.org/datasources/)
+- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
+- [OpenTelemetry documentation](https://opentelemetry.io/docs/)
+
+<EndMark />

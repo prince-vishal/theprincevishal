@@ -1,0 +1,372 @@
+---
+number: "031"
+title: "What I would build as Head of AI Security Platform"
+titleHtml: "What I would build as <em>Head of AI Security Platform</em>."
+headingHtml: "What I would build as<br/><span class=\"red\">Head of AI Security Platform</span>."
+description: "A practical leadership brief for building AI security platforms: product primitives, evidence systems, agent control, SecOps workflows, trust, team design, and execution."
+ogDescription: "What to build as Head of AI Security Platform: evidence layer, agent control plane, SecOps workflows, evals, trust systems, and team operating model."
+date: "2026-06-25"
+displayDate: "2026 · 06 · 25"
+readTime: "12 min"
+quirk: "-- or the job description I keep accidentally writing for myself"
+excerptHtml: "If I owned an AI security platform, I would build around evidence, controlled agency, analyst workflows, reliability, trust, and a team that can ship without losing judgment."
+dekHtml: "A builder-leader brief for founders, CISOs, and recruiters evaluating what AI security platform leadership should actually do."
+tags: ["career", "leadership", "security", "ai", "platform", "building"]
+featured: true
+tableOfContents: true
+nextSlug: "ai-security-demo-to-production-checklist"
+---
+
+<Lede>
+  If I were hired to lead an AI security platform, I would not start by asking
+  which model we use. I would start by asking which trust contract the platform
+  has to earn.
+</Lede>
+
+"Head of AI Security Platform" can mean many things.
+
+In one company, it means owning an internal platform that helps security teams
+investigate faster.
+
+In another, it means building a customer-facing agentic SOC product.
+
+In another, it means creating the control layer that lets product teams use AI
+without creating avoidable risk.
+
+The title is flexible.
+
+The work is not.
+
+The work is building systems that combine AI capability with security judgment,
+operational workflow, reliable infrastructure, and customer trust.
+
+This is what I would build.
+
+## First, define the platform promise.
+
+The platform should not promise magic.
+
+It should promise something concrete.
+
+For example:
+
+> Help security teams investigate, explain, and act faster while preserving
+> evidence, human control, auditability, and safe boundaries.
+
+That sentence matters.
+
+It says the platform is not merely an assistant.
+
+It is not merely a chat interface.
+
+It is not trying to replace the security team.
+
+It is a system for better security work.
+
+That framing changes the roadmap.
+
+## Primitive one: the evidence layer.
+
+I would build the evidence layer first.
+
+Every AI security platform eventually discovers this.
+
+The hard part is not generating text.
+
+The hard part is knowing what the text is allowed to claim.
+
+The evidence layer should collect, normalize, retrieve, and cite information
+from security-relevant systems:
+
+- SIEM and log stores;
+- EDR and endpoint telemetry;
+- cloud audit logs;
+- identity providers;
+- email security systems;
+- vulnerability scanners;
+- asset inventory;
+- ticketing systems;
+- threat intelligence sources;
+- case notes and analyst feedback.
+
+But it should not flatten these sources into one vague bucket called "context."
+
+Security context needs provenance.
+
+Identity logs and threat intel do not have the same authority.
+
+A fresh cloud audit event and a stale asset tag do not carry the same weight.
+
+An analyst note and an automated enrichment should not be treated as equivalent.
+
+So the evidence layer needs source typing, freshness, confidence, entity
+resolution, tenancy boundaries, and citation support.
+
+Without that, AI output becomes a charming rumor.
+
+## Primitive two: the agent control plane.
+
+The second primitive is the control plane for agents.
+
+If the platform lets AI call tools, it needs a system that defines and enforces
+what tools can do.
+
+The control plane should own:
+
+- tool registration;
+- permission scopes;
+- action classes;
+- approval rules;
+- policy checks;
+- tenant isolation;
+- audit logs;
+- simulation and dry-run support;
+- rollback metadata;
+- rate limits;
+- incident hooks.
+
+This is where many AI products get too casual.
+
+They treat tool use as an integration feature.
+
+In security, tool use is a power boundary.
+
+An agent that can summarize an alert is helpful.
+
+An agent that can change identity policy, isolate an endpoint, delete email, or
+modify a detection rule can affect the business.
+
+That capability needs control.
+
+## Primitive three: workflow-native SecOps.
+
+I would not build a generic AI chat layer and hope analysts adapt.
+
+The platform should meet the workflow.
+
+For SecOps, that means specific surfaces:
+
+- alert triage;
+- phishing investigation;
+- suspicious login investigation;
+- cloud misconfiguration response;
+- malware case enrichment;
+- threat intelligence briefing;
+- detection engineering support;
+- incident handoff;
+- executive summaries.
+
+Each workflow needs its own shape.
+
+Phishing triage needs email artifacts, sender context, URL analysis, attachment
+inspection, user targeting, and remediation options.
+
+Suspicious login investigation needs identity posture, device context, geo
+signals, session behavior, MFA strength, privilege, and recent exposure.
+
+Cloud misconfiguration response needs resource ownership, reachable services,
+policy context, blast radius, and remediation confidence.
+
+The platform should share primitives, but the UX should respect the workflow.
+
+That is how AI becomes useful instead of decorative.
+
+## Primitive four: evals and reliability.
+
+AI systems need evaluation discipline.
+
+Security systems need reliability discipline.
+
+AI security platforms need both.
+
+I would build evals around operational outcomes:
+
+- Did the system cite the right evidence?
+- Did it distinguish fact from inference?
+- Did it refuse unsafe actions?
+- Did it escalate missing context?
+- Did it choose the right tool?
+- Did it avoid attacker-controlled instructions?
+- Did it reduce analyst effort?
+- Did it preserve auditability?
+- Did it stay within latency and cost budgets?
+
+These evals should run before releases.
+
+They should also inform product decisions.
+
+If the system cannot safely automate a workflow, that does not mean the
+workflow is useless.
+
+It may mean the platform should ship an analyst-approved recommendation first.
+
+Reliability is not the enemy of speed.
+
+It is what lets the team move faster twice.
+
+## Primitive five: trust UX.
+
+The user interface should make trust inspectable.
+
+I would want the analyst to see:
+
+- exact evidence;
+- missing evidence;
+- confidence boundaries;
+- source reliability;
+- action risk;
+- approval requirement;
+- reasoning summary;
+- next best question;
+- ability to correct the system.
+
+Trust UX is not decoration.
+
+It is the human side of the control system.
+
+If the analyst can inspect the system, they can use it.
+
+If the analyst can correct the system, the platform can learn.
+
+If the analyst can see uncertainty, the product can avoid false confidence.
+
+## Primitive six: customer controls.
+
+For a customer-facing platform, the controls should be first-class.
+
+Customers should be able to configure:
+
+- which data sources are connected;
+- which agent actions are allowed;
+- which actions require approval;
+- which users can approve;
+- which data is retained;
+- which logs are exported;
+- which workflows can run autonomously;
+- which reports are customer-visible.
+
+This matters for trust and sales.
+
+Different customers have different risk appetites.
+
+A mature SOC may accept certain low-risk autonomous actions.
+
+A regulated customer may want strict human approval.
+
+A smaller team may want automation but need guardrails they can understand.
+
+The platform should make those differences configurable without turning into a
+settings swamp.
+
+## The team I would build.
+
+The team design should mirror the platform primitives.
+
+I would want strength in:
+
+- AI systems and evaluation;
+- security engineering;
+- detection and response workflows;
+- backend platform engineering;
+- data retrieval and entity resolution;
+- product design for analysts;
+- reliability and observability;
+- customer-facing product judgment.
+
+In an early-stage company, these may be five people, not five departments.
+
+The point is capability coverage.
+
+If the team has great model engineers but weak security workflow knowledge, the
+product will sound smart and miss the job.
+
+If the team has security knowledge but weak platform engineering, the product
+will work in demos and suffer in production.
+
+If the team has managers but no builder taste, the architecture will drift.
+
+The leader has to notice those gaps early.
+
+## The operating rhythm.
+
+I would run the team around a few durable rituals:
+
+- weekly product-risk review;
+- architecture review for new tools and high-impact workflows;
+- eval review before model, retrieval, prompt, or tool changes;
+- customer evidence review;
+- incident and near-miss review;
+- roadmap pruning;
+- regular analyst workflow demos.
+
+The point is not process for its own sake.
+
+The point is to keep judgment close to the work.
+
+AI security teams can drift into either chaos or bureaucracy.
+
+The useful middle is a team that writes things down, ships small primitives,
+measures behavior, and keeps a clear map of risk.
+
+## What I would not build first.
+
+I would not start with a giant autonomous SOC.
+
+That sounds exciting and usually hides too many assumptions.
+
+I would not start with a generic chatbot over all security data.
+
+That sounds flexible and often creates a weak trust boundary.
+
+I would not start with executive dashboards that summarize weak evidence.
+
+That creates confidence before capability.
+
+I would not start by optimizing model selection while evidence, permissions,
+and evals are immature.
+
+Model choice matters.
+
+It just cannot carry the platform alone.
+
+## What success looks like.
+
+Success should be measurable.
+
+I would look for:
+
+- lower investigation time for specific workflows;
+- higher percentage of AI claims with cited evidence;
+- fewer analyst context switches;
+- reduced duplicate alert handling;
+- safer and more consistent playbook execution;
+- improved detection feedback loops;
+- fewer unsupported product claims;
+- faster customer onboarding to trusted workflows;
+- clear audit trails for AI-assisted work;
+- higher analyst confidence without hidden overreliance.
+
+The metrics should map to the product promise.
+
+If the platform promise is trust, speed, and control, the metrics should prove
+trust, speed, and control.
+
+## References.
+
+- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
+- [NIST AI RMF Core](https://airc.nist.gov/airmf-resources/airmf/5-sec-core/)
+- [OWASP Top 10 for Large Language Model Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications/)
+- [OWASP LLM06: Excessive Agency](https://genai.owasp.org/llmrisk/llm062025-excessive-agency/)
+- [MITRE ATLAS](https://atlas.mitre.org/)
+- [CISA Secure by Design](https://www.cisa.gov/securebydesign)
+
+## The hiring signal.
+
+If you are hiring for this role, the signal is not whether someone can say
+"agentic SOC" with confidence.
+
+The signal is whether they can explain what to build first, what to defer, how
+to keep analysts in control, how to earn customer trust, how to evaluate agent
+behavior, and how to organize the team around the real work.
+
+That is the kind of AI security platform leadership I want to do.

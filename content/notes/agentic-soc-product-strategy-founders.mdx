@@ -1,0 +1,283 @@
+---
+number: "033"
+title: "Agentic SOC product strategy for founders who need the real version"
+titleHtml: "Agentic SOC product strategy for founders who need the <em>real</em> version."
+headingHtml: "Agentic SOC product strategy<br/>for founders who need the <span class=\"red\">real</span> version."
+description: "A practical product strategy note for founders building agentic SOC platforms: wedge selection, trust, analyst workflows, evidence, automation boundaries, GTM proof, and product sequencing."
+ogDescription: "Agentic SOC product strategy for founders: pick the right wedge, build trust first, sequence automation, and prove value beyond a demo."
+date: "2026-06-25"
+displayDate: "2026 · 06 · 25"
+readTime: "11 min"
+quirk: "-- because the TAM slide is not the product"
+excerptHtml: "Agentic SOC strategy is not 'AI replaces analysts.' The real strategy is choosing a painful workflow, proving trust, and earning automation step by step."
+dekHtml: "A founder-facing product strategy memo for agentic SOC, AI-native SecOps, and security automation teams trying to move from demo to durable business."
+tags: ["ai", "security", "secops", "agents", "startup", "product", "leadership"]
+featured: true
+tableOfContents: true
+nextSlug: "founding-cto-ai-cybersecurity-startup"
+---
+
+<Lede>
+  The strongest agentic SOC strategy is not "replace analysts." It is "make one
+  painful security workflow measurably calmer, safer, and faster."
+</Lede>
+
+Agentic SOC is an easy category to pitch badly.
+
+The bad pitch goes like this:
+
+Security teams are overwhelmed.
+
+AI agents can investigate alerts.
+
+Therefore AI agents will run the SOC.
+
+The story is simple.
+
+It is also too thin.
+
+SOC work is not one job.
+
+It is a messy bundle of triage, enrichment, detection engineering, identity
+context, customer-specific policy, escalation, incident response, reporting,
+evidence handling, and human judgment.
+
+If a founder treats all of that as one queue for an agent to chew through, the
+product will either overpromise or become another assistant that analysts do
+not trust.
+
+The real product strategy has to be sharper.
+
+## Start with a workflow, not a category.
+
+"Agentic SOC" is the category.
+
+It is not the wedge.
+
+A strong wedge has four properties:
+
+- the workflow is painful enough that buyers care;
+- the evidence needed for the workflow is available;
+- the action boundary can be made safe;
+- the improvement can be measured.
+
+That points to specific entry points:
+
+- phishing triage;
+- suspicious login investigation;
+- cloud alert enrichment;
+- dark web exposure review;
+- threat intelligence summarization with operational recommendations;
+- detection rule generation with test cases;
+- alert grouping and case timeline creation.
+
+Each wedge has a different data model, buyer story, analyst experience, and
+risk boundary.
+
+The founder's job is to choose.
+
+Not forever.
+
+For the first proof.
+
+## The buyer is purchasing trust reduction, not AI novelty.
+
+Security buyers do not wake up wanting an agent.
+
+They wake up wanting fewer misses, faster investigations, better evidence,
+lower analyst fatigue, cleaner handoffs, and less operational risk.
+
+AI matters when it moves one of those numbers.
+
+So the strategy should make a concrete promise:
+
+- reduce time spent collecting context;
+- increase percentage of cases with complete evidence;
+- reduce duplicate alert review;
+- improve response consistency;
+- speed up detection feedback;
+- reduce manual reporting work;
+- make junior analysts more effective without hiding risk.
+
+That is what a founder should sell.
+
+Not "autonomous SOC."
+
+Trust reduction.
+
+## Build trust before autonomy.
+
+Autonomy is a product milestone, not a starting slogan.
+
+The product can earn autonomy in stages:
+
+1. Assemble evidence.
+2. Explain what happened.
+3. Identify what is missing.
+4. Recommend the next step.
+5. Draft the action.
+6. Execute with approval.
+7. Execute low-risk actions automatically.
+8. Expand automation by customer policy, confidence, and blast radius.
+
+This sequencing matters because it gives customers a way to trust the system
+before the system changes their environment.
+
+OWASP's LLM guidance on excessive agency is especially relevant here: tool
+access and autonomy must be bounded by product controls, not vibes.
+
+In a SOC, a wrong answer is bad.
+
+A wrong action is worse.
+
+## Make evidence the product primitive.
+
+The product should treat evidence as a reusable primitive.
+
+That means every workflow should produce:
+
+- facts;
+- sources;
+- timestamps;
+- entity links;
+- confidence boundaries;
+- missing context;
+- recommended next steps;
+- action logs.
+
+This evidence model becomes the foundation for summaries, timelines, approvals,
+case notes, dashboards, detection feedback, and customer-facing reports.
+
+It also becomes the foundation for trust.
+
+If the agent says "this looks like credential compromise," the analyst should
+see the login behavior, MFA posture, device context, privilege, and exposure
+evidence that produced the recommendation.
+
+If the system cannot show that, the strategy is premature.
+
+## The product needs a control plane.
+
+An agentic SOC product should have an obvious answer to:
+
+- What can the agent read?
+- What can the agent write?
+- What needs approval?
+- What is blocked?
+- Who approved it?
+- What changed?
+- Can we replay the run?
+- Can we turn this off for one customer or one action class?
+
+This is the control plane.
+
+It may not be a separate product surface at first.
+
+But it should be a real architecture concept.
+
+The control plane is what lets the company expand from assistance to action.
+
+Without it, every new automation feature becomes a fresh risk argument.
+
+## GTM proof should be workflow proof.
+
+Early go-to-market should not rely on broad claims.
+
+It should prove a workflow.
+
+For example:
+
+- "We reduce phishing investigation time by assembling sender, URL, attachment,
+  user, and remediation context in one analyst-reviewed case."
+- "We help identity teams triage suspicious login alerts by joining MFA
+  posture, device trust, privilege, session behavior, and exposure data."
+- "We help detection teams move from incident finding to tested detection logic
+  faster."
+
+Those claims are specific enough to demo, measure, and sell.
+
+They also help the product team avoid wandering.
+
+If the buyer cannot explain the workflow improvement to their team, the deal
+will drag.
+
+## The moat is not the model.
+
+Models will change.
+
+Capabilities will compress.
+
+The moat is more likely to come from:
+
+- workflow-specific data models;
+- integrations;
+- evidence quality;
+- customer-specific context;
+- analyst feedback loops;
+- safe action controls;
+- eval suites;
+- implementation knowledge;
+- trust with the buyer.
+
+This is why I do not like shallow AI wrappers in security.
+
+They may look fast early.
+
+They do not compound well.
+
+A serious agentic SOC company should get smarter with every workflow it
+operationalizes.
+
+## The founder question.
+
+If I were advising or joining an agentic SOC startup, I would ask:
+
+> What do we want to be trusted to do twelve months from now that we are not
+> trusted to do today?
+
+That question is clarifying.
+
+It forces the roadmap to become a trust ladder.
+
+Today:
+
+- summarize evidence;
+- recommend next steps;
+- draft notes.
+
+Soon:
+
+- run approved enrichment;
+- create cases;
+- suggest containment.
+
+Later:
+
+- perform low-risk actions automatically;
+- route incidents;
+- tune detections;
+- orchestrate playbooks with policy gates.
+
+The exact ladder depends on the customer and workflow.
+
+But the product strategy should know which rung it is climbing.
+
+## References.
+
+- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
+- [NIST AI RMF Core](https://airc.nist.gov/airmf-resources/airmf/5-sec-core/)
+- [OWASP Top 10 for Large Language Model Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications/)
+- [OWASP LLM01: Prompt Injection](https://genai.owasp.org/llmrisk/llm01-prompt-injection/)
+- [OWASP LLM06: Excessive Agency](https://genai.owasp.org/llmrisk/llm062025-excessive-agency/)
+- [MITRE ATLAS](https://atlas.mitre.org/)
+- [CISA: Software Must Be Secure by Design, and Artificial Intelligence Is No Exception](https://www.cisa.gov/news-events/news/software-must-be-secure-design-and-artificial-intelligence-no-exception)
+
+## The hiring signal.
+
+If you are a founder building in this space, the leader you want is not only
+someone who can say "agentic SOC."
+
+You want someone who can choose the wedge, build the evidence model, control
+the agent, earn analyst trust, and keep the company honest while it ships.
+
+That is the real version.

@@ -211,6 +211,39 @@ function TableOfContents({ items }) {
   );
 }
 
+function RecruiterNote({ note }) {
+  const recruiterTags = new Set([
+    'ai',
+    'security',
+    'secops',
+    'agents',
+    'building',
+    'leadership',
+    'career',
+    'platform',
+  ]);
+  const shouldShow = note.tags.some((tag) => recruiterTags.has(tag));
+
+  if (!shouldShow) return null;
+
+  return (
+    <aside className="recruiter-note" aria-labelledby="recruiter-note-title">
+      <div>
+        <span className="eyebrow">hiring note</span>
+        <h2 id="recruiter-note-title">Could this experience be useful to your team?</h2>
+        <p>
+          My work sits across AI-native security, SecOps, threat intelligence, platform
+          engineering, and the teams that bring those systems into production.
+        </p>
+      </div>
+      <div className="actions">
+        <Link href="/for-recruiters">for recruiters</Link>
+        <Link href="/resume.pdf">resume</Link>
+      </div>
+    </aside>
+  );
+}
+
 export default async function NotePage({ params }) {
   const { slug } = await params;
   const [note, notes] = await Promise.all([getNoteBySlug(slug).catch(() => null), getPublishedNotes()]);
@@ -262,6 +295,8 @@ export default async function NotePage({ params }) {
         <TableOfContents items={tableOfContents} />
         <article className="article">{content}</article>
       </div>
+
+      <RecruiterNote note={note} />
 
       <div className="filed">
         <span className="lab">filed under →</span>

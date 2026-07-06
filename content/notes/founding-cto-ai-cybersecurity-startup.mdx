@@ -1,0 +1,285 @@
+---
+number: "032"
+title: "The AI cybersecurity founding CTO memo I would want to read"
+titleHtml: "The AI cybersecurity <em>founding CTO</em> memo I would want to read."
+headingHtml: "The AI cybersecurity<br/><span class=\"red\">founding CTO</span> memo I would want to read."
+description: "A practical founding CTO memo for AI cybersecurity startups: what to build first, how to earn trust, how to avoid shallow AI wrappers, and how to lead the early engineering system."
+ogDescription: "A founding CTO memo for AI cybersecurity startups: trust contract, product wedge, architecture, evidence, agent controls, hiring, and operating rhythm."
+date: "2026-06-25"
+displayDate: "2026 · 06 · 25"
+readTime: "10 min"
+quirk: "-- or the startup brief that filters out the wrong chaos"
+excerptHtml: "A founding CTO in AI cybersecurity has to build the product, the trust system, the engineering culture, and the risk posture at the same time."
+dekHtml: "A practical memo for founders and recruiters evaluating founding CTO or early engineering leadership in AI-native cybersecurity."
+tags: ["career", "leadership", "security", "ai", "startup", "building"]
+featured: true
+tableOfContents: true
+nextSlug: "head-of-ai-security-platform-brief"
+---
+
+<Lede>
+  A founding CTO in AI cybersecurity is not just the person who chooses the
+  stack. They are the person who makes the company trustworthy enough to sell.
+</Lede>
+
+Early AI cybersecurity companies have a strange temptation.
+
+They want to look bigger than they are.
+
+The demo has to feel inevitable.
+
+The roadmap has to sound enormous.
+
+The product has to say "agentic" without sounding like it learned the word last
+week.
+
+The founder pitch has to make a buyer believe that this small team can become
+part of a security program that already has too many tools, too many alerts,
+and too little trust.
+
+That is a lot of pressure.
+
+The founding CTO's job is to convert that pressure into a system.
+
+Not just code.
+
+A system.
+
+Product direction, architecture, security posture, hiring, customer learning,
+delivery rhythm, and the company's technical truthfulness all show up in the
+same seat.
+
+This is the memo I would want to read before joining, advising, or building one.
+
+## Start with the trust contract.
+
+The first question is not "what can the model do?"
+
+The first question is:
+
+> What trust contract are we asking the customer to accept?
+
+In cybersecurity, every feature changes trust.
+
+If the product summarizes an investigation, the customer has to trust the
+evidence.
+
+If the product recommends containment, the customer has to trust the reasoning.
+
+If the product calls tools, the customer has to trust the permission model.
+
+If the product stores security data, the customer has to trust the boundary.
+
+If the product claims "autonomy," the customer has to trust the rollback path.
+
+The founding CTO has to make this explicit early.
+
+The product is not just a capability map.
+
+It is a trust map.
+
+## Pick a wedge where AI has earned permission.
+
+The worst early product idea is "AI for the whole SOC."
+
+It is too broad.
+
+It hides the workflow.
+
+It creates a vague architecture.
+
+It forces the team to overclaim before the product has earned trust.
+
+A better wedge is narrow, painful, repeatable, and evidence-rich.
+
+Examples:
+
+- phishing investigation with cited evidence and analyst-approved response;
+- suspicious identity activity triage with device, MFA, privilege, and exposure context;
+- dark web exposure investigation tied to identity risk;
+- cloud alert investigation with asset ownership and blast-radius context;
+- threat intelligence briefing that turns raw sources into operational action;
+- detection engineering assistant that ships rules with tests and context.
+
+The wedge should answer a real operational question.
+
+Not "can AI chat with security data?"
+
+"Can this workflow get materially better because the system assembles evidence,
+explains uncertainty, and helps the analyst choose the next safe step?"
+
+That is a better starting point.
+
+## Build an evidence product, not a text product.
+
+LLMs are good at producing language.
+
+Security buyers are not buying language.
+
+They are buying confidence that the language is connected to reality.
+
+So the founding architecture should treat evidence as a first-class product
+primitive.
+
+The system should preserve:
+
+- source;
+- timestamp;
+- tenant;
+- entity mapping;
+- confidence;
+- freshness;
+- retrieval path;
+- analyst correction;
+- action taken.
+
+This matters because AI-native cybersecurity products will be judged after
+mistakes.
+
+When the system is wrong, can the team explain why?
+
+When the customer asks where a claim came from, can the product show it?
+
+When a model changes, can the team detect regressions?
+
+When an analyst disagrees, can the correction become product signal?
+
+If the answer is no, the startup is building a demo, not a durable platform.
+
+## Design agent permissions before the agents feel powerful.
+
+Founding teams often add tool use quickly because it makes the demo come alive.
+
+The agent enriches an indicator.
+
+The agent opens a ticket.
+
+The agent updates a case.
+
+The agent recommends blocking an account.
+
+This is exciting.
+
+It is also where product risk starts becoming real business risk.
+
+OWASP's LLM risk guidance calls out excessive agency as a core concern for LLM
+applications. For security products, the lesson is simple: the more the agent
+can do, the more the platform has to constrain.
+
+The founding CTO should define:
+
+- read-only tools;
+- write tools;
+- destructive tools;
+- approval requirements;
+- customer configuration;
+- audit logging;
+- tool-call simulation;
+- rollback paths;
+- tenant boundaries.
+
+This is not bureaucracy.
+
+It is what makes autonomy sellable.
+
+## Hire for taste under ambiguity.
+
+The first engineers in an AI cybersecurity startup need unusually broad taste.
+
+They have to tolerate ambiguity without becoming sloppy.
+
+They need security judgment, platform instincts, product empathy, and enough AI
+fluency to avoid both hype and fear.
+
+I would look for people who can answer questions like:
+
+- What evidence would make this recommendation safe?
+- What happens if the model is wrong?
+- Which action should never be automatic?
+- What should the analyst see first?
+- Which integration is strategically important and which is a distraction?
+- How do we test this behavior?
+- What do we tell a CISO when the system refuses to act?
+
+The founding CTO should not hire only for task throughput.
+
+They should hire for judgment density.
+
+In a small team, one careless abstraction can become the company's roadmap.
+
+## Write the first operating system.
+
+The founding CTO has to create the operating rhythm before the company grows
+into accidental habits.
+
+I would keep it simple:
+
+- one weekly customer learning review;
+- one weekly architecture and risk review;
+- one demo with real data shape, not only happy-path fixtures;
+- one eval review before changing model, retrieval, prompt, or tool behavior;
+- one short written decision record for important product bets;
+- one honest roadmap pruning conversation every week.
+
+The rituals should be lightweight.
+
+But they should exist.
+
+AI cybersecurity teams can otherwise drift between two bad modes:
+
+- demo-driven chaos;
+- security-theater paralysis.
+
+The useful middle is disciplined shipping.
+
+## Know what not to build.
+
+The founding CTO earns trust partly by saying no.
+
+I would be cautious about:
+
+- generic chat over all customer data;
+- fully autonomous response before evidence and permissions mature;
+- dashboards built from weak summaries;
+- integrations that look impressive but do not improve a workflow;
+- model-switching debates before the product has evals;
+- "platform" claims before the primitives are reusable;
+- enterprise promises before the security posture is ready.
+
+Startups die from building too little.
+
+They also die from building the wrong impressive thing.
+
+## The board-level explanation.
+
+If I had to explain the founding CTO job to a board, I would say:
+
+> The technical leader has to build a product that can safely compound trust.
+> Every customer workflow should produce more evidence, better controls, better
+> evals, and clearer product judgment.
+
+That is the job.
+
+It is not just shipping features.
+
+It is building the machine that lets the company ship harder things later.
+
+## References.
+
+- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
+- [NIST AI RMF Core](https://airc.nist.gov/airmf-resources/airmf/5-sec-core/)
+- [OWASP Top 10 for Large Language Model Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications/)
+- [OWASP LLM06: Excessive Agency](https://genai.owasp.org/llmrisk/llm062025-excessive-agency/)
+- [MITRE ATLAS](https://atlas.mitre.org/)
+- [CISA: Software Must Be Secure by Design, and Artificial Intelligence Is No Exception](https://www.cisa.gov/news-events/news/software-must-be-secure-design-and-artificial-intelligence-no-exception)
+
+## The hiring signal.
+
+If you are hiring a founding CTO or early engineering leader for an AI
+cybersecurity startup, ask them what trust has to be earned before the product
+can become more autonomous.
+
+The answer should include product, architecture, security, customer learning,
+and team design.
+
+That is the shape of the role.

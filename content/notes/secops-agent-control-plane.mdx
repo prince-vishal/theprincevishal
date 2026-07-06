@@ -1,0 +1,319 @@
+---
+number: "025"
+title: "The control plane for SecOps agents"
+titleHtml: "The <em>control plane</em> for SecOps agents."
+headingHtml: "The <em>control plane</em><br/>for <span class=\"red\">SecOps agents</span>."
+description: "A technical guide to designing the control plane for SecOps agents: policies, tool permissions, approvals, workflows, audit logs, human review, and safe autonomy."
+ogDescription: "How to design a SecOps agent control plane with scoped tools, policy enforcement, approvals, evidence, audit logs, and safe autonomy."
+date: "2026-06-25"
+displayDate: "2026 · 06 · 25"
+readTime: "11 min"
+quirk: "-- or one agent kept on a leash"
+excerptHtml: "The difference between useful SecOps agents and dangerous SecOps agents is the control plane around them."
+dekHtml: "A technical builder-leader note on the policies, permissions, approvals, tool boundaries, and audit trails that make security agents production-safe."
+tags: ["ai", "security", "secops", "agents", "platform"]
+tableOfContents: true
+nextSlug: "evidence-layer-ai-security-platforms"
+---
+
+<Lede>
+  The difference between useful SecOps agents and dangerous SecOps agents is the
+  control plane around them.
+</Lede>
+
+SecOps agents should not be judged by how autonomous they sound.
+
+They should be judged by how well they are controlled.
+
+A security agent may retrieve evidence, enrich indicators, inspect identity
+context, summarize incidents, stage containment, draft detections, open tickets,
+or call response tools. Those abilities are useful only when the platform can
+control who, what, when, why, and how.
+
+That is the job of the control plane.
+
+The control plane is the system that governs agent behavior:
+
+- tool access;
+- workflow boundaries;
+- policy decisions;
+- approvals;
+- rate limits;
+- audit logs;
+- evidence requirements;
+- human review;
+- emergency disable paths.
+
+Without it, agentic AI in the SOC becomes a trust fall.
+
+## Agents need policy outside the prompt.
+
+Prompts are not enough.
+
+System prompts can instruct the model to avoid unsafe actions, respect policy,
+and cite evidence. That is useful, but policy should not live only in text that
+the model interprets.
+
+The platform should enforce policy outside the model.
+
+Examples:
+
+- this workflow can call read-only identity tools;
+- this action requires analyst approval;
+- this tool cannot run without a case ID;
+- this user cannot view restricted evidence;
+- this agent cannot execute containment in shadow mode;
+- this output must pass schema validation;
+- this source cannot be summarized for broad sharing.
+
+The model can request.
+
+The control plane decides.
+
+## The control plane objects.
+
+A practical SecOps agent control plane needs several core objects.
+
+### Workflow.
+
+The workflow defines the agent's job:
+
+- phishing triage;
+- suspicious login investigation;
+- cloud exposure assessment;
+- detection drafting;
+- incident handoff;
+- threat intel enrichment.
+
+Each workflow has allowed tools, required evidence, output schema, and action
+rules.
+
+### Tool.
+
+The tool defines an external capability:
+
+- fetch sign-ins;
+- get endpoint process tree;
+- enrich IP;
+- create ticket;
+- stage session revocation;
+- rotate secret.
+
+Tools should be typed, scoped, and observable.
+
+### Policy.
+
+Policy defines what is allowed:
+
+- who can run the workflow;
+- which tools are available;
+- what data can be read;
+- which actions require approval;
+- which outputs require review.
+
+### Approval.
+
+Approval defines human authorization:
+
+- target;
+- action;
+- evidence;
+- reason;
+- expected impact;
+- approver;
+- timestamp.
+
+### Run.
+
+The run is the execution record:
+
+- input;
+- model version;
+- prompt version;
+- evidence;
+- tool calls;
+- policy decisions;
+- outputs;
+- feedback.
+
+These objects make agent behavior inspectable.
+
+## Tool permissions should be scoped by workflow.
+
+Do not give every agent every tool.
+
+A phishing triage workflow may need:
+
+- read email headers;
+- inspect URLs;
+- detonate attachment;
+- check sender reputation;
+- draft user notice.
+
+It probably does not need:
+
+- disable account;
+- rotate cloud secret;
+- isolate production host.
+
+A credential-compromise workflow may need session inspection and staged
+revocation.
+
+A detection-engineering workflow may need telemetry samples and rule-test
+tools.
+
+Permissions should attach to the workflow and case context.
+
+This reduces blast radius.
+
+It also makes agent behavior easier to explain.
+
+## Approvals are product UX.
+
+Approval flows are not paperwork.
+
+They are user experience for risk.
+
+A good approval request should show:
+
+- recommended action;
+- target;
+- supporting evidence;
+- confidence;
+- expected impact;
+- risk of waiting;
+- rollback path;
+- policy reason;
+- who requested it.
+
+A bad approval request says:
+
+<PullQuote>
+  Agent recommends action. Approve?
+</PullQuote>
+
+That is not enough.
+
+If a session revocation affects one user, approval may be simple. If endpoint
+isolation affects production, the approval needs more context and a different
+approver.
+
+The control plane should encode those differences.
+
+## Audit logs are part of trust.
+
+Every agent run should produce an audit trail:
+
+- who started it;
+- what triggered it;
+- which model answered;
+- which prompt version was used;
+- which tools were called;
+- what data was read;
+- which policy checks ran;
+- which actions were staged;
+- who approved;
+- what executed;
+- what failed.
+
+This is essential for security.
+
+It is also essential for debugging.
+
+When an agent behaves strangely, the team needs a trace.
+
+OpenTelemetry-style traces are useful here because agent runs are distributed
+workflows: retrieval, model calls, tool calls, policy checks, and outputs.
+
+## Safe autonomy is tiered.
+
+Autonomy should have levels.
+
+Example:
+
+| Level | Agent can do |
+| --- | --- |
+| L0 | summarize only |
+| L1 | read approved sources |
+| L2 | enrich and draft |
+| L3 | stage actions |
+| L4 | execute low-risk actions |
+| L5 | execute high-risk actions |
+
+Most SOC workflows should live between L1 and L3 for a long time.
+
+That is not a failure.
+
+It is maturity.
+
+The goal is not maximum autonomy.
+
+The goal is appropriate autonomy.
+
+## For hiring teams.
+
+If you are hiring someone to lead agentic AI security work, ask them to design a
+control plane.
+
+Strong answers will cover:
+
+- workflow-scoped permissions;
+- typed tools;
+- policy outside prompts;
+- approval UX;
+- audit trails;
+- evidence requirements;
+- safe degradation;
+- emergency kill switches;
+- evaluation.
+
+This is the difference between a builder-leader and an AI enthusiast.
+
+The builder-leader knows the agent is only one part of the system.
+
+The control plane is what makes the system safe enough to ship.
+
+## Final thoughts.
+
+SecOps agents need a control plane because security operations requires
+accountability.
+
+The agent can reason.
+
+The platform must govern.
+
+The model can request action.
+
+The control plane must decide whether that action is allowed.
+
+That is how agentic AI becomes production software instead of demo magic.
+
+## FAQ.
+
+### What is a SecOps agent control plane?
+
+A SecOps agent control plane governs agent behavior through workflows, scoped
+tools, policies, approvals, audit logs, evidence requirements, and emergency
+disable paths.
+
+### Why should policy live outside the prompt?
+
+Prompt-only policy depends on model interpretation. Production security systems
+need deterministic enforcement for permissions, approvals, sensitive data,
+workflow scope, and high-impact actions.
+
+### What is safe autonomy for SOC agents?
+
+Safe autonomy means matching agent authority to risk. Agents can often read,
+enrich, draft, and stage actions, but consequential actions such as account
+disablement, endpoint isolation, or secret rotation should require approval.
+
+## Sources.
+
+- [OWASP Top 10 for Large Language Model Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications)
+- [OWASP MCP Top 10](https://owasp.org/www-project-mcp-top-10/)
+- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
+- [NIST SP 800-61 Rev. 3](https://csrc.nist.gov/pubs/sp/800/61/r3/final)
+- [OpenTelemetry documentation](https://opentelemetry.io/docs/)
+
+<EndMark />

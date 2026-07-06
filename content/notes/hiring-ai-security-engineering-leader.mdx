@@ -1,0 +1,414 @@
+---
+number: "027"
+title: "How I would evaluate an AI security engineering leader"
+titleHtml: "How I would evaluate an <em>AI security engineering leader</em>."
+headingHtml: "How I would evaluate an <em>AI security engineering leader</em>."
+description: "A practical scorecard for hiring AI security engineering leaders: architecture judgment, SecOps depth, agent safety, delivery rhythm, product taste, and team leadership."
+ogDescription: "A hiring scorecard for AI security engineering leaders across architecture, SecOps, agent safety, delivery, product judgment, and leadership."
+date: "2026-06-25"
+displayDate: "2026 · 06 · 25"
+readTime: "12 min"
+quirk: "-- or the interview loop I wish more teams used"
+excerptHtml: "The fastest way to hire an AI security engineering leader is to stop interviewing only for management polish."
+dekHtml: "A recruiter- and founder-friendly scorecard for evaluating builder-leaders in AI-native cybersecurity, SecOps platforms, agentic SOC systems, and security engineering teams."
+tags: ["career", "leadership", "security", "ai", "secops", "building"]
+featured: true
+tableOfContents: true
+nextSlug: "builder-leader-cybersecurity-engineering"
+---
+
+<Lede>
+  The fastest way to hire an AI security engineering leader is to stop
+  interviewing only for management polish.
+</Lede>
+
+Management polish is useful.
+
+It is not enough.
+
+AI security engineering sits at an awkward intersection: cybersecurity,
+software architecture, SecOps workflows, data systems, product judgment,
+AI risk, customer trust, and team leadership.
+
+If the interview loop only tests calendar competence, it will miss the person
+who can build the system.
+
+If the interview loop only tests coding, it will miss the person who can create
+organizational leverage.
+
+If the interview loop only tests AI enthusiasm, it will miss the person who
+knows where autonomy becomes dangerous.
+
+The role needs a builder-leader.
+
+This is the scorecard I would use if I were hiring one.
+
+## Start with the actual job.
+
+"AI security leader" can mean several different things.
+
+Before interviewing anyone, the hiring team should decide which job they are
+really filling.
+
+Common versions:
+
+- leading an AI-native SecOps product team;
+- building agentic SOC workflows;
+- owning AI security architecture inside a security company;
+- leading detection, investigation, and response automation;
+- building infrastructure for AI-assisted threat intelligence;
+- securing internal AI adoption;
+- creating the security control plane for agents and tools;
+- translating AI risk into product and platform decisions.
+
+These are adjacent.
+
+They are not the same.
+
+The right candidate for a compliance-heavy AI governance role may not be the
+right candidate for an agentic SOC product team. The right candidate for a
+research team may not be the right candidate for a customer-facing platform
+team that has to ship every week.
+
+The first hiring mistake is vague role design.
+
+The second is interviewing as if the role were generic engineering management.
+
+## Scorecard 1: architecture judgment.
+
+An AI security engineering leader should be able to reason through architecture
+without hiding behind slogans.
+
+I would test for questions like:
+
+- Where does evidence enter the system?
+- Which claims must be cited?
+- Which tool calls require approval?
+- What should be deterministic instead of model-generated?
+- How do we separate instructions from untrusted data?
+- Which systems can the agent read?
+- Which systems can it write to?
+- How does the platform handle customer-specific context?
+- What gets logged for audit?
+- What is the failure mode when the model is wrong?
+
+This does not require whiteboard theater.
+
+Give the candidate a realistic scenario:
+
+> A SOC analyst asks an AI agent to investigate suspicious OAuth consent activity
+> across identity logs, email telemetry, endpoint events, and threat-intel sources.
+> The agent can summarize, enrich, open tickets, revoke sessions, and propose
+> containment steps.
+
+Then ask them to draw the system.
+
+Not perfectly.
+
+Usefully.
+
+The strongest candidates will talk about evidence objects, source confidence,
+identity context, action permissions, tool schemas, human approvals, run traces,
+evaluation cases, and rollback paths.
+
+The weaker candidates will say "RAG plus agents" and hope that is architecture.
+
+## Scorecard 2: AI risk literacy.
+
+AI risk literacy is not the same as knowing model names.
+
+A good leader should understand the practical risks around AI systems:
+
+- prompt injection;
+- indirect prompt injection;
+- excessive agency;
+- sensitive information disclosure;
+- insecure tool design;
+- overreliance;
+- hallucinated evidence;
+- data poisoning;
+- evaluation drift;
+- model and dependency supply chain risk;
+- cost and latency failure modes.
+
+NIST's AI Risk Management Framework is useful here because it pushes teams to
+think in functions: Govern, Map, Measure, and Manage. That matters for AI
+security leadership because risk cannot live only in a launch checklist.
+
+OWASP's LLM guidance is also useful because it names concrete application risks.
+Prompt injection is not theoretical when your agent reads emails, tickets,
+web pages, malware reports, chat transcripts, or customer-provided logs.
+
+OWASP's Excessive Agency category is especially relevant for SecOps agents. The
+danger is not merely that the model says something wrong. The danger is that the
+system gives it too much functionality, too much permission, or too much
+autonomy.
+
+In interviews, I would ask:
+
+- What AI risks would you explicitly design out of the platform?
+- Which ones would you detect and contain?
+- Which ones would you accept with compensating controls?
+- How would you explain those decisions to a CISO?
+
+That last question matters.
+
+Security leadership is translation work.
+
+## Scorecard 3: SecOps workflow depth.
+
+AI-native security products fail when they do not understand how analysts work.
+
+A leader does not need to have spent their whole career as a SOC analyst, but
+they should understand the shape of the workflow:
+
+- alert intake;
+- deduplication;
+- enrichment;
+- triage;
+- severity assessment;
+- evidence collection;
+- investigation timeline;
+- containment recommendation;
+- escalation;
+- case notes;
+- post-incident learning;
+- detection improvement.
+
+Ask the candidate where AI helps.
+
+Then ask where it should stay quiet.
+
+Good answers usually sound like:
+
+- summarization is useful if citations are attached;
+- enrichment is useful if sources and confidence are visible;
+- investigation planning is useful if the analyst can edit the plan;
+- containment recommendations are useful if approval gates are explicit;
+- detection suggestions are useful if they ship with test cases;
+- ticket drafting is useful if it does not invent facts.
+
+Weak answers treat the analyst as a rubber stamp.
+
+That is not leadership.
+
+That is a product trust problem waiting to become a sales problem.
+
+## Scorecard 4: delivery rhythm.
+
+AI security teams can become research-shaped very quickly.
+
+Research is valuable.
+
+Shipping is how trust compounds.
+
+I would evaluate whether the candidate can turn ambiguity into a delivery
+system:
+
+- Can they define a small primitive worth shipping?
+- Can they reduce scope without reducing usefulness?
+- Can they write the first technical memo?
+- Can they set quality bars for agent behavior?
+- Can they build feedback loops with analysts?
+- Can they instrument the feature before arguing about success?
+- Can they decide what not to build?
+
+For example, "build an agentic SOC" is too large.
+
+"Attach an evidence table to every AI-generated investigation summary" is
+small enough to ship and fundamental enough to change trust.
+
+"Add typed approval gates for containment actions" is small enough to reason
+about and important enough to reduce risk.
+
+"Create twenty golden investigation cases and track regression every week" is
+not glamorous, but it is how AI systems become reliable.
+
+This is where builder-leaders are useful. They can compress strategy into
+shippable units.
+
+## Scorecard 5: product judgment.
+
+AI security products are not only technical systems.
+
+They are trust systems.
+
+The leader should be able to talk about product tradeoffs:
+
+- What should the analyst see first?
+- How much uncertainty should be exposed?
+- When should the product interrupt a workflow?
+- Which actions require confirmation?
+- Which outputs should be editable?
+- Where should the system ask a question instead of guessing?
+- How should the system recover from being wrong?
+- What should be shown to the customer in an audit trail?
+
+Product judgment is especially important in cybersecurity because customers are
+not buying magic.
+
+They are buying better decisions under pressure.
+
+If the product hides uncertainty, it trains overreliance.
+
+If the product exposes every raw detail, it recreates alert fatigue.
+
+If the product automates too aggressively, it creates fear.
+
+If the product does nothing decisive, it becomes another dashboard.
+
+The leader has to find the useful middle.
+
+## Scorecard 6: team leadership.
+
+The role still needs leadership in the ordinary human sense.
+
+Can the candidate build a team that ships?
+
+Can they hire well?
+
+Can they coach senior engineers without flattening them?
+
+Can they protect focus?
+
+Can they make product, research, security, and engineering work together?
+
+Can they create review culture without turning review into performance?
+
+Can they carry pressure without making everyone else carry it too?
+
+I would ask for specific stories:
+
+- a time they changed an architecture decision;
+- a time they killed a tempting project;
+- a time they raised the quality bar;
+- a time they hired or promoted someone;
+- a time they handled a production incident;
+- a time they had to explain technical risk to executives;
+- a time they had to choose between speed and trust.
+
+The answers should have nouns in them.
+
+Systems. People. Timelines. Tradeoffs. Consequences.
+
+Generic leadership language is too easy.
+
+## The interview loop I would run.
+
+For a senior AI security engineering leader, I would run a loop like this:
+
+1. Role fit conversation.
+   Validate scope, motivation, domain fit, and what kind of leadership they
+   actually want.
+
+2. Architecture case.
+   Design an AI-assisted SOC investigation workflow with evidence, tools,
+   permissions, approvals, and observability.
+
+3. Risk review.
+   Walk through prompt injection, excessive agency, data exposure, evaluation,
+   logging, and incident response for the proposed architecture.
+
+4. Product case.
+   Improve the analyst experience for one painful workflow: phishing triage,
+   suspicious login investigation, cloud misconfiguration response, or threat
+   intelligence enrichment.
+
+5. Delivery and operating model.
+   Ask for a 90-day plan. Look for sequencing, tradeoffs, trust-building
+   primitives, and team rhythm.
+
+6. Leadership references.
+   Talk to people who have seen the candidate make decisions under pressure.
+
+This loop tests the actual job.
+
+It also gives the candidate signal about the company.
+
+Strong builders want strong loops.
+
+## Signals I would treat as positive.
+
+Positive signals:
+
+- talks about evidence before automation;
+- distinguishes assistive, supervised, and autonomous workflows;
+- understands that prompt injection is an application architecture problem;
+- treats tool permissions as product architecture, not implementation detail;
+- talks about analyst trust and not only model quality;
+- knows how to ship small primitives;
+- can explain tradeoffs to both engineers and executives;
+- has a point of view on evals;
+- has led teams but still thinks in systems.
+
+These signals matter more than whether the candidate has the exact title you
+imagined.
+
+## Signals I would treat as risky.
+
+Risky signals:
+
+- says "agents will handle it" without describing control boundaries;
+- treats SOC analysts as approval buttons;
+- has no answer for indirect prompt injection;
+- cannot explain what gets logged;
+- wants broad write access for tools early;
+- ignores cost, latency, and reliability;
+- cannot describe how a feature would be evaluated;
+- talks only about headcount and never about architecture;
+- talks only about architecture and never about people.
+
+Any one of these can be coachable.
+
+Several together are a pattern.
+
+## What I would want recruiters to notice.
+
+If you are a recruiter reading this, the hiring brief should not be:
+
+"Need AI manager."
+
+That phrase is too thin.
+
+The better brief is:
+
+"Need a builder-leader who can own AI-native security product architecture,
+lead a team, reason about SecOps workflows, design agent guardrails, build
+trust with analysts, and ship production systems."
+
+That is a very different search.
+
+It points toward people who have lived near product, security, architecture,
+and engineering leadership at the same time.
+
+It also explains why I keep positioning myself as a builder-leader rather than
+only a manager.
+
+## References I would expect a serious team to know.
+
+Useful starting points:
+
+- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
+- [NIST AI RMF Core: Govern, Map, Measure, Manage](https://airc.nist.gov/airmf-resources/airmf/)
+- [NIST NCCoE Cyber AI Profile](https://www.nccoe.nist.gov/projects/cyber-ai-profile)
+- [MITRE ATLAS and AI incident sharing](https://www.mitre.org/news-insights/news-release/mitre-launches-ai-incident-sharing-initiative)
+- [OWASP Top 10 for Large Language Model Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications/)
+- [OWASP LLM01: Prompt Injection](https://genai.owasp.org/llmrisk/llm01-prompt-injection/)
+- [OWASP LLM06: Excessive Agency](https://genai.owasp.org/llmrisk/llm062025-excessive-agency/)
+
+## The short version.
+
+Hire for the real work.
+
+The real work is not "manage AI people."
+
+It is architecture judgment, AI risk literacy, SecOps workflow depth, product
+taste, delivery rhythm, and team leadership.
+
+That is the job.
+
+That is also the kind of job I want.
+
+If your team is building AI-native cybersecurity products, agentic SOC systems,
+or security platforms where trust matters, this is the interview I would want
+to have.

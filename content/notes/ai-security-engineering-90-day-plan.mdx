@@ -1,0 +1,285 @@
+---
+number: "023"
+title: "My 90-day plan for leading an AI security engineering team"
+titleHtml: "My <em>90-day plan</em> for leading an AI security engineering team."
+headingHtml: "My <em>90-day plan</em><br/>for leading an <span class=\"red\">AI security engineering</span> team."
+description: "A practical 90-day plan for AI security engineering leadership: trust, architecture, SecOps workflows, agent guardrails, delivery rhythm, hiring signals, and measurable outcomes."
+ogDescription: "A builder-leader 90-day plan for leading AI security engineering teams across agentic SOC, product architecture, trust boundaries, delivery, and hiring outcomes."
+date: "2026-06-25"
+displayDate: "2026 · 06 · 25"
+readTime: "11 min"
+quirk: "-- or one onboarding plan with fewer platitudes"
+excerptHtml: "The fastest way to evaluate an AI security engineering leader is to ask what they would change in the first 90 days."
+dekHtml: "A concrete operating plan for hiring managers who need someone to lead AI-native security product work without losing the builder's grip on architecture."
+tags: ["ai", "security", "leadership", "building", "career"]
+featured: true
+tableOfContents: true
+nextSlug: "reliable-ai-security-agents"
+---
+
+<Lede>
+  The fastest way to evaluate an AI security engineering leader is to ask what
+  they would change in the first 90 days.
+</Lede>
+
+Titles are noisy.
+
+Resumes are compressed.
+
+Interviews are theatrical in a way nobody admits out loud.
+
+So if a hiring manager wants to understand whether someone can lead AI security
+engineering work, I think the best question is simple:
+
+<PullQuote>
+  What would you do in the first 90 days?
+</PullQuote>
+
+Not in vague leadership language.
+
+In operating detail.
+
+An AI security engineering leader should be able to talk about people,
+architecture, workflows, threat models, product bets, technical debt, trust,
+delivery, and metrics in the same conversation. That is especially true for
+agentic SOC systems, AI-native security platforms, threat intelligence
+automation, and AI-assisted incident response.
+
+This is the 90-day plan I would bring into that role.
+
+## Days 1-15: learn the real system.
+
+The first two weeks should be spent building a map.
+
+Not a political map.
+
+A system map.
+
+I would want to understand:
+
+- product surface;
+- customer workflow;
+- current architecture;
+- core data model;
+- alert and investigation objects;
+- identity and asset context;
+- detection coverage;
+- AI features in production;
+- model and prompt ownership;
+- tool permissions;
+- incident history;
+- delivery process;
+- team strengths;
+- team bottlenecks.
+
+This is where a builder-leader has an advantage. I do not only want a dashboard
+of initiatives. I want to understand how the system behaves.
+
+Questions I would ask:
+
+- Where does evidence enter the product?
+- Which claims can the system explain?
+- Which workflows require too many manual pivots?
+- Which AI outputs are trusted by analysts?
+- Which AI outputs are ignored?
+- Where do permissions become too broad?
+- Which integrations are fragile?
+- Which customers are pulling the roadmap?
+- Which architectural decision is slowing the team down every week?
+
+The output of this phase should be a short memo:
+
+- current operating model;
+- top workflow pain points;
+- top architecture risks;
+- top delivery risks;
+- trust gaps;
+- candidate quick wins.
+
+No heroics yet.
+
+Just understanding.
+
+## Days 16-30: choose the leverage points.
+
+By the end of the first month, I would want to choose no more than three
+leverage points.
+
+For AI security engineering, the likely candidates are:
+
+- evidence layer;
+- agent tool security;
+- identity context;
+- detection engineering workflow;
+- evaluation harness;
+- observability and reliability;
+- customer-facing investigation UX;
+- data normalization.
+
+The mistake is trying to fix everything.
+
+The better move is to find the layer that makes many future things easier.
+
+For example, if every AI output lacks evidence, fix the evidence model before
+adding more agent features.
+
+If every workflow requires custom connector logic, fix tool schemas and
+permission boundaries.
+
+If analysts do not trust summaries, fix citations, uncertainty, and correction
+loops.
+
+If the team cannot tell whether agents are improving, build evaluation and
+observability.
+
+The output of this phase should be a focused 60-day execution plan.
+
+## Days 31-60: ship one trust-building primitive.
+
+The second month should produce something visible.
+
+Not a giant rewrite.
+
+One trust-building primitive.
+
+Examples:
+
+- evidence table attached to every AI summary;
+- typed action approvals for agent tools;
+- golden-case evaluation suite for SOC agents;
+- identity context panel for suspicious login triage;
+- agent run tracing with tool-call logs;
+- detection package template with test cases;
+- threat-intel enrichment workflow with source confidence.
+
+This primitive should be small enough to ship, but fundamental enough to change
+how the product feels.
+
+For instance, an evidence table sounds modest.
+
+It is not.
+
+It changes the trust contract:
+
+- the model must cite claims;
+- analysts can inspect sources;
+- corrections become structured;
+- future automation has safer inputs;
+- customer conversations become easier.
+
+This is how technical leadership becomes product leverage.
+
+## Days 61-90: turn the primitive into an operating rhythm.
+
+The third month is where many leaders lose the builder thread.
+
+They ship a feature and call it done.
+
+I would rather turn the primitive into a rhythm.
+
+If we ship agent evaluation, it should become part of release gates.
+
+If we ship tool approvals, it should become the standard pattern for new tools.
+
+If we ship evidence tables, it should become the default AI output contract.
+
+If we ship identity context, it should become the model for other entity
+workspaces.
+
+The output of month three should include:
+
+- shipped primitive;
+- adoption signal;
+- metric baseline;
+- next two workflow expansions;
+- ownership model;
+- risks still open;
+- hiring or team-shape recommendation.
+
+This is where leadership starts compounding.
+
+## What I would measure.
+
+I would avoid vanity metrics.
+
+Useful metrics:
+
+- time to triage;
+- analyst override rate;
+- recommendation acceptance rate;
+- evidence citation completeness;
+- unsafe-action attempts;
+- tool-call failure rate;
+- prompt-injection test pass rate;
+- customer workflow adoption;
+- incident handoff quality;
+- deployment frequency;
+- escaped defects;
+- support escalations tied to AI output.
+
+For leadership health:
+
+- cycle time;
+- review quality;
+- clarity of ownership;
+- meeting load;
+- roadmap churn;
+- number of decisions waiting on one person;
+- team confidence in technical direction.
+
+The goal is not to measure everything.
+
+The goal is to know whether the system is getting better.
+
+## For hiring teams.
+
+If you are hiring for AI security engineering leadership, this is the kind of
+operating plan I would expect from someone who can both build and lead.
+
+They should be able to explain:
+
+- which layer they would inspect first;
+- how they would earn analyst trust;
+- what they would ship in 60 days;
+- how they would measure it;
+- how they would avoid unsafe autonomy;
+- how they would improve team execution without flattening technical judgment.
+
+The role is not only people management.
+
+It is not only architecture.
+
+It is the bridge between product risk, security reality, and engineering
+execution.
+
+That is the builder-leader lane.
+
+## FAQ.
+
+### What should an AI security engineering leader do first?
+
+They should understand the real system: product workflows, architecture, data
+models, trust gaps, agent permissions, customer pain, team bottlenecks, and
+delivery risks. The first move is mapping, not reorg theater.
+
+### What is a good first project for an AI-native SecOps leader?
+
+A good first project is a trust-building primitive: evidence tables, action
+approval gates, agent evaluation, identity context, or agent run tracing. The
+best first project makes many future AI features safer and easier to ship.
+
+### How should hiring managers evaluate AI security leaders?
+
+Ask for a 90-day plan. Strong candidates will connect strategy to architecture,
+workflows, metrics, team health, and customer outcomes. Weak candidates will
+stay at the level of AI slogans.
+
+## Sources.
+
+- [NIST Cybersecurity Framework 2.0](https://www.nist.gov/cyberframework)
+- [NIST SP 800-61 Rev. 3](https://csrc.nist.gov/pubs/sp/800/61/r3/final)
+- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
+- [MITRE ATT&CK](https://attack.mitre.org/)
+- [OWASP Top 10 for Large Language Model Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications)
+
+<EndMark />
